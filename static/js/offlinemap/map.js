@@ -76,7 +76,7 @@ window.TILE_VERSION = {
 };
 window.BMAP_AUTHENTIC_KEY = "offlinekey";
 function my_log(s){
-    if(console) 
+    if(console)
      console.log(s);
 }
 (function() {
@@ -1221,7 +1221,7 @@ function my_log(s){
 			for (var a = this.R.ZE; a < z.Ar.length; a++) z.Ar[a](this);
 			this.R.ZE = a
 		},
-		oF: function(a) { 
+		oF: function(a) {
 		    //guoguo   setCurrentCity
 		    i_setCurrentCity(this, a);
 		    /*
@@ -1515,7 +1515,7 @@ function my_log(s){
     z.ma = offmapcfg.home;
     z.cj = offmapcfg.home;
     //end guoguo 改成本地路径
-    
+
 	z.sg = function(a, b) {
 		var c, d, b = b || "";
 		switch (a) {
@@ -2612,7 +2612,7 @@ function my_log(s){
 		control: "zrzowm",
 		navictrl: "ekcmmq",
 		geoctrl: "szvqac",
-		copyrightctrl: "owa3ga",
+		//copyrightctrl: "owa3ga",
 		citylistcontrol: "dieiks",
 		scommon: "akkd5g",
 		local: "spxcwu",
@@ -2744,7 +2744,7 @@ function my_log(s){
                           }
                         } else {
                           e.UK()
-                        } 
+                        }
                         /*end*/
 					}, 1));
 					d.Bd = this.Fj.GP
@@ -8017,7 +8017,7 @@ function my_log(s){
 		panTo: X.ui,
 		panBy: X.xg,
 		setCenter: X.Wf,
-		setCurrentCity: X.oF, 
+		setCurrentCity: X.oF,
 		setMapType: X.Ag,
 		setViewport: X.Ah,
 		setZoom: X.Nc,

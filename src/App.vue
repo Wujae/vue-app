@@ -43,7 +43,6 @@
       </el-aside>
       <el-container>
         <el-main>
-            <router-view/>
         </el-main>
         <el-footer style="height: 30px">版权所有：中车唐山机车车辆有限公司 技术支持：上海杰之能软件科技有限公司 </el-footer>
       </el-container>
