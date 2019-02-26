@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Dashboard from '../components/Dashboard'
 import HelloWorld from '../components/HelloWorld'
 import ElementUI from '../components/ElementUI'
 import Calendar from '../components/memo/Calendar'
@@ -13,6 +14,7 @@ Vue.use(Router);
 export default new Router({
   base: 'vue-app',
   routes: [
+    { path: '/dashboard', name: 'Dashboard', component: Dashboard },
     { path: '/HelloWorld', name: 'HelloWorld', component: HelloWorld },
     { path: '/Element-ui', name: 'Element', component: ElementUI },
     { path: '/Calendar', name: 'Calendar', component: Calendar },

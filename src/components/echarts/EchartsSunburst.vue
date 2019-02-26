@@ -9,7 +9,7 @@
     name: 'echartsBar',
     data () {
       return {
-        chartinstance: null
+        chartInstance: null
       }
     },
     props: {
