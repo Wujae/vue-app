@@ -26,11 +26,6 @@
     components: {EchartsForce, EchartsBar, TechFrame},
     data: function () {
       return {
-        frameInitOptions: {
-          size: {width: 7 * 150, height: 150 * 4},
-          blurDistance: 3,
-          connerClip: [0, 0, 20, 0]
-        },
         stationButtonOptions: {
           size: {width: 150, height: 40},
           blurDistance: 2,
@@ -47,6 +42,18 @@
         rawData: [],
         separatedByStation: [],
         selectedBtn: 0
+      }
+    },
+    props: {
+      frameInitOptions: {
+        type: Object,
+        default: () => {
+          return {
+            size: {width: 7 * 150, height: 150 * 4},
+            blurDistance: 3,
+            connerClip: [0, 0,  0, 0]
+          }
+        }
       }
     },
     methods: {

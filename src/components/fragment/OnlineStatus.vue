@@ -28,12 +28,15 @@
 
   export default {
     name: "OnlineStatus",
-    data: function () {
-      return {
-        frameInitOptions: {
-          size: {width: 5 * 150, height: 150 * 5},
-          blurDistance: 3,
-          connerClip: [0, 0, 20, 0]
+    props: {
+      frameInitOptions: {
+        type: Object,
+        default: () => {
+          return {
+            size: {width: 5 * 150, height: 150 * 5},
+            blurDistance: 3,
+            connerClip: [0, 0, 20, 0]
+          }
         }
       }
     },

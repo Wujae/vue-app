@@ -1,6 +1,6 @@
 <template>
   <tech-frame v-bind="frameInitOptions">
-    <div class="title">运用信息</div>
+    <div class="title">检修信息</div>
 
   </tech-frame>
 </template>
@@ -9,7 +9,7 @@
   import TechFrame from '../base/TechFrame'
 
   export default {
-    name: "TrainStatus",
+    name: "RepairTaskInfo",
     data: function () {
       return {
 
@@ -27,36 +27,11 @@
         }
       }
     },
-    components: {TechFrame},
-    created () {
-      let serverData = {
-        "axisData": [
-          "车组总数",
-          "上线",
-          "未上线",
-          "热备",
-          "高级修",
-          "扣修",
-          "库停"
-        ],
-        "seriesData": [
-          [
-            "754",
-            "670",
-            "84",
-            "11",
-            "5",
-            "24",
-            "42"
-          ]
-        ]
-      }
-    }
+    components: {TechFrame}
   }
 </script>
 
 <style scoped>
-
   .title {
     width: 40px;
     height: 100%;
@@ -65,5 +40,4 @@
     float: left;
     padding-top: 60px;
   }
-
 </style>

@@ -19,12 +19,16 @@
     },
     methods: {
       bindResizeWindow () {
+        let innerWidth = window.innerWidth;
+        let innerHeight = window.innerHeight;
         window.addEventListener('resize', e => {
-          console.log(e);
-          let innerWidth = window.innerWidth;
-          let innerHeight = window.innerHeight;
+
           this.scaleTransform(innerWidth, innerHeight)
         });
+
+        let resizeEvent = new Event('resize');
+        window.dispatchEvent(resizeEvent);
+
       },
       scaleTransform (width, height) {
         let scaleW = width / DEFAULT_CLIENT_WIDTH;
