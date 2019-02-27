@@ -1,6 +1,6 @@
 <template>
 
-  <div ref="echartsBar" :style="{width: width + 'px', height: height + 'px'}"></div>
+  <div ref="echartsBar" :style="{width: width + 'px', height: height + 'px'}" class="echarts"></div>
 
 </template>
 
@@ -24,6 +24,12 @@
         default: () => {
           return 400;
         }
+      },
+      option: {
+        type: Object,
+        default: () => {
+          return {};
+        }
       }
     },
     watch: {
@@ -38,16 +44,15 @@
     methods: {
       updateEcharts () {
         console.log(this.width, this.height);
-
         setTimeout( () => {
           this.chartInstance.resize();
-
         },100);
-
       },
       drawEcharts () {
+
         // 基于准备好的dom，初始化echarts实例
         this.chartInstance = this.$echarts.init(this.$refs.echartsBar);
+
         // 绘制图表
         let data = [{
           name: '区域1',
@@ -284,22 +289,25 @@
               }
             }]
           }]
-        }]
+        }];
 
         let option = {
           title: {
-            text: '各服务站车组配属'
+            text: `${this.option.name}车组配属`,
+            textStyle: {
+              color: '#fff'
+            }
           },
           series: {
             type: 'sunburst',
             highlightPolicy: 'ancestor',
-            data: data,
+            data: this.option.children,
             center: ['50%', '50%'],
             radius: [0, '95%'],
             sort: null,
             levels: [{}, {
               r0: '15%',
-              r: '35%',
+              r: '50%',
               itemStyle: {
                 borderWidth: 2
               },
@@ -307,14 +315,14 @@
                 rotate: 'tangential'
               }
             }, {
-              r0: '35%',
-              r: '70%',
+              r0: '50%',
+              r: '80%',
               label: {
                 align: 'right'
               }
             }, {
-              r0: '70%',
-              r: '72%',
+              r0: '80%',
+              r: '92%',
               label: {
                 position: 'outside',
                 padding: 3,
@@ -329,12 +337,13 @@
 
         this.chartInstance.setOption(option);
 
-        window.chartInstance = this.chartInstance;
       }
     }
   }
 </script>
 
 <style scoped>
-
+  .echarts {
+    display: inline-block;
+  }
 </style>

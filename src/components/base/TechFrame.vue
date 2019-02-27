@@ -1,7 +1,7 @@
 <template>
   <div class="hexagon" :style="outerStyle">
     <svg class="hexagon-background" width="100%" height="100%">
-      <path class="halo-path" :d="`M${blurDistance*2 + connerClip[0]} ${blurDistance*2}
+      <path class="halo-path" :fill="fillColor" :d="`M${blurDistance*2 + connerClip[0]} ${blurDistance*2}
       L${size.width - blurDistance*2 - connerClip[1]} ${blurDistance*2}
       L${size.width - blurDistance*2} ${blurDistance*2 + connerClip[1]}
       L${size.width - blurDistance*2} ${size.height - blurDistance*2 - connerClip[2]}
@@ -9,7 +9,7 @@
       L${blurDistance*2 + connerClip[3]} ${size.height - blurDistance*2}
       L${blurDistance*2} ${size.height - blurDistance*2 - connerClip[3]}
       L${blurDistance*2} ${blurDistance*2 + connerClip[0]} Z`" />
-      <path class="halo-path" :d="`M${blurDistance*2 + connerClip[0]} ${blurDistance*2}
+      <path class="halo-path" :fill="fillColor" :d="`M${blurDistance*2 + connerClip[0]} ${blurDistance*2}
       L${size.width - blurDistance*2 - connerClip[1]} ${blurDistance*2}
       L${size.width - blurDistance*2} ${blurDistance*2 + connerClip[1]}
       L${size.width - blurDistance*2} ${size.height - blurDistance*2 - connerClip[2]}
@@ -51,6 +51,10 @@
         default: () => {
           return [0, 0, 50, 0]
         }
+      },
+      fillColor: {
+        type: String,
+        default: () =>  "#1d2d47"
       }
     },
     computed : {
@@ -93,7 +97,6 @@
 
   .halo-path {
     /*fill-opacity: 0.1;*/
-    fill: #1d2d47;
     stroke: #3a6a9f;
     stroke-width: 2px;
 
@@ -104,6 +107,7 @@
     height: 100%;
 
     padding: 5px;
+    position: relative;
   }
 
 </style>

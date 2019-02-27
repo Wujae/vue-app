@@ -191,7 +191,6 @@
         title: {
           text: '车组实时监控',
           subtext: 'data from WTDS',
-          sublink: 'http://www.pm25.in',
           left: 'left',
           textStyle: {
             color: '#fff'

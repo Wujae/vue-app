@@ -26,8 +26,8 @@
         layout: [
           {"x":0, "y":0, "w":7, "h":5, "i":"0", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa0", "componentPath": "fragment/BaiduOfflineMap" },
           {"x":7, "y":0, "w":5, "h":5, "i":"1", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa1", "componentPath": "fragment/OnlineStatus"  },
-          {"x":0, "y":5, "w":7, "h":4, "i":"2", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa2", "componentPath": "base/TechFrame"  },
-          {"x":7, "y":5, "w":5, "h":2, "i":"3", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa3", "componentPath": "base/TechFrame"  },
+          {"x":0, "y":5, "w":7, "h":4, "i":"2", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa2", "componentPath": "fragment/TrainAllocation"  },
+          {"x":7, "y":5, "w":5, "h":2, "i":"3", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa3", "componentPath": "fragment/TrainStatus"  },
           {"x":7, "y":7, "w":5, "h":2, "i":"4", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa4", "componentPath": "base/TechFrame"  },
         ],
         gridVolume: [

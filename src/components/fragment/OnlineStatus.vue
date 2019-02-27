@@ -1,10 +1,22 @@
 <template>
     <tech-frame v-bind="frameInitOptions">
       <div class="level-band-container-div">
-        <div class="level-band level-a"></div>
-        <div class="level-band level-b"></div>
-        <div class="level-band level-c"></div>
-        <div class="level-band level-normal"></div>
+        <div class="level-band-holder">
+          <div class="level-band level-a"></div>
+          <div>一级(A)</div>
+        </div>
+        <div class="level-band-holder">
+          <div class="level-band level-b"></div>
+          <div>二级(B)</div>
+        </div>
+        <div class="level-band-holder">
+          <div class="level-band level-c"></div>
+          <div>三级(C)</div>
+        </div>
+        <div class="level-band-holder">
+          <div class="level-band level-normal"></div>
+          <div>正常</div>
+        </div>
       </div>
       <wrap-table></wrap-table>
     </tech-frame>
@@ -31,12 +43,20 @@
 
 <style scoped>
   .level-band-container-div{
+    position: relative;
     width: 100%;
+    padding: 10px;
+  }
+
+  .level-band-holder {
+    width: 20%;
+    height: 30px;
+    display: inline-block;
   }
 
   .level-band {
-    width: 25%;
-    height:20px;
+    width: 100%;
+    height: 15px;
   }
 
   .level-a {

@@ -51,11 +51,11 @@
             columns: [
               {title: '', key: 'mark', style: {width: '5%'}},
               {title: '服务站', key: 'station', style: {width: '15%'}},
-              {title: '配置', key: 'alloc', style: {width: '10%'}},
-              {title: '运行', key: 'operation', style: {width: '30%'}},
+              {title: '配置', key: 'alloc', style: {width: '20%'}},
+              {title: '运行', key: 'operation', style: {width: '15%'}},
               {title: '在线', key: 'online', style: {width: '15%'}},
-              {title: '离线', key: 'offline', style: {width: '25%'}},
-              {title: '故障', key: 'fault', style: {width: '25%', color: 'red'}, titleStyle: {color: 'white', width: '25%'}},
+              {title: '离线', key: 'offline', style: {width: '10%'}},
+              {title: '故障', key: 'fault', style: {width: '15%', color: 'red'}, titleStyle: {color: 'white', width: '25%'}},
               {title: '来源', key: 'source', style: {width: '25%'}}
             ]
           };
@@ -70,8 +70,14 @@
             { mark: {special: true, style: {'background-color': '#cdcd40', height:'12px', width:'16px'}},station: '杭州', alloc: '233', operation: '123', online: '23', offline: '23', fault: '23', source: '--' },
             { mark: {special: true, style: {'background-color': '#5ab943', height:'12px', width:'16px'}},station: '南京南', alloc: '233', operation: '123', online: '23', offline: '23', fault: '23', source: '平台预警' },
             { mark: {special: true, style: {'background-color': '#cf8c2d', height:'12px', width:'16px'}},station: '合肥', alloc: '233', operation: '123', online: '23', offline: '23', fault: '23', source: '平台预警' },
-            { mark: {special: true, style: {'background-color': '#5ab943', height:'12px', width:'16px'}},station: '徐州东', alloc: '233', operation: '123', online: '23', offline: '23', fault: '23', source: '--' },
-            { mark: {special: true, style: {'background-color': '#5ab943', height:'12px', width:'16px'}},station: '北京', alloc: '233', operation: '123', online: '23', offline: '23', fault: '23', source: '平台预警' },
+            { mark: {special: true, style: {'background-color': '#c43838', height:'12px', width:'16px'}},station: '徐州东', alloc: '233', operation: '123', online: '23', offline: '23', fault: '23', source: '--' },
+            { mark: {special: true, style: {'background-color': '#5ab943', height:'12px', width:'16px'}},station: '北京南', alloc: '233', operation: '123', online: '23', offline: '23', fault: '23', source: '平台预警' },
+            { mark: {special: true, style: {'background-color': '#cdcd40', height:'12px', width:'16px'}},station: '西安', alloc: '233', operation: '123', online: '23', offline: '23', fault: '23', source: '平台预警' },
+            { mark: {special: true, style: {'background-color': '#5ab943', height:'12px', width:'16px'}},station: '重庆', alloc: '233', operation: '123', online: '23', offline: '23', fault: '23', source: '平台预警' },
+            { mark: {special: true, style: {'background-color': '#cdcd40', height:'12px', width:'16px'}},station: '成都', alloc: '233', operation: '123', online: '23', offline: '23', fault: '23', source: '平台预警' },
+            { mark: {special: true, style: {'background-color': '#5ab943', height:'12px', width:'16px'}},station: '长沙', alloc: '233', operation: '123', online: '23', offline: '23', fault: '23', source: '平台预警' },
+            { mark: {special: true, style: {'background-color': '#5ab943', height:'12px', width:'16px'}},station: '广州', alloc: '233', operation: '123', online: '23', offline: '23', fault: '23', source: '平台预警' },
+            { mark: '',station: '合计', alloc: '233', operation: '123', online: '23', offline: '23', fault: '23', source: '' },
           ];
         }
       }
