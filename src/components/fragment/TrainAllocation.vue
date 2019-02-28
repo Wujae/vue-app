@@ -522,10 +522,7 @@
         {"station":"北京服务站","model":"CRH380B","train":"3694"}
       ];
 
-      console.log(this.separateStation(allcar));
-
       this.separatedByStation = this.separateStation(allcar);
-
       this.rawData = this.separatedByStation[0].trains;
 
     }
