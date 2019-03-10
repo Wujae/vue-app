@@ -1,13 +1,19 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import echarts from 'echarts'
 import App from './App'
 import router from './router'
-import './plugins/element.js'
+import './plugins/element.js' //引入element ui
+import './plugins/echarts.js' //引入echarts
+import store from './store'//引入store
+import axios from 'axios'
+import VueJsonp from 'vue-jsonp'
+
+Vue.use(VueJsonp)
 
 Vue.config.productionTip = false
-Vue.prototype.$echarts = echarts
+
+Vue.prototype.axios = axios
 
 /**
  * @desc 统一加载注册组件资源
@@ -18,11 +24,33 @@ Vue.prototype.registerComponent = (templateName, templatePath) =>{
 
 }
 
+//获取服务器参数后创建Vue
+axios.get('static/properties.json').then(response => {
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
+  console.log("load interface server properties success");
+
+  /* eslint-disable no-new */
+  new Vue({
+    el: '#app',
+    router,
+    store,
+    components: { App },
+    template: '<App/>',
+    beforeCreate() {
+      this.$store.state.server = response.data.server;
+      this.$store.state.displayMaincys = response.data.displayMaincys;
+      this.$store.state.token = response.data.token;
+
+    }
+  })
+
+}, error => {
+
+  console.error('load interface server properties error', error )
+
 })
+
+
+
+
+

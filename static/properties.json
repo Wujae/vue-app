@@ -1,0 +1,45 @@
+{
+  "app": {
+    "name": "my-first-angular",
+    "description": "蓝屏前端"
+  },
+  "server": {
+    "remoteThmServerProperties": {
+      "useRelativeUrl": false,
+      "serverIp": "phm.tangche.com",
+      "serverPort": "",
+      "ctx": "thm"
+    },
+    "remoteMdpServerProperties": {
+      "useRelativeUrl": false,
+      "serverIp": "localhost",
+      "serverPort": "2525",
+      "ctx": "MDP"
+    },
+    "remotePhmDataMdpServerProperties": {
+      "useRelativeUrl": false,
+      "serverIp": "192.168.3.154",
+      "serverPort": "8080",
+      "ctx": "PHM_DATA"
+    }
+  },
+  "token": {
+    "username": "admin",
+    "password_thm": "f27dd74b6048db0456afbc13345897c6e0dada66",
+    "password_mdp": "39851116466ba80098b72b9794dbfd89"
+  },
+  "displayMaincys": [
+    {"NAME":"I1","ID":"000006","IS_ADVANCE":"0"},
+    {"NAME":"I2","ID":"000004","IS_ADVANCE":"0"},
+    {"NAME":"M0","ID":"000022","IS_ADVANCE":"0"},
+    {"NAME":"M1","ID":"000009","IS_ADVANCE":"0"},
+    {"NAME":"M2","ID":"000010","IS_ADVANCE":"0"},
+    {"NAME":"M3","ID":"000011","IS_ADVANCE":"0"},
+    {"NAME":"LU探伤","ID":"000008","IS_ADVANCE":"0"},
+    {"NAME":"空探","ID":"000003","IS_ADVANCE":"0"},
+    {"NAME":"镟修","ID":"000013","IS_ADVANCE":"0"},
+    {"NAME":"三级修","ID":"100000","IS_ADVANCE":"1"},
+    {"NAME":"四级修","ID":"200000","IS_ADVANCE":"1"},
+    {"NAME":"五级修","ID":"000005","IS_ADVANCE":"1"}
+  ]
+}

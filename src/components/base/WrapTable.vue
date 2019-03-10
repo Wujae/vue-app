@@ -98,7 +98,7 @@
 
   .rolling-table-ul{
     list-style: none;
-    font-size: 20px;
+    font-size: 18px;
     padding-left: 0;
     margin-top: 5px;
     overflow: hidden;
@@ -112,7 +112,7 @@
   .rolling-table-ul > li.title-li{
     color: #fff;
 
-    font-size: 22px;
+    font-size: 20px;
     font-weight: bolder;
     z-index: 2;
   }

@@ -10,6 +10,8 @@
 
 <script>
   import VueGridLayout from 'vue-grid-layout';
+  import thmInterfaceService from '../../service/ThmInterfaceService'
+  import mdpInterfaceService from '../../service/MdpInterfaceService'
 
   export default {
     name: '',
@@ -42,6 +44,22 @@
 
         this.registerComponent(item.innerComponent, item.componentPath);
       });
+    },
+    mounted () {
+
+      //车组上线状态数据
+      thmInterfaceService.getOnlineStatusData(this);
+
+      mdpInterfaceService.getUsageData(this, {
+        params: {
+          areaCenter: '1K2300020000',
+          startDate: '2017-01-01',
+          endDate: '2018-12-30'
+        }
+      });
+      thmInterfaceService.getFaultData(this);
+      thmInterfaceService.getWarnData(this);
+      //thmInterfaceService.getTrainParamsData(this);
     },
     methods: {
 

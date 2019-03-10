@@ -5455,7 +5455,7 @@ function my_log(s){
 	    //普通地图
         var tdir = offmapcfg.tiles_dir.length > 0 ? offmapcfg.tiles_dir : offmapcfg.home + "tiles";/*guoguo 使用本地的瓦片 */
         tdir = tdir + "/" + b + "/" + d + "/" + a + offmapcfg.imgext; /*guoguo 使用本地的瓦片 */
-        my_log('普通地图:' + tdir);
+        //my_log('普通地图:' + tdir);
         return tdir;
 	    /*
 		this.map.Fx() && (f = 2);

@@ -31,13 +31,14 @@
     },
     watch: {
       // 如果 `rawData` 发生改变，这个函数就会运行
-      rawData: function (curVal, oldVal) {
-        //console.log(curVal,oldVal);
+      rawData (curVal, oldVal) {
+
         this.updateEcharts();
       }
     },
     mounted () {
       this.initEcharts()
+      console.log('sub mount over')
     },
     methods: {
       parseRelation (data) {
@@ -48,28 +49,29 @@
         let stationMap = {};
 
         return data.reduce((p, c, i) => {
-          let modelIdx = model.indexOf(c.model);
+
+          let modelIdx = model.indexOf(c.train_type);
           //找到车型
           if (modelIdx > -1) {
 
             p.modelSum[modelIdx].value++
           } else {
 
-            model.push(c.model);
+            model.push(c.train_type);
             p.categories.push({
-              "name": c.model,
+              "name": c.train_type,
               "keyword": {},
-              "base": c.model
+              "base": c.train_type
             });
 
             p.modelSum.push({
-              name: c.model,
+              name: c.train_type,
               value: 1
             })
           }
 
           p.nodes.push({
-            "name": c.train,
+            "name": c.sn,
             "value": 1,
             "category": modelIdx
           });
@@ -96,8 +98,11 @@
 
       },
       initEcharts () {
+
+        if(this.chartInstance) return;
+
         let initFinished = false;
-        if (!this.rawData || this.rawData.length === 0) return;
+
         // 基于准备好的dom，初始化echarts实例
         this.chartInstance = this.$echarts.init(this.$refs.echartsBar);
 
@@ -124,9 +129,13 @@
           initFinished = true;
         });
 
-        this.drawEcharts();
       },
       drawEcharts () {
+
+        this.initEcharts()
+
+        if(!this.rawData || this.rawData.length === 0 ) return;
+
         let result = this.parseRelation(this.rawData);
 
         //console.log(result);
@@ -180,7 +189,7 @@
               },
               label: {
                 normal: {
-                  formatter: '{b} : {c}辆' + '\n' + '[{d}%]',
+                  formatter: '{b} : {c}列' + '\n' + '[{d}%]',
                   borderWidth: 0,
                   borderRadius: 4,
                   height: 30,

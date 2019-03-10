@@ -157,9 +157,6 @@
 
         }, []);
 
-        console.log(summaryData);
-        console.log(chartDatas);
-
         this.updateCharts(chartDatas[0]);
 
       },
@@ -176,7 +173,7 @@
           grid: {
             left: '3%',
             right: '20%',
-            top: '3%',
+            top: '10%',
             bottom: '3%',
             containLabel: true
           },
@@ -277,6 +274,7 @@
     display: inline-block;
     float: left;
     padding-top: 60px;
+    padding-left: 20px;
   }
 
 </style>
