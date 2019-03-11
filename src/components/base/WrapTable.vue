@@ -2,7 +2,7 @@
   <div class="wrap-table-div">
     <ul class="rolling-table-ul" :style="columnSetting.overallStyle">
       <li  class="title-li" :style="columnSetting.titleRowStyle">
-        <div class="rolling-table-row-wrapper" :style="{height: columnSetting.columnHeight}">
+        <div class="rolling-table-row-wrapper" :style="{height: columnSetting.rowHeight}">
           <div v-if="columnSetting.needIdx" :style="{width: columnSetting.idxOccupancyRate + '%'}"></div>
           <template v-for="column in columnSetting.columns">
             <div :style="column.titleStyle ? column.titleStyle : column.style">{{column.title}}</div>
@@ -11,7 +11,7 @@
       </li>
       <template v-for="item in dataItems">
         <li class="data-li" @click="onClick($event,item)" :style="item.idx % 2 === 1 ? columnSetting.oddRowStyle : columnSetting.evenRowStyle">
-          <div class="rolling-table-row-wrapper" :style="{height: columnSetting.columnHeight, 'min-height': columnSetting.columnMinHeight}">
+          <div class="rolling-table-row-wrapper" :style="{height: columnSetting.rowHeight, 'min-height': columnSetting.rowMinHeight}">
             <div v-if="columnSetting.needIdx" :style="{width: columnSetting.idxOccupancyRate + '%'}">
               <i :content="item.idx">{{item.idx}}</i>
             </div>
@@ -40,16 +40,20 @@
         type: Object,
         default: () => {
           return {
-            needIdx: false,
-            idxOccupancyRate: 5,
-            overallStyle: null,
-            columnHeight: '45px',
-            columnMinHeight: '20px',
-            titleRowStyle: null,
-            oddRowStyle: null,
-            evenRowStyle: null,
-            columns: [
-              {title: '', key: 'mark', style: {width: '5%'}},
+            needIdx: false,  //是否需要序号
+            idxOccupancyRate: 5,  //序号宽度百分比
+            overallStyle: null,   //整体style样式
+            rowHeight: '45px', //整体行高
+            rowMinHeight: '20px', //最小行高
+            titleRowStyle: null,  //标题行样式
+            oddRowStyle: null,    //奇数数据行样式
+            evenRowStyle: null,   //偶数数据行样式
+            columns: [    //列定义
+              { title: '',  //列标题
+                key: 'mark',  //数据映射字段
+                style: {width: '5%'},  //列样式
+                titleStyle: null  //标题列样式
+              },
               {title: '服务站', key: 'station', style: {width: '15%'}},
               {title: '配置', key: 'alloc', style: {width: '20%'}},
               {title: '运行', key: 'operation', style: {width: '15%'}},
