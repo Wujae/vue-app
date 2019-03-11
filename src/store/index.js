@@ -17,14 +17,22 @@ export default new Vuex.Store({
     displayMaincys: null,
     token: null,
     trains: null,
-    gpsMap: null
+    gpsMap: null,
+    currentFault: null,
+    currentWarn: null,
   },
   getters: {
     getTrains: state => {
       return state.trains;
     },
     getGpsData: state => {
-      return state.trains;
+      return state.gpsMap;
+    },
+    getCurrentFault: state => {
+      return state.currentFault;
+    },
+    getCurrentWarn: state => {
+      return state.currentWarn;
     }
   },
   mutations: {
@@ -33,6 +41,12 @@ export default new Vuex.Store({
     },
     updateGpsMapData (state, data) {
       state.gpsMap = data
+    },
+    updateCurrentFault (state, data) {
+      state.currentFault = data
+    },
+    updateCurrentWarn (state, data) {
+      state.currentWarn = data
     }
   }
 })

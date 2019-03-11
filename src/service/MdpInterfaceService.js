@@ -4,7 +4,7 @@ const SECRET_KEY = "098f6bcd4621d373cade4e832627b4f6";
 
 export default {
   /**
-   * 屏幕一 运用信息
+   * 屏幕-全图监控-运用信息
    * @param {Vue} v - vue实例
    * @param {Object} callback 回调方法
    * @param {Object} callback.params - 请求参数
@@ -48,7 +48,7 @@ export default {
 
   },
   /**
-   * 屏幕一 检修信息
+   * 屏幕-全图监控-检修信息
    * @param {Vue} v - vue实例
    * @param {Object} callback 回调方法
    * @param {Object} callback.params - 请求参数
@@ -86,6 +86,7 @@ export default {
 
   },
   /**
+   * 获取MDP服务器路径
    * @param {Vue} v - vue实例
    * @param {String} requestPath - 请求地址
    * @return {Promise}
@@ -101,7 +102,7 @@ export default {
 
   },
   /**
-   *
+   * 生成jwtToken验证信息
    * @param {String} requestURI - 请求地址
    * @param {Object} tokenData - 权限令牌
    * @return {Promise}

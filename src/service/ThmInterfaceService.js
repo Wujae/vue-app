@@ -1,6 +1,7 @@
 export default {
   /**
-   * 屏幕一 全图车组GPS位置信息
+   * @deprecated
+   * 全图车组GPS位置信息
    * @param {Vue} v - vue实例
    * @param {Object} callback 回调方法
    * @param {Object} callback.params - 请求参数
@@ -34,7 +35,7 @@ export default {
 
   },
   /**
-   * 屏幕一 车组在线状态
+   * 屏幕一-全图监控-GPS地图车组位置信息
    * @param {Vue} v - vue实例
    * @param {Object} callback 回调方法
    * @param {Object} callback.params - 请求参数
@@ -79,8 +80,8 @@ export default {
 
   },
   /**
-   * 屏幕二 当前故障
-   * @param v
+   * 屏幕-事件中心-实时故障信息
+   * @param {Vue} v - vue实例
    */
   getFaultData (v) {
 
@@ -88,7 +89,7 @@ export default {
 
     let start = new Date()
 
-    console.log("告警API",serverAddress);
+    console.log("实时故障信息API",serverAddress);
 
     v.$jsonp(serverAddress,
       {
@@ -118,14 +119,16 @@ export default {
       console.log(`get thm fault complete in ${ new Date() - start }ms`)
       console.log(response)
 
+      v.$store.commit('updateCurrentFault', response)
+
     }).catch(error => {
       console.log(error)
     })
 
   },
   /**
-   * 屏幕二 当前预警
-   * @param v
+   * 屏幕-事件中心-平台预警
+   * @param {Vue} v - vue实例
    */
   getWarnData (v) {
     let serverAddress = this.createServerURL(v, 'faultrec/selectFaultWarnOnDay')
@@ -153,34 +156,48 @@ export default {
       console.log(`get thm warn complete in ${ new Date() - start }ms`)
       console.log(response)
 
+      v.$store.commit('updateCurrentWarn', response)
+
     }).catch(error => {
       console.log(error)
     })
   },
   /**
-   * 屏幕一 车组运行参数
-   * @param v
+   * 屏幕-车组参数-车组运行参数
+   * @param {Vue} v - vue实例
+   * @param {Object} callback 回调方法
+   * @param {Object} callback.params - 请求参数
+   * @param {String} callback.params.sn - 车组号 如：3501
+   * @param {Function} callback.onSuccess - onSuccess (response){}
+   * @param {Function} callback.onError - onError (error){}
    */
-  getTrainParamsData (v) {
+  getTrainParamsData (v, callback) {
 
     let serverAddress = this.createServerURL(v, 'monitor/paramsMonitor')
 
     let start = new Date()
 
     v.$jsonp(serverAddress,
-      {
-        sn: 3501
-      }).then(response => {
+      callback.params
+    ).then(response => {
 
       console.log(`get thm train params complete in ${ new Date() - start }ms`)
       console.log(response)
 
+      if (callback.onSuccess) {
+        callback.onSuccess(response)
+      }
+
     }).catch(error => {
+
+      if (callback.onError) {
+        callback.onError(error)
+      }
       console.log(error)
     })
   },
   /**
-   * 屏幕一 车组在线状态
+   * 获取请求完整路径
    * @param {Vue} v - vue实例
    * @param {String} requestPath - 请求地址
    */
