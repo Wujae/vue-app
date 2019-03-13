@@ -12,8 +12,8 @@
     },
     "remoteMdpServerProperties": {
       "useRelativeUrl": false,
-      "serverIp": "localhost",
-      "serverPort": "2525",
+      "serverIp": "tk.imsp.cn",
+      "serverPort": "",
       "ctx": "MDP"
     },
     "remotePhmDataMdpServerProperties": {

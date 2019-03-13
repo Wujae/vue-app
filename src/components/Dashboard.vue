@@ -15,6 +15,7 @@
       return {
         links: [
           { path: '/layout', name: 'Layout'},
+          { path: '/layout-resource-center', name: 'LayoutResourceCenter'},
           { path: '/HelloWorld', name: 'HelloWorld'},
           { path: '/Element-ui', name: 'Element'},
           { path: '/Calendar', name: 'Calendar'},

@@ -7,6 +7,7 @@ import Calendar from '../components/memo/Calendar'
 import EchartsSunburst from '../components/echarts/EchartsSunburst'
 import Portal from '../components/Portal'
 import Layout from '../components/layout/Layout'
+import LayoutResourceCenter from '../components/layout/LayoutResourceCenter'
 import AniTextDEMO from '../components/AniTextDEMO'
 
 Vue.use(Router);
@@ -21,6 +22,7 @@ export default new Router({
     { path: '/echarts-sunburst', name: 'EchartsSunburst', component: EchartsSunburst },
     { path: '/portal', name: 'Portal', component: Portal},
     { path: '/layout', name: 'Layout', component: Layout},
+    { path: '/layout-resource-center', name: 'LayoutResourceCenter', component: LayoutResourceCenter},
     { path: '/ani-text-demo', name: 'AniTextDEMO', component: AniTextDEMO}
   ]
 })

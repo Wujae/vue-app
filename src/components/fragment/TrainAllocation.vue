@@ -3,9 +3,9 @@
     <div class="title">车组配属信息</div>
     <div class="station-container-div">
       <template v-for="(station, i) in stations">
-        <tech-frame v-bind="stationButtonOptions" :fillColor="i === selectedBtn ? 'rgba(255, 0, 0, 0.2)': '#182134'">
-          <div class="station-btn-div" @click="switchStationData(i)" >
-            <span style="color: #66b3b3">[ </span>{{station}}<span style="color: #66b3b3"> ]</span>
+        <tech-frame v-bind="stationButtonOptions" :fillColor="selectedBtn.indexOf(i) > -1 ? 'rgba(255, 0, 0, 0.2)': '#182134'">
+          <div class="station-btn-div" @click="switchStationData(i, station.code)">
+            <span style="color: #66b3b3">[ </span>{{station.name}}<span style="color: #66b3b3"> ]</span>
           </div>
         </tech-frame>
       </template>
@@ -35,7 +35,8 @@
         stations: [],
         rawData: [],
         separatedByStation: [],
-        selectedBtn: 0
+        selectedBtn: [],
+        staCodeSelected: []
       }
     },
     props: {
@@ -59,17 +60,52 @@
       getTrains (newv) { //newv 就是改变后的getTrains值
 
         this.separatedByStation = this.separateStation(newv);
-        this.rawData = this.separatedByStation[0].trains;
+
+        this.rawData = this.separatedByStation[0].trains
+
+        this.selectedBtn = [0]
+
+        this.staCodeSelected = [this.separatedByStation[0].code]
+
+
+      },
+      staCodeSelected (newV) {
+        this.$store.commit('updateStationSelected', newV);
+
       }
     },
     methods: {
-      switchStationData (index) {
-        this.rawData = this.separatedByStation[index].trains;
-        this.selectedBtn = index;
+      switchStationData (index, staCode) {
+
+        let pos = this.selectedBtn.indexOf(index);
+
+        if(pos > -1) {
+          this.selectedBtn.splice(pos, 1)
+          this.staCodeSelected.splice(pos, 1)
+
+        }else {
+          this.selectedBtn.push(index)
+          this.staCodeSelected.push(staCode)
+
+        }
+
+        this.rawData = this.separatedByStation.reduce((p, c) => {
+
+          if(this.staCodeSelected && this.staCodeSelected.length > 0){
+            if(this.staCodeSelected.indexOf(c.code) > -1){
+
+              p = p.concat(c.trains)
+            }
+
+          }
+          return p;
+
+        }, []);
+
       },
       separateStation (data) {
         if(data){
-          let station = [], result;
+          let station = [], stationObjs = [], result;
 
           result = data.reduce((p, c, i)=>{
 
@@ -82,7 +118,8 @@
             }else{ //找不到服务站
 
               station.push(c.station);
-              let newStation = {name: c.station};
+              stationObjs.push({name: c.station, code: c.stationCode});
+              let newStation = {name: c.station, code: c.stationCode};
               newStation.trains = [c];
               p.push(newStation);
 
@@ -90,7 +127,7 @@
             return p;
           }, []);
 
-          this.stations = station;
+          this.stations = stationObjs;
 
           return result;
         }
@@ -98,10 +135,6 @@
         this.stations = [];
         return null;
       }
-    },
-    created () {
-
-
     }
   }
 </script>

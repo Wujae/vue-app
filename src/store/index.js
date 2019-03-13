@@ -20,6 +20,8 @@ export default new Vuex.Store({
     gpsMap: null,
     currentFault: null,
     currentWarn: null,
+    stationSelected: null,
+    trainSelected: null
   },
   getters: {
     getTrains: state => {
@@ -33,6 +35,12 @@ export default new Vuex.Store({
     },
     getCurrentWarn: state => {
       return state.currentWarn;
+    },
+    getStationSelected : state => {
+      return state.stationSelected;
+    },
+    getTrainSelected : state => {
+      return state.trainSelected;
     }
   },
   mutations: {
@@ -47,6 +55,13 @@ export default new Vuex.Store({
     },
     updateCurrentWarn (state, data) {
       state.currentWarn = data
+    },
+    updateStationSelected (state, data) {
+      state.stationSelected = data
+    },
+    updateTrainSelected (state, data){
+      console.log("trainSelected updated ")
+      state.trainSelected = data
     }
   }
 })

@@ -1,41 +1,96 @@
 <template>
-  <grid-layout class="grid-layout" :layout.sync="layout" :col-num="12" :row-height="150" :is-draggable="true" :is-resizable="true"
-    :is-mirrored="false" :vertical-compact="true" :margin="[0, 0]" :use-css-transforms="true" >
-    <grid-item v-for="( item, i ) in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
-               :is-draggable="item.isDraggable" :is-resizable="item.isResizable" :i="item.i" >
-      <component :is="item.innerComponent" :frameInitOptions="gridVolume[i]" />
-    </grid-item>
-  </grid-layout>
+  <div>
+    <div class="header">
+      <div class="title">全图监控</div>
+    </div>
+    <grid-layout class="grid-layout" :layout.sync="layout" :col-num="12" :row-height="150" :is-draggable="true"
+                 :is-resizable="true"
+                 :is-mirrored="false" :vertical-compact="true" :margin="[0, 0]" :use-css-transforms="true">
+      <grid-item v-for="( item, i ) in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
+                 :is-draggable="item.isDraggable" :is-resizable="item.isResizable" :i="item.i">
+        <component :is="item.innerComponent" :frameInitOptions="gridVolume[i]"/>
+      </grid-item>
+    </grid-layout>
+  </div>
 </template>
 
 <script>
   import VueGridLayout from 'vue-grid-layout';
   import thmInterfaceService from '../../service/ThmInterfaceService'
-  import mdpInterfaceService from '../../service/MdpInterfaceService'
 
   export default {
-    name: '',
+    name: 'Layout',
     components: {
       GridLayout: VueGridLayout.GridLayout,
       GridItem: VueGridLayout.GridItem
     },
-    data (){
+    data () {
       return {
         layout: [
-          {"x":0, "y":0, "w":7, "h":5, "i":"0", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa0", "componentPath": "fragment/BaiduOfflineMap" },
-          {"x":7, "y":0, "w":5, "h":5, "i":"1", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa1", "componentPath": "fragment/OnlineStatus"  },
-          {"x":0, "y":5, "w":7, "h":4, "i":"2", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa2", "componentPath": "fragment/TrainAllocation"  },
-          {"x":7, "y":5, "w":5, "h":2, "i":"3", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa3", "componentPath": "fragment/TrainStatus"  },
-          {"x":7, "y":7, "w":5, "h":2, "i":"4", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa4", "componentPath": "fragment/RepairTaskInfo"  },
+          {
+            "x": 0,
+            "y": 0,
+            "w": 7,
+            "h": 5,
+            "i": "0",
+            isDraggable: false,
+            isResizable: false,
+            "innerComponent": "async-echarts-compa0",
+            "componentPath": "fragment/BaiduOfflineMap"
+          },
+          {
+            "x": 7,
+            "y": 0,
+            "w": 5,
+            "h": 5,
+            "i": "1",
+            isDraggable: false,
+            isResizable: false,
+            "innerComponent": "async-echarts-compa1",
+            "componentPath": "fragment/OnlineStatus"
+          },
+          {
+            "x": 0,
+            "y": 5,
+            "w": 7,
+            "h": 4,
+            "i": "2",
+            isDraggable: false,
+            isResizable: false,
+            "innerComponent": "async-echarts-compa2",
+            "componentPath": "fragment/TrainAllocation"
+          },
+          {
+            "x": 7,
+            "y": 5,
+            "w": 5,
+            "h": 2,
+            "i": "3",
+            isDraggable: false,
+            isResizable: false,
+            "innerComponent": "async-echarts-compa3",
+            "componentPath": "fragment/TrainStatus"
+          },
+          {
+            "x": 7,
+            "y": 7,
+            "w": 5,
+            "h": 2,
+            "i": "4",
+            isDraggable: false,
+            isResizable: false,
+            "innerComponent": "async-echarts-compa4",
+            "componentPath": "fragment/RepairTaskInfo"
+          },
         ],
         gridVolume: [
-          {size: {width: 7 * 150, height: 150 * 5}, blurDistance: 3, connerClip: [0, 0,  0, 0] },
-          {size: {width: 5 * 150, height: 150 * 5}, blurDistance: 3, connerClip: [0, 0, 20, 0] },
-          {size: {width: 7 * 150, height: 150 * 4}, blurDistance: 3, connerClip: [0, 0, 20, 0] },
-          {size: {width: 5 * 150, height: 150 * 2}, blurDistance: 3, connerClip: [0, 0, 10, 0] },
-          {size: {width: 5 * 150, height: 150 * 2}, blurDistance: 3, connerClip: [0, 0, 10, 0] },
+          {size: {width: 7 * 150, height: 150 * 5}, blurDistance: 3, connerClip: [0, 0, 0, 0]},
+          {size: {width: 5 * 150, height: 150 * 5}, blurDistance: 3, connerClip: [0, 0, 20, 0]},
+          {size: {width: 7 * 150, height: 150 * 4}, blurDistance: 3, connerClip: [0, 0, 20, 0]},
+          {size: {width: 5 * 150, height: 150 * 2}, blurDistance: 3, connerClip: [0, 0, 10, 0]},
+          {size: {width: 5 * 150, height: 150 * 2}, blurDistance: 3, connerClip: [0, 0, 10, 0]},
         ],
-        callbackdata:{},//返回数据
+        callbackdata: {},//返回数据
       }
     },
     created () {
@@ -50,20 +105,11 @@
       //车组上线状态数据
       thmInterfaceService.getOnlineStatusData(this);
 
-      mdpInterfaceService.getUsageData(this, {
-        params: {
-          areaCenter: '1K2300020000',
-          startDate: '2017-01-01',
-          endDate: '2018-12-30'
-        }
-      });
       thmInterfaceService.getFaultData(this);
       thmInterfaceService.getWarnData(this);
       //thmInterfaceService.getTrainParamsData(this);
     },
-    methods: {
-
-    }
+    methods: {}
   }
 </script>
 
@@ -93,5 +139,36 @@
   .vue-grid-item {
     /*border: 1px solid gray;*/
     /*font-size: 150px;*/
+  }
+
+  .header {
+    height: 40px;
+    position: relative;
+  }
+
+  .title {
+    color: #10ffeb;
+    float: left;
+    width: 300px;
+    position: absolute;
+    left: 50%;
+    margin-left: -150px;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing:2px;
+    padding-top: 8px;
+  }
+
+
+  .title:before {
+    color: #10ffeb;
+    content: "<<<<< ";
+    font-weight: lighter;
+  }
+
+  .title:after {
+    color: #10ffeb;
+    content: " >>>>>";
+    font-weight: lighter;
   }
 </style>
