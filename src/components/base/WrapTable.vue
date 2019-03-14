@@ -17,11 +17,11 @@
             </div>
             <template v-for="column in columnSetting.columns">
               <div :style="column.style">
-                <template v-if="item[column.key].special">
+                <template v-if="item[column.key] && item[column.key].special">
                   <div :style="item[column.key].style">{{item[column.key].value}}</div>
                 </template>
-                <template v-if="!item[column.key].special">
-                  {{item[column.key]}}
+                <template v-if="!item[column.key] ||!item[column.key].special">
+                  {{item[column.key] | dealNull(column.nullVal)}}
                 </template>
               </div>
             </template>
@@ -54,7 +54,7 @@
                 style: {width: '5%'},  //列样式
                 titleStyle: null  //标题列样式
               },
-              {title: '服务站', key: 'station', style: {width: '15%'}},
+              {title: '服务站', nullVal:'-', key: 'station', style: {width: '15%'}},
               {title: '配置', key: 'alloc', style: {width: '20%'}},
               {title: '运行', key: 'operation', style: {width: '15%'}},
               {title: '在线', key: 'online', style: {width: '15%'}},
@@ -84,6 +84,13 @@
             { mark: '',station: '合计', alloc: '233', operation: '123', online: '23', offline: '23', fault: '23', source: '' },
           ];
         }
+      }
+    },
+    filters: {
+      dealNull: (value, nullVal) => {
+        if (!value || value.trim().length === 0 ) return nullVal
+
+        return value
       }
     },
     methods: {

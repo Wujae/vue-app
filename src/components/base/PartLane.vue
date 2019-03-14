@@ -1,29 +1,31 @@
 <template>
   <div class="train-part-level-div">
     <div class="scroll-tool-content">
-      <tech-frame v-for="(data, idx ) in displayData" v-if="idx === nodeSelected"
+      <tech-frame v-for="(part, idx ) in displayData" v-if="idx === nodeSelected"
                   v-bind="trainPartExpandBtnOptions">
-        <div class="train-part-btn-div" style="color: black" @click="selectNode(idx)">
-          {{data.funcLocName}}
+        <div class="train-part-btn-div" style="color: black" @click="selectNode(idx, part)" :title="part.funcLocName">
+          {{part.funcLocName}}
           <br>
           <div class="part-simple-name-div">
             <span>[ </span>
-            {{data.funcLocName.substr(0,1)}}
-            <span class="next-cursor"> ]</span>
+            {{part.funcLocName.substr(0,1)}}
+            <span class="next-cursor" :class="{'no-child' : !part.isParent}"> ]</span>
           </div>
         </div>
       </tech-frame>
       <tech-frame v-else-if="idx !== nodeSelected" v-bind="trainPartFoldBtnOptions">
-        <div class="train-part-btn-div fold" @click="selectNode(idx)">
-          {{data.funcLocName}}
+        <div class="train-part-btn-div fold" @click="selectNode(idx, part)" :title="part.funcLocName">
+          <div style="width: 100%; padding: 0 15px; text-overflow: ellipsis;">
+            {{part.funcLocName}}
+          </div>
         </div>
       </tech-frame>
     </div>
     <div class="scroll-tool-div">
-      <tech-frame v-bind="scrollToolBtnOptions">
+      <tech-frame v-bind="scrollToolUpBtnOptions">
         <i class="el-icon-arrow-up scroll-tool-icon" @click="scrollEv(-1)"></i>
       </tech-frame>
-      <tech-frame v-bind="scrollToolBtnOptions">
+      <tech-frame v-bind="scrollToolDownBtnOptions">
         <i class="el-icon-arrow-down scroll-tool-icon" @click="scrollEv(1)"></i>
       </tech-frame>
     </div>
@@ -39,10 +41,16 @@
     components: {TechFrame},
     data () {
       return {
-        scrollToolBtnOptions: {
+        scrollToolUpBtnOptions: {
           size: {width: 30, height: 30},
           blurDistance: 1,
-          connerClip: [2, 2, 2, 2],
+          connerClip: [10, 2, 2, 2],
+          strokeColor: "white",
+        },
+        scrollToolDownBtnOptions: {
+          size: {width: 30, height: 30},
+          blurDistance: 1,
+          connerClip: [2, 2, 10, 2],
           strokeColor: "white",
         },
         trainPartExpandBtnOptions: {
@@ -60,11 +68,12 @@
           strokeColor: "white"
         },
         nodeSelectedPos: {
-          x: 0,
+          xs: 20,
           y: 0,
           xe: 160,
         },
-        foldBtnHeight: 60,
+        nodeSelected: 0,
+        foldBtnHeight: 50,
         heightFix: 60,
       }
     },
@@ -72,24 +81,35 @@
       displayData: {
         type: Array,
         default: () => []
-      },
-      nodeSelected: {
-        type: Number,
-        default: () => 0
+      }
+    },
+    watch: {
+      displayData(newData){
+        if(newData && newData.length){
+
+          this.selectNode(0, newData[0])
+        }
       }
     },
     methods: {
       scrollEv (delta) {
         this.$bScroll.scrollBy(0, 200 * delta, 500)
       },
-      selectNode (idx) {
+      selectNode (idx, data) {
         this.nodeSelectedPos.y = idx * this.foldBtnHeight + this.heightFix
+
+        this.nodeSelected = idx
+
+        data.pos = this.nodeSelectedPos
+
+        // console.log("node selected", data.pos, idx)
+
+        this.$emit('lane-node-selected', data);
+
       }
     },
     mounted () {
       this.$nextTick(() => {
-
-        console.log(this.$el)
 
         this.$bScroll = new BScroll(this.$el,
           {
@@ -106,6 +126,9 @@
 
           this.$emit('part-lane-scrolled',pos);
         })
+
+        this.selectNode(0, this.displayData[0])
+
       })
     }
   }
@@ -124,8 +147,8 @@
   .scroll-tool-div {
     position: absolute;
     color: white;
+    bottom: 5px;
     right: 0;
-    top: 0;
   }
 
   .scroll-tool-icon {
@@ -142,6 +165,9 @@
     position: relative;
     font-size: 12px;
     height: 100%;
+    word-break: keep-all;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
   .train-part-btn-div.fold:before {
@@ -171,7 +197,7 @@
     width: 100px;
   }
 
-  .next-cursor:after {
+  .next-cursor:not(.no-child):after {
     font-family: element-icons, serif !important;
     content: " \e60e";
     right: 0;

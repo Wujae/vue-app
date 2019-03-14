@@ -4,15 +4,17 @@
     <div class="train-structure-display-div">
       <div class="lines-holder-div">
         <svg height="100%" width="100%" style="left: 10px; top:10px;">
-          <path :d="`M ${160 + pointStart.x} ${510 + pointStart.y} c 80 0 80 ${-340 - gap} 160 ${-340 - gap}`" stroke="#66b3b3" stroke-width="2" fill="none" />
-          <path d="M 460 160 c 80 0 80 150 160 150" stroke="#66b3b3" stroke-width="2" fill="none" />
-          <path d="M 760 310 c 80 0 80 -250 160 -250" stroke="#66b3b3" stroke-width="2" fill="none" />
-          <path d="M 1060 60 c 80 0 80 210 160 210" stroke="#66b3b3" stroke-width="2" fill="none" />
+          <template v-for="(line, idx) in nodeLines">
+            <path v-if="line.renderale"  :d="`M ${line.xs + gap * idx} ${line.ys + line.ysFix}
+                        c ${lineGap / 2} 0 ${lineGap / 2} ${line.ye - line.ys + line.yeFix - line.ysFix}
+                        ${lineGap} ${line.ye - line.ys + line.yeFix - line.ysFix}`"
+                  stroke="#66b3b3" stroke-width="2" fill="none" />
+          </template>
         </svg>
       </div>
 
       <template v-for="(dataTree, treeIdx) in dataTrees">
-        <part-lane :display-data="dataTree" :node-selected="nodeSelected[treeIdx]" @part-lane-scrolled="laneScrollHandler($event, treeIdx)"></part-lane>
+        <part-lane :display-data="dataTree" @lane-node-selected="nodeSelectedHandler($event, treeIdx)" @part-lane-scrolled="laneScrollHandler($event, treeIdx)"></part-lane>
       </template>
     </div>
   </tech-frame>
@@ -50,12 +52,17 @@
           strokeColor: "white"
         },
         dataTrees: [],
-        nodeSelected: [9, 2, 5, 0, 4],
-        pointStart: {
-          x: 0,
-          y: 0
+        nodeLines:[],
+        nodeLineBase: {
+          renderale: false,
+          xs: 160,
+          ys: 60,
+          ye: null,
+          ysFix: 0,
+          yeFix: 0,
         },
-        gap: 0
+        gap: 300,
+        lineGap: 160
       }
     },
     props: {
@@ -76,33 +83,115 @@
       ])
     },
     watch: {
-      getTrainSelected (newv) { //newv 就是改变后的trainSelected值
-        this.getNextStructure(newv, newv, true);
+      getTrainSelected (newTrain) { //newv 就是改变后的trainSelected值
+
+        this.nodeLines.length = 0
+        this.getNextStructure(newTrain, newTrain, 0)
 
       }
     },
     methods: {
-      getNextStructure(funcPath, train, isRebuild) {
+      /**
+       * 获取service接口数据
+       * @param funcPath 功能路径
+       * @param train 车组
+       * @param idx
+       */
+      getNextStructure(funcPath, train, idx) {
 
-        mdpInterfaceService.getTrainStracture(this, {params: {funcLocPath: funcPath, train: train}, onSuccess: result => {
-          this.buildStructure(result, isRebuild)
+        mdpInterfaceService.getTrainStructure(this, {params: {funcLocPath: funcPath, train: train}, onSuccess: result => {
+
+          this.buildStructure(result, idx)
 
         }})
 
       },
-      buildStructure(data, isRebuild) {
+      /**
+       * 创建结构
+       * @param data
+       * @param idx
+       */
+      buildStructure(data, idx) {
 
-        if(isRebuild) {}
-        console.log(data);
+        // console.log(data, idx);
+
+        this.dataTrees.splice(idx, this.dataTrees.length - idx)
+        if(data && data.length > 0) {
+          this.dataTrees.push(data)
+        }
+
+      },
+      buildLine(idx){
+        if(!this.nodeLines[idx]) {
+          this.nodeLines.push(JSON.parse(JSON.stringify(this.nodeLineBase)))
+        }else{
+          this.nodeLines.splice(idx+1, this.nodeLines.length)
+        }
+        return this.nodeLines[idx]
 
       },
       laneScrollHandler(pos, idx) {
+        // console.log(pos, idx)
 
-        this.pointStart.x = pos.x
-        this.pointStart.y = pos.y
-        this.gap = pos.y
+        this.updateLine(pos, idx, "scroll")
+      },
+      nodeSelectedHandler(nodeSelected, idx) {
 
-        console.log(params, idx)
+        // console.log("node select handler", nodeSelected.pos, idx)
+
+        this.getNextStructure(nodeSelected.funcLocPath, nodeSelected.train, idx + 1)
+
+        this.updateLine(nodeSelected.pos, idx, "node")
+      },
+      updateLine(pos, nodeIdx, mode){
+
+        if(!mode) return;
+
+        let mae = nodeIdx - 1, tsugi
+
+        if(mode === "scroll") {
+
+          if(mae < 0){ //0
+            mae = this.nodeLines[nodeIdx]
+
+            mae.ysFix = pos.y
+
+          }else { //others
+            mae = this.nodeLines[mae]
+            mae.yeFix = pos.y
+
+            tsugi = this.nodeLines[nodeIdx]
+            if(tsugi){
+              tsugi.ysFix = pos.y
+            }
+
+          }
+        }else if(mode === "node") {
+
+          if(mae < 0){ //0
+
+            mae = this.buildLine(nodeIdx)
+
+            mae.xs = pos.xe
+            mae.ys = pos.y
+            mae.renderale = true;
+
+          }else { //others
+
+            mae = this.nodeLines[mae]
+            mae.ye = pos.y
+            mae.renderale = true;
+
+            tsugi = this.buildLine(nodeIdx)
+            if(tsugi){
+              tsugi.xs = pos.xe
+              tsugi.ys = pos.y
+              tsugi.renderale = false
+            }
+
+          }
+        }
+
       }
     },
     created () {
@@ -111,505 +200,6 @@
 
     },
     mounted() {
-      let remoteData = [
-        {
-          "status": 13,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-01",
-          "funcLocName": "CRH380BL-01车模板",
-          "pFuncLocPath": "3501",
-          "train": "3501",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 13,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-02",
-          "funcLocName": "CRH380BL-02车模板",
-          "pFuncLocPath": "3501",
-          "train": "3501",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 13,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-03",
-          "funcLocName": "CRH380BL-03车模板",
-          "pFuncLocPath": "3501",
-          "train": "3501",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 13,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-04",
-          "funcLocName": "CRH380BL-04车模板",
-          "pFuncLocPath": "3501",
-          "train": "3501",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 13,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-05",
-          "funcLocName": "CRH380BL-05车模板",
-          "pFuncLocPath": "3501",
-          "train": "3501",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 13,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-06",
-          "funcLocName": "CRH380BL-06车模板",
-          "pFuncLocPath": "3501",
-          "train": "3501",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 13,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-07",
-          "funcLocName": "CRH380BL-07车模板",
-          "pFuncLocPath": "3501",
-          "train": "3501",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 13,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-08",
-          "funcLocName": "CRH380BL-08车模板",
-          "pFuncLocPath": "3501",
-          "train": "3501",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 13,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-09",
-          "funcLocName": "CRH380BL-09车模板",
-          "pFuncLocPath": "3501",
-          "train": "3501",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 13,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-10",
-          "funcLocName": "CRH380BL-10车模板",
-          "pFuncLocPath": "3501",
-          "train": "3501",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 13,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-11",
-          "funcLocName": "CRH380BL-11车模板",
-          "pFuncLocPath": "3501",
-          "train": "3501",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 13,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-12",
-          "funcLocName": "CRH380BL-12车模板",
-          "pFuncLocPath": "3501",
-          "train": "3501",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 13,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-13",
-          "funcLocName": "CRH380BL-13车模板",
-          "pFuncLocPath": "3501",
-          "train": "3501",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 13,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-14",
-          "funcLocName": "CRH380BL-14车模板",
-          "pFuncLocPath": "3501",
-          "train": "3501",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 13,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-15",
-          "funcLocName": "CRH380BL-15车模板",
-          "pFuncLocPath": "3501",
-          "train": "3501",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 13,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-16",
-          "funcLocName": "CRH380BL-16车模板",
-          "pFuncLocPath": "3501",
-          "train": "3501",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        }
-      ];
-
-      let r2 = [
-        {
-          "status": 7,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-01-01",
-          "funcLocName": "车体及车端连接",
-          "pFuncLocPath": "3501-01",
-          "zmatnr": "1",
-          "train": "3501",
-          "equipid": "000000009000043270",
-          "equipname": "车体及车端连接",
-          "station": "TCSH0010",
-          "pequipid": "ZYS350101",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 2,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-01-02",
-          "funcLocName": "转向架及传动装置",
-          "pFuncLocPath": "3501-01",
-          "train": "3501",
-          "equipid": "000000009000043278",
-          "equipname": "转向架及传动装置",
-          "station": "TCSH0010",
-          "pequipid": "ZYS350101",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 5,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-01-03",
-          "funcLocName": "高压供电及牵引系统",
-          "pFuncLocPath": "3501-01",
-          "train": "3501",
-          "equipid": "000000009000043297",
-          "equipname": "高压供电及牵引系统",
-          "station": "TCSH0010",
-          "pequipid": "ZYS350101",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 8,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-01-04",
-          "funcLocName": "辅助电气系统",
-          "pFuncLocPath": "3501-01",
-          "train": "3501",
-          "equipid": "000000009000043301",
-          "equipname": "辅助电气系统",
-          "station": "TCSH0010",
-          "pequipid": "ZYS350101",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 99,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-01-05",
-          "funcLocName": "供风及空气制动系统",
-          "pFuncLocPath": "3501-01",
-          "train": "3501",
-          "equipid": "000000009000043303",
-          "equipname": "供风及空气制动系统",
-          "station": "TCSH0010",
-          "pequipid": "ZYS350101",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 7,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-01-06",
-          "funcLocName": "网络控制系统",
-          "pFuncLocPath": "3501-01",
-          "train": "3501",
-          "equipid": "000000009000043308",
-          "equipname": "网络控制系统",
-          "station": "TCSH0010",
-          "pequipid": "ZYS350101",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 7,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-01-07",
-          "funcLocName": "旅客信息系统",
-          "pFuncLocPath": "3501-01",
-          "train": "3501",
-          "equipid": "000000009000043314",
-          "equipname": "旅客信息系统",
-          "station": "TCSH0010",
-          "pequipid": "ZYS350101",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 4,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-01-08",
-          "funcLocName": "车内环境控制",
-          "pFuncLocPath": "3501-01",
-          "train": "3501",
-          "equipid": "000000009000043323",
-          "equipname": "车内环境控制",
-          "station": "TCSH0010",
-          "pequipid": "ZYS350101",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 5,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-01-09",
-          "funcLocName": "给排水及卫生系统",
-          "pFuncLocPath": "3501-01",
-          "train": "3501",
-          "equipid": "000000009000043326",
-          "equipname": "给排水及卫生系统",
-          "station": "TCSH0010",
-          "pequipid": "ZYS350101",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 11,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-01-10",
-          "funcLocName": "车内设施",
-          "pFuncLocPath": "3501-01",
-          "train": "3501",
-          "equipid": "000000009000043331",
-          "equipname": "车内设施",
-          "station": "TCSH0010",
-          "pequipid": "ZYS350101",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 10,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-01-11",
-          "funcLocName": "司机室",
-          "pFuncLocPath": "3501-01",
-          "train": "3501",
-          "equipid": "000000009000043333",
-          "equipname": "司机室",
-          "station": "TCSH0010",
-          "pequipid": "ZYS350101",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 4,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-01-12",
-          "funcLocName": "行车安全装置",
-          "pFuncLocPath": "3501-01",
-          "train": "3501",
-          "equipid": "000000009000043341",
-          "equipname": "行车安全装置",
-          "station": "TCSH0010",
-          "pequipid": "ZYS350101",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        },
-        {
-          "status": 5,
-          "checked": false,
-          "isParent": true,
-          "open": false,
-          "nocheck": false,
-          "funcLocPath": "3501-01-13",
-          "funcLocName": "其他",
-          "pFuncLocPath": "3501-01",
-          "train": "3501",
-          "equipid": "000000009000043354",
-          "equipname": "其他",
-          "station": "TCSH0010",
-          "pequipid": "ZYS350101",
-          "isChecked": false,
-          "isNocheck": false,
-          "isOpen": false,
-          "parent": false
-        }
-      ]
-
-      this.dataTrees.push(remoteData)
-      this.dataTrees.push(r2)
-      this.dataTrees.push(r2)
-      this.dataTrees.push(r2)
-      this.dataTrees.push(r2)
 
     }
   }

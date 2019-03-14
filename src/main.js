@@ -39,6 +39,7 @@ axios.get('static/properties.json').then(response => {
     beforeCreate() {
       this.$store.state.server = response.data.server;
       this.$store.state.displayMaincys = response.data.displayMaincys;
+      this.$store.state.queryFunctions = response.data.queryFunctions;
       this.$store.state.token = response.data.token;
 
     }

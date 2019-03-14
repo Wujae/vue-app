@@ -12,8 +12,9 @@ export default new Vuex.Store({
     server: {
       thmServer: null,
       mdpServer: null,
-      phmDataMdpServer: null
+      phmDataMdpServer: null,
     },
+    queryFunctions: null,
     displayMaincys: null,
     token: null,
     trains: null,
