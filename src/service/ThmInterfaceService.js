@@ -106,7 +106,7 @@ export default {
         mode: 0,
         occrStatus: '',
         pageNo: 1,
-        pageSize: 10,
+        pageSize: 20,
         sn: '',
         stationCode: '',
         status: '',
