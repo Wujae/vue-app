@@ -6,7 +6,7 @@
         <div class="train-part-btn-div" style="color: black" @click="selectNode(idx, part)" :title="part.funcLocName">
           {{part.funcLocName}}
           <br>
-          <div class="part-simple-name-div">
+          <div class="part-simple-name-div breathe-animation">
             <span>[ </span>
             {{part.funcLocName.substr(0,1)}}
             <span class="next-cursor" :class="{'no-child' : !part.isParent}"> ]</span>
@@ -210,5 +210,23 @@
     font-size: 30px;
     padding-top: 8px;
     line-height: 45px;
+  }
+
+  .breathe-animation {
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-name: breathe;
+    -webkit-animation-duration: 1500ms;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: alternate;
+  }
+
+  @-webkit-keyframes breathe {
+    0% {
+      opacity: .4;
+    }
+
+    100% {
+      opacity: 1;
+    }
   }
 </style>

@@ -119,6 +119,42 @@ export default {
 
   },
   /**
+   * 屏幕-资源中心-基础信息
+   * @param {Vue} v - vue实例
+   * @param {Object} callback 回调方法
+   * @param {Object} callback.params - 请求参数
+   * @param {String} callback.params.trainNo  - 请求参数-车组号
+   * @param {Function} callback.onSuccess - onSuccess (response){}
+   * @param {Function} callback.onError - onError (error){}
+   */
+  getTrainBaseInfo (v, callback) {
+
+    this.createServerURL(v, '/resume/trainCarFile/baseTrainInfo').then((requestURI) => {
+
+      let start = new Date();
+
+      v.$jsonp(requestURI, callback.params).then(response => {
+
+        console.log(`get mdp train base info complete in ${ new Date() - start }ms`);
+
+        if (callback.onSuccess) {
+          callback.onSuccess(response);
+        }
+      }).catch(error => {
+
+        if (callback.onError) {
+          callback.onError(error);
+        }
+        console.log(error)
+
+      })
+    }, reason => {
+
+      console.log(reason);
+    })
+
+  },
+  /**
    * queryBy方法统一入口
    * @param {Vue} v - vue实例
    * @param {String} functionName 接口函数名称
@@ -173,6 +209,28 @@ export default {
     })
 
 
+  },
+  /**
+   * 获取空调数据
+   * @param {Vue} v - vue实例
+   * @param v
+   */
+  getAirConditioner(v) {
+
+    let startDate = '2018-09-01 00:00:00', endDate = '2019-03-15 23:59:59'
+
+    let querySql = `EVALUATE_DATE BETWEEN '${startDate}' AND '${endDate}'`
+
+    this.queryBy(v, "T_MA_AC_HEALTH", {params: {queryResultFilterSql: querySql},
+      onSuccess: (resp) => {
+
+        console.log(resp)
+        v.$store.commit('updateAirConditioner', resp)
+
+      }, onError: (error) => {
+        console.log(error)
+      }
+    })
   },
   /**
    * 获取MDP服务器路径

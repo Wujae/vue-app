@@ -9,11 +9,12 @@
           </template>
         </div>
       </li>
-      <template v-for="item in dataItems">
-        <li class="data-li" @click="onClick($event,item)" :style="item.idx % 2 === 1 ? columnSetting.oddRowStyle : columnSetting.evenRowStyle">
+      <template v-for="(item, idx) in displayItems">
+        <transition :name="animationSetting.animationName" v-on:after-enter="nextShow(idx)">
+        <li v-show="shows[idx]" class="data-li" @click="onClick($event,item)" :style="idx % 2 === 1 ? columnSetting.oddRowStyle : columnSetting.evenRowStyle">
           <div class="rolling-table-row-wrapper" :style="{height: columnSetting.rowHeight, 'min-height': columnSetting.rowMinHeight}">
             <div v-if="columnSetting.needIdx" :style="{width: columnSetting.idxOccupancyRate + '%'}">
-              <i :content="item.idx">{{item.idx}}</i>
+              <div>{{idx + 1}}</div>
             </div>
             <template v-for="column in columnSetting.columns">
               <div :style="column.style">
@@ -27,6 +28,7 @@
             </template>
           </div>
         </li>
+        </transition>
       </template>
     </ul>
   </div>
@@ -35,7 +37,21 @@
 <script>
   export default {
     name: "WrapTable",
+    data() {
+      return {
+        shows: [],
+        displayItems: []
+      }
+    },
     props: {
+      animationSetting: {
+        type: Object,
+        default: () => {
+          return {
+            animationName: "el-zoom-in-center",
+          }
+        }
+      },
       columnSetting: {
         type: Object,
         default: () => {
@@ -86,14 +102,39 @@
         }
       }
     },
+    watch: {
+      dataItems(newV) {
+        if(newV){
+          this.discardAnimation()
+          this.displayItems = this.dataItems
+          this.shows = Array(this.dataItems.length).fill(false)
+          this.nextShow(-1)
+        }
+      }
+    },
     filters: {
       dealNull: (value, nullVal) => {
-        if (!value || value.trim().length === 0 ) return nullVal
+        if (!value || (value+"").trim().length === 0 ) return nullVal
 
         return value
       }
     },
     methods: {
+      discardAnimation() {
+        this.shows.forEach((show, idx) => this.$set(this.shows, idx, false))
+
+      },
+      nextShow(idx){
+
+        setTimeout(() => {
+
+          if(idx++ < this.shows.length){
+            this.$set(this.shows, idx, true)
+          }
+          //console.log("show", idx)
+
+        }, 10)
+      },
       onClick () {
 
       }

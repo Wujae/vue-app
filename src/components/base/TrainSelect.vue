@@ -3,42 +3,57 @@
     <el-select :size="'mini'" v-model="selectedTrain" filterable placeholder="请选择车组" :popper-class="'train-select-popper-class'">
       <el-option
         v-for="item in options"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value">
+        :key="item.sn"
+        :label="item.sn"
+        :value="item.sn">
       </el-option>
     </el-select>
   </div>
 </template>
 
 <script>
+  import thmInterfaceService from '../../service/ThmInterfaceService'
+  import { mapGetters } from 'vuex'
+
   export default {
     name: "TrainSelect",
     data () {
       return {
         options: [{
-          value: '3501',
-          label: '3501'
+          sn: '3501',
         }, {
-          value: '3502',
-          label: '3502'
+          sn: '3502'
         }, {
-          value: '3503',
-          label: '3503'
+          sn: '3503'
         }, {
-          value: '3504',
-          label: '3504'
+          sn: '3504'
         }, {
-          value: '3505',
-          label: '3505'
+          sn: '3505'
         }],
         selectedTrain: null
       }
     },
+    computed:{
+      ...mapGetters([
+        'getTrains'
+      ])
+    },
     watch: {
+      getTrains (newv) { //newv 就是改变后的getTrains值
+        this.parseData(newv);
+      },
       selectedTrain(newV) {
         this.$store.commit("updateTrainSelected", newV);
       }
+    },
+    methods: {
+      parseData(data) {
+        this.options = data
+      }
+    },
+    mounted() {
+      thmInterfaceService.getOnlineStatusData(this)
+
     }
   }
 </script>
@@ -64,6 +79,10 @@
     background-color: #1b3b65;
     border-color: #23a2da;
     color: #fff;
+  }
+
+  .train-select-popper-class .el-select-dropdown__item {
+    color: #23a2da;
   }
 
 </style>

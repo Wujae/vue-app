@@ -49,7 +49,7 @@
       "viewCode": "T_MA_AC_HEALTH_1",
       "rows": 10,
       "page": 1,
-      "queryResultFilterSql": "TO_CHAR(EVALUATE_DATE, 'YYYYMMDD') BETWEEN '${startDate}' AND '${endDate}'"
+      "queryResultFilterSql": "EVALUATE_DATE BETWEEN '${startDate}' AND '${endDate}'"
     },
     "V_KXQK":{
       "menuId": "V_KXQK_1_GRID",

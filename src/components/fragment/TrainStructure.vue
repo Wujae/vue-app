@@ -8,7 +8,7 @@
             <path v-if="line.renderale"  :d="`M ${line.xs + gap * idx} ${line.ys + line.ysFix}
                         c ${lineGap / 2} 0 ${lineGap / 2} ${line.ye - line.ys + line.yeFix - line.ysFix}
                         ${lineGap} ${line.ye - line.ys + line.yeFix - line.ysFix}`"
-                  stroke="#66b3b3" stroke-width="2" fill="none" />
+                  stroke="#66b3b3" stroke-width="2" fill="none" class="breathe-animation" />
           </template>
         </svg>
       </div>
@@ -304,5 +304,23 @@
     font-size: 30px;
     padding-top: 8px;
     line-height: 45px;
+  }
+
+  .breathe-animation {
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-name: breathe;
+    -webkit-animation-duration: 1500ms;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: alternate;
+  }
+
+  @-webkit-keyframes breathe {
+    0% {
+      opacity: .4;
+    }
+
+    100% {
+      opacity: 1;
+    }
   }
 </style>
