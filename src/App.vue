@@ -63,7 +63,7 @@
     padding: 0;
     transform-origin: left top 0;
     transition: transform ease-in-out .18s;
-    background-color: #2c3e50;
+    background-color: #151923;
   }
 
   #app {

@@ -15,7 +15,7 @@ export default {
 
     let start = new Date();
 
-    this.createServerURL(v, 'statistics/usage/usageStatistics/query/jsonp').then((requestURI) => {
+    this.createServerURL(v, 'statistics/usage/usageStatistics/query').then((requestURI) => {
 
       console.log("request URI", requestURI)
 
@@ -24,9 +24,6 @@ export default {
       v.$jsonp(requestURI, callback.params).then(response => {
 
           console.log(`get mdp usage complete in ${ new Date() - start }ms`);
-
-          //存储为全局车组基础信息
-          //v.$store.commit('updateGpsMap', response);
           console.log(response)
 
           if (callback.onSuccess) {
@@ -57,16 +54,14 @@ export default {
    */
   getMaincycData (v, callback) {
 
-    this.createServerURL(v, 'statistics/usage/maincycStatistics/query/jsonp').then((requestURI) => {
+    this.createServerURL(v, 'statistics/usage/maincycStatistics/query').then((requestURI) => {
 
       let start = new Date();
 
-      v.$jsonp(requestURI, callback).then(response => {
+      v.$jsonp(requestURI, callback.params).then(response => {
 
         console.log(`get mdp maincyc complete in ${ new Date() - start }ms`);
-
-        //存储为全局车组基础信息
-        v.$store.commit('updateTrains', response);
+        console.log(response)
 
         if (callback.onSuccess) {
           callback.onSuccess(response);
@@ -83,6 +78,100 @@ export default {
 
       console.log(reason);
     })
+
+  },
+  /**
+   * 屏幕-资源中心-车组配置
+   * @param {Vue} v - vue实例
+   * @param {Object} callback 回调方法
+   * @param {Object} callback.params - 请求参数
+   * @param {String} callback.params.train  - 请求参数-车组号
+   * @param {String} callback.params.funcLocPath - 功能路径
+   * @param {String} callback.params.pFuncLocPath - 父级功能节点
+   * @param {Function} callback.onSuccess - onSuccess (response){}
+   * @param {Function} callback.onError - onError (error){}
+   */
+  getTrainStructure (v, callback) {
+
+    this.createServerURL(v, 'sap/bom/trainstracture/tree').then((requestURI) => {
+
+      let start = new Date();
+
+      v.$jsonp(requestURI, callback.params).then(response => {
+
+        console.log(`get mdp train structure complete in ${ new Date() - start }ms`);
+
+        if (callback.onSuccess) {
+          callback.onSuccess(response);
+        }
+      }).catch(error => {
+
+        if (callback.onError) {
+          callback.onError(error);
+        }
+        console.log(error)
+
+      })
+    }, reason => {
+
+      console.log(reason);
+    })
+
+  },
+  /**
+   * queryBy方法统一入口
+   * @param {Vue} v - vue实例
+   * @param {String} functionName 接口函数名称
+   * @param {Object} callback 回调方法
+   * @param {Object} callback.params - 请求参数
+   * @param {String} callback.params.menuId - 菜单ID
+   * @param {String} callback.params.codeName - 表名
+   * @param {String} callback.params.viewCode - 视图名
+   * @param {String} callback.params.rows" - 单页行数
+   * @param {String} callback.params.page - 当前页数
+   * @param {String} callback.params.queryResultFilterSql - 过滤条件
+   * @param {Function} callback.onSuccess - onSuccess (response){}
+   * @param {Function} callback.onError - onError (error){}
+   */
+  queryBy (v, functionName, callback) {
+
+    let queryFunction = v.$store.state.queryFunctions[functionName]
+
+    if(!queryFunction) {
+      let error = new Error(`can not find function with name ${functionName}`)
+      if (callback.onError) {
+        callback.onError(error);
+
+      }
+      throw error;
+    }
+
+    this.createServerURL(v, 'report/queryBy').then((requestURI) => {
+
+      let start = new Date();
+
+      let params = Object.assign(queryFunction, callback.params)
+
+      v.$jsonp(requestURI, params).then(response => {
+
+        console.log(`get mdp query by complete in ${ new Date() - start }ms`);
+
+        if (callback.onSuccess) {
+          callback.onSuccess(response);
+        }
+      }).catch(error => {
+
+        if (callback.onError) {
+          callback.onError(error);
+        }
+        console.log(error)
+
+      })
+    }, reason => {
+
+      console.log(reason);
+    })
+
 
   },
   /**
@@ -117,7 +206,7 @@ export default {
       jwt.sign(tokens, SECRET_KEY, {expiresIn:1800}, (err, token)=> {
         if(err) { reject(new Error(err))}
 
-        console.log(token)
+        //  console.log(token)
 
         resolve(`${requestURI}?jwtToken=${token}`);
       })

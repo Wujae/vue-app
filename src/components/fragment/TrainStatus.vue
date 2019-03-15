@@ -7,6 +7,8 @@
 
 <script>
   import TechFrame from '../base/TechFrame'
+  import mdpInterfaceService from '../../service/MdpInterfaceService'
+  import { mapGetters } from 'vuex'
 
   const COLOR_MAP = [
     '#00cddb',
@@ -44,8 +46,32 @@
         }
       }
     },
+    computed:{
+      ...mapGetters([
+        'getStationSelected'
+      ])
+    },
+    watch: {
+      getStationSelected (newv) {
+        this.getRemoteData(newv);
+      }
+    },
     components: {TechFrame},
     methods: {
+      getRemoteData(seletedTrains) {
+
+        mdpInterfaceService.getUsageData(this, {
+          params: {
+            station: seletedTrains.join(","),
+            startDate: '2017-01-01',
+            endDate: '2018-12-30'
+          },
+          onSuccess: (response) => {
+            this.doBuildData(response);
+          }
+        });
+
+      },
       fullFillUsage: function (areas) {
 
         let usages = this.usages;
