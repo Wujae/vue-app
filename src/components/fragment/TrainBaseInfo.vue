@@ -167,7 +167,6 @@
 </template>
 
 <script>
-  import 'element-ui/lib/theme-chalk/base.css';
   import TechFrame from '../base/TechFrame'
   import mdpInterfaceService from '../../service/MdpInterfaceService'
   import { mapGetters } from 'vuex'
@@ -246,7 +245,7 @@
       }
     },
     mounted () {
-      // mdpInterfaceService.getAirConditioner(this)
+
     }
 
   }

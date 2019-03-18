@@ -46,11 +46,18 @@ export default {
 
     let serverAddress = this.createServerURL(v, 'monitor/runStatusMonitor')
 
-    let start = new Date()
+    let requestInterval = v.$store.state.requestInterval
 
     console.log("全图车组GPS位置信息API", serverAddress);
 
-    v.$jsonp(serverAddress,
+    this.getOnlineStatusDataTimer(serverAddress, v, requestInterval,callback)
+
+  },
+  getOnlineStatusDataTimer(url, v, interval, callback){
+
+    let start = new Date()
+
+    v.$jsonp(url,
       {
         islate: '',
         jcode: '',
@@ -62,13 +69,19 @@ export default {
 
       console.log(`get thm online status complete in ${ new Date() - start }ms`)
 
-      console.log(response)
       //存储为全局车组基础信息
       v.$store.commit('updateTrains', response)
+      console.log(response)
+
+
+      setTimeout(() => {
+        this.getOnlineStatusDataTimer(url, v, interval, callback)
+      }, interval)
 
       if (callback.onSuccess) {
         callback.onSuccess(response)
       }
+
     }).catch(error => {
 
       if (callback.onError) {

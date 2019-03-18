@@ -38,7 +38,7 @@
     },
     mounted () {
       this.initEcharts()
-      console.log('sub mount over')
+      // console.log('sub mount over')
     },
     methods: {
       parseRelation (data) {
