@@ -2,11 +2,8 @@
   <tech-frame v-bind="frameInitOptions">
     <div id="onlinestatus2-l1">实 时 故 障 信 息</div>
     <div id="onlinestatus2-r1">
-      <select value="">
-        <option >一级260</option>
-        <option >二级136</option>
-        <option >三级136</option>
-      </select>
+      <level-dropdown v-bind:style="styleObject4"></level-dropdown>
+
     </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
   </tech-frame>
@@ -16,6 +13,7 @@
   import TechFrame from '../base/TechFrame'
   import WrapTable from '../base/WrapTable'
   import { mapGetters } from 'vuex'
+  import LevelDropdown from "../base/LevelDropdown";
 
   const TRAIN_STATUS = [
     '运行中', '传输中', '停止运行', '离线', '断开连接'
@@ -78,6 +76,13 @@
           ]
         },
         dataItems: [],
+        styleObject4:{
+          position: 'absolute',
+          top: '-20px',
+          right: '30px',
+          width: '100px',
+          height: '20px'
+        }
       }
     },
     props: {
@@ -102,12 +107,12 @@
       getCurrentFault (newv) { //newv 就是改变后的getCurrentFault值（请求回来的数据）
 
         this.dataItems=newv.list
-
+        console.log(newv,'currentfault')
 
         //this.parseData(newv);
       }
     },
-    components: {WrapTable, TechFrame},
+    components: {LevelDropdown, WrapTable, TechFrame},
     mounted () {
 
     },
@@ -264,7 +269,7 @@
     position: relative;
 
   }
-  #onlinestatus2-r1 select {
+  .selectCF1 {
     position: absolute;
     top: -20px;
     right: 30px;

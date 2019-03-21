@@ -2,11 +2,7 @@
   <tech-frame v-bind="frameInitOptions">
     <div id="onlinestatus6-l1">规则关注</div>
     <div id="onlinestatus6-r1">
-      <select value="">
-        <option >一级260</option>
-        <option >二级136</option>
-        <option >三级136</option>
-      </select>
+      <level-dropdown v-bind:style="styleObject5"></level-dropdown>
     </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
   </tech-frame>
@@ -16,6 +12,7 @@
   import TechFrame from '../base/TechFrame'
   import WrapTable from '../base/WrapTable'
   import { mapGetters } from 'vuex'
+  import LevelDropdown from "../base/LevelDropdown";
 
   const  LVL_COLOR = {
     A: '#c43838',
@@ -50,8 +47,14 @@
           ]
         },
         // dataItems: null,
-        dataItems:[ ]
-
+        dataItems:[],
+        styleObject5:{
+          position: 'absolute',
+          top: '-20px',
+          right: '30px',
+          width: '100px',
+          height: '20px'
+        }
       }
     },
     props: {
@@ -80,7 +83,7 @@
         console.log(newv)
       }
     },
-    components: {WrapTable, TechFrame},
+    components: {WrapTable, TechFrame,LevelDropdown},
     mounted () {
 
     },

@@ -2,11 +2,7 @@
   <tech-frame v-bind="frameInitOptions" :content-style="{overflow: 'hidden'}">
     <div id="onlinestatus5-l1">空调健康评估</div>
     <div id="onlinestatus5-r1">
-      <select value="">
-        <option >一级260</option>
-        <option >二级136</option>
-        <option >三级136</option>
-      </select>
+      <level-dropdown v-bind:style="styleObject3"></level-dropdown>
     </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
   </tech-frame>
@@ -16,6 +12,7 @@
   import TechFrame from '../base/TechFrame'
   import WrapTable from '../base/WrapTable'
   import { mapGetters } from 'vuex'
+  import LevelDropdown from "../base/LevelDropdown";
 
   //airConditioner
   export default {
@@ -44,7 +41,14 @@
           ]
         },
         // dataItems: null,
-        dataItems:[]
+        dataItems:[],
+        styleObject3:{
+          position: 'absolute',
+          top: '-20px',
+          right: '30px',
+          width: '100px',
+          height: '20px'
+        }
 
       }
     },
@@ -71,7 +75,7 @@
         this.dataItems=newv.rows
       }
     },
-    components: {WrapTable, TechFrame},
+    components: {WrapTable, TechFrame,LevelDropdown},
     mounted () {
 
     },
