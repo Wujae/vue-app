@@ -31,61 +31,17 @@
     data () {
       return {
         columnSetting: {
-          needIdx: true,
+          needIdx: false,
           idxOccupancyRate: 10,
-          overallStyle: {'border-bottom':'1px solid #23a2da'},
-          rowHeight: '46px',
+          overallStyle: {'border-bottom':'1px solid #23a2da', width: '98%', margin: '0 1%'},
+          rowHeight: '35px',
           rowMinHeight: '20px',
-
-          titleRowStyle: {'background-color': '#1b3b65','border':'1px solid #23a2da'},
-          oddRowStyle:{'background-color': '#1a4069'},
-          evenRowStyle:{'background-color': '#1c3759'},
+          titleRowStyle: {'background-color': '#1b3b65','border':'1px solid #23a2da', height: '35px', 'font-weight': 'normal'},
+          oddRowStyle:{'background-color': '#1a4069', 'border-top': '1px solid #1d2d47'},
+          evenRowStyle:{'background-color': '#1c3759', 'border-top': '1px solid #1d2d47'},
           columns:null
-          //   [
-          //   {title: '项目', key: 'number', style: {width: '30%', 'font-size': '14px', color:'white'},  titleStyle: {width: '30%', 'font-size': '14px', color:' #09f2e1'}},
-          //   {title: '1车', key: 'station', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
-          //   {title: '2车', key: 'alloc', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
-          //   {title: '3车', key: 'online', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
-          //   {title: '4车', key: 'trans', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
-          //   {title: '5车', key: 'five',style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
-          //   {title: '6车', key: 'six', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
-          //   {title: '7车', key: 'seven',style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
-          //   {title: '8车', key: 'eight', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}}
-          //
-          // ]
         },
-        // dataItems: null,
-        dataItems:[
-          // {number:"转向架1一轴左侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
-          // {number:"转向架1二轴左侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
-          // {number:"转向架1一轴右侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37' },
-          // {number:"转向架1二轴右侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37' },
-          // {number:"转向架2三轴左侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
-          // {number:"转向架2四轴左侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37' },
-          // {number:"转向架2三轴右侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37' },
-          // {number:"转向架2四轴右侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
-          // {number:"电机1驱动侧轴承温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37' },
-          // {number:"电机2驱动侧轴承温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
-          // {number:"电机3驱动侧轴承温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
-          // {number:"电机4驱动侧轴承温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'}
-          // {number:"6",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"7",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"8",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"9",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"10",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"11",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"12",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"13",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"14",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"15",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"16",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"17",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"18",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"19",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"20",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-
-        ]
-
+        dataItems:[]
       }
     },
     props: {
@@ -124,16 +80,16 @@
             let result = [{
               title: '项目',
               key: 'key',
-              style: {width: '50%', 'font-size': '14px', color: 'white'},
-              titleStyle: {width: '50%', 'font-size': '14px', color: ' #09f2e1'}
+              style: {width: '50%', 'font-size': '13px', color: 'white'},
+              titleStyle: {width: '50%', 'font-size': '13px', color: ' #09f2e1'}
             }];
             data.coaches.forEach((coach, idxe) => {
 
               result.push({
-                title: `${coach}车设备`,
+                title: `${coach}车`,
                 key: `param_${idxe}`,
-                style: {width: '50%', 'font-size': '14px', color: 'white'},
-                titleStyle: {width: '50%', 'font-size': '14px', color: ' #09f2e1'}
+                style: {width: '50%', 'font-size': '13px', color: 'white'},
+                titleStyle: {width: '50%', 'font-size': '13px', color: ' #09f2e1'}
               })
             })
 
@@ -203,22 +159,8 @@
     color: #09f2e1;
     font-weight: bolder;
     font-size: 18px;
-    margin-top: 30px;
+    margin: 20px auto;
 
-  }
-  #onlinestatus3-r1 {
-    position: relative;
-
-  }
-  #onlinestatus3-r1 select {
-    position: absolute;
-    top: -20px;
-    right: 0px;
-    width: 150px;
-    height: 20px;
-    background: #1b3b65;
-    border-color: #23a2da;
-    color: white;
   }
 
 </style>

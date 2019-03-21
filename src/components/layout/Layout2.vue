@@ -1,12 +1,18 @@
 <template>
-  <grid-layout class="grid-layout" :layout.sync="layout" :col-num="60" :row-height="30" :is-draggable="true" :is-resizable="true"
-               :is-mirrored="false" :vertical-compact="true" :margin="[0, 0]" :use-css-transforms="true" >
+  <div>
+    <div class="header">
+      <div class="title">列车参数</div>
+    </div>
+    <grid-layout class="grid-layout" :layout.sync="layout" :col-num="60" :row-height="30" :is-draggable="true"
+                 :is-resizable="true"
+                 :is-mirrored="false" :vertical-compact="true" :margin="[0, 0]" :use-css-transforms="true">
 
-    <grid-item v-for="( item, i ) in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
-               :is-draggable="item.isDraggable" :is-resizable="item.isResizable" :i="item.i" >
-      <component :is="item.innerComponent" :frameInitOptions="gridVolume[i]" />
-    </grid-item>
-  </grid-layout>
+      <grid-item v-for="( item, i ) in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
+                 :is-draggable="item.isDraggable" :is-resizable="item.isResizable" :i="item.i">
+        <component :is="item.innerComponent" :frameInitOptions="gridVolume[i]"/>
+      </grid-item>
+    </grid-layout>
+  </div>
 </template>
 
 <script>
@@ -94,5 +100,37 @@
     /*border: 1px solid gray;*/
     /*font-size: 150px;*/
   }
+  
+  .header {
+    height: 40px;
+    position: relative;
+  }
+
+  .title {
+    color: #10ffeb;
+    float: left;
+    width: 300px;
+    position: absolute;
+    left: 50%;
+    margin-left: -150px;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing:2px;
+    padding-top: 8px;
+  }
+
+
+  .title:before {
+    color: #10ffeb;
+    content: "<<<<< ";
+    font-weight: lighter;
+  }
+
+  .title:after {
+    color: #10ffeb;
+    content: " >>>>>";
+    font-weight: lighter;
+  }
+
 </style>
 
