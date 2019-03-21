@@ -138,6 +138,12 @@
       onClick () {
 
       }
+    },
+    mounted () {
+      this.displayItems = this.dataItems
+      this.shows = Array(this.dataItems.length).fill(false)
+      this.nextShow(-1)
+
     }
   }
 </script>

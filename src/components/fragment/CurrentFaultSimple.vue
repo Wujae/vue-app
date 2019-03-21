@@ -1,8 +1,14 @@
 <template>
-  <tech-frame v-bind="frameInitOptions">
-    <div id="onlinestatus3-l1">列车牵引单元参数</div>
-
-    <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
+  <tech-frame v-bind="frameInitOptions" :content-style="{overflow: 'hidden'}">
+    <div id="onlinestatus3-l1">车组报警</div>
+    <div id="onlinestatus3-r1">
+      <select value="">
+        <option >一级260</option>
+        <option >二级136</option>
+        <option >三级136</option>
+      </select>
+    </div>
+    <wrap-table :column-setting="columnSetting" :data-items="dataItems" ></wrap-table>
   </tech-frame>
 </template>
 
@@ -25,43 +31,37 @@
     NORMAL: '#5ab943'
   };
 
+  //currentFaultSimple
   export default {
-    name: "",
+    name: "OnlineStatus2",
     data () {
       return {
         columnSetting: {
           needIdx: true,
           idxOccupancyRate: 5,
-          overallStyle: {'border-bottom':'1px solid #23a2da'},
-          rowHeight: '45px',
+          overallStyle: null,
+          rowHeight: '32px',
           rowMinHeight: '20px',
           titleRowStyle: null,
-          titleRowStyle: {'background-color': '#1b3b65','border':'1px solid #23a2da'},
-          oddRowStyle:{'background-color': '#1a4069'},
-          evenRowStyle:{'background-color': '#1c3759'},
+          oddRowStyle: null,
+          evenRowStyle: null,
           columns: [
-            {title: '项目', key: 'number', style: {width: '30%', 'font-size': '14px', color:'white'},  titleStyle: {width: '30%', 'font-size': '14px', color:' #09f2e1'}},
-            {title: '1单元', key: 'station', style: {width: '40%', 'font-size': '14px', color:'white'},  titleStyle: {width: '40%', 'font-size': '14px', color:' #09f2e1'}},
-            {title: '2单元', key: 'alloc', style: {width: '30%', 'font-size': '14px', color:'white'},  titleStyle: {width: '30%', 'font-size': '14px', color:' #09f2e1'}}
-            // {title: '车辆号', key: 'online', style: {width: '10%', 'font-size': '14px'}},
-            // {title: '所属系统', key: 'trans', style: {width: '25%', 'font-size': '14px'}},
-            // {title: '故障代码', key: 'stopped', style: {width: '20%', 'font-size': '14px'}}
+            // {title: '序号', key: 'number', style: {width: '10%', 'font-size': '14px'}},
+            {title: '车型', key: 'trainType', style: {width: '20%', 'font-size': '14px'}},
+            {title: '车组号', key: 'sn', style: {width: '15%', 'font-size': '14px'}},
+            {title: '车辆号', key: 'coach', style: {width: '10%', 'font-size': '14px'}},
+            {title: '所属系统', key: 'sysName', style: {width: '25%', 'font-size': '14px'}},
+            {title: '故障代码', key: 'faultCode', style: {width: '20%', 'font-size': '14px'}}
 
           ]
         },
         // dataItems: null,
         dataItems:[
-          {number:"网压",station: '28.13', alloc: '28.13' },
-          {number:"网流",station: '0', alloc: '0' },
-          {number:"受电弓",station: '降下', alloc: '降下' },
-          {number:"主断",station: '断开', alloc: '断开' },
-          {number:"牵引力",station: '0', alloc: '0' },
-          {number:"电池电压",station: '122.9', alloc: '122.9' },
-          {number:"空气制动力",station: '181.59', alloc: '181.59' },
-          {number:"主风管压力",station: '961.88', alloc: '961.88' },
-          {number:"制动管压力",station: '228', alloc: '228' },
-          {number:"空簧载重",station: '施加', alloc: '施加' },
-          {number:"载重",station: '施加', alloc: '施加' }
+          // {number:"1",station: 'CRH380B', alloc: '3616',online: '08',stopped: '6812', trans:'辅助电器系统' },
+          // {number:"2",station: 'CRH380B', alloc: '3616',online: '08',stopped: '6812', trans:'辅助电器系统' },
+          // {number:"3",station: 'CRH380B', alloc: '3616',online: '08',stopped: '6812', trans:'辅助电器系统' },
+          // {number:"4",station: 'CRH380B', alloc: '3616',online: '08',stopped: '6812', trans:'辅助电器系统' },
+          // {number:"5",station: 'CRH380B', alloc: '3616',online: '08',stopped: '6812', trans:'辅助电器系统' }
           // {number:"6",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
           // {number:"7",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
           // {number:"8",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
@@ -96,12 +96,12 @@
     },
     computed:{
       ...mapGetters([
-        'getTrains'
+        'getCurrentFault'
       ])
     },
     watch: {
-      getTrains (newv) { //newv 就是改变后的getTrains值
-        this.parseData(newv);
+      getCurrentFault (newv) { //newv 就是改变后的getTrains值
+        this.dataItems=newv.list
       }
     },
     components: {WrapTable, TechFrame},
@@ -256,7 +256,6 @@
     font-weight: bolder;
     font-size: 18px;
     margin-top: 30px;
-
   }
   #onlinestatus3-r1 {
     position: relative;
@@ -265,12 +264,9 @@
   #onlinestatus3-r1 select {
     position: absolute;
     top: -20px;
-    right: 0px;
-    width: 150px;
+    right: 30px;
+    width: 100px;
     height: 20px;
-    background: #1b3b65;
-    border-color: #23a2da;
-    color: white;
   }
 
 </style>

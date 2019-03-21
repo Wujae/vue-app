@@ -118,7 +118,7 @@ export default {
 
       console.log(`get thm fault complete in ${ new Date() - start }ms`)
       console.log(response)
-
+      //请求回来的数据commit到vuex
       v.$store.commit('updateCurrentFault', response)
 
     }).catch(error => {
@@ -182,7 +182,7 @@ export default {
     ).then(response => {
 
       console.log(`get thm train params complete in ${ new Date() - start }ms`)
-      console.log(response)
+      //console.log(response)
 
       if (callback.onSuccess) {
         callback.onSuccess(response)

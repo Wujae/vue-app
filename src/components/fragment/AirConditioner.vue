@@ -31,6 +31,7 @@
     NORMAL: '#5ab943'
   };
 
+  //airConditioner
   export default {
     name: "OnlineStatus2",
     data () {

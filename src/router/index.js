@@ -25,7 +25,7 @@ export default new Router({
     { path: '/portal', name: 'Portal', component: Portal},
     { path: '/layout', name: 'Layout', component: Layout},
     { path: '/layout2', name: 'Layout2', component: Layout2},
-    { path: '/layout3', name: 'Layout2', component: Layout3},
+    { path: '/layout3', name: 'Layout3', component: Layout3},
     { path: '/layout-resource-center', name: 'LayoutResourceCenter', component: LayoutResourceCenter},
     { path: '/ani-text-demo', name: 'AniTextDEMO', component: AniTextDEMO}
   ]

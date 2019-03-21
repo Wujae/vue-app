@@ -24,7 +24,9 @@ export default new Vuex.Store({
     stationSelected: null,
     trainSelected: null,
     airConditioner: null,
-
+    trainParamsEntity:null,
+    trainParamsUnit:null,
+    trainParamsParts:null
   },
   getters: {
     getTrains: state => {
@@ -47,6 +49,15 @@ export default new Vuex.Store({
     },
     getAirConditioner : state => {
       return state.airConditioner;
+    },
+    getTrainParamsEntity :state => {
+      return state.trainParamsEntity;
+    },
+    getTrainParamsUnit:state => {
+      return state.trainParamsUnit
+    },
+    getTrainParamsParts:state =>{
+      return state.trainParamsParts
     }
   },
   mutations: {
@@ -72,6 +83,15 @@ export default new Vuex.Store({
     updateAirConditioner (state, data){
       state.airConditioner = data
 
+    },
+    updateTrainParamsEntity (state,data){
+      state.trainParamsEntity = data
+    },
+    updateTrainParamsUnit (state,data){
+      state.trainParamsUnit = data
+    },
+    updateTrainParamsParts (state,data){
+      state.trainParamsParts = data
     }
   }
 })

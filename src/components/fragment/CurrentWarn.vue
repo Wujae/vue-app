@@ -1,7 +1,7 @@
 <template>
-  <tech-frame v-bind="frameInitOptions">
-    <div id="onlinestatus3-l1">车组报警</div>
-    <div id="onlinestatus3-r1">
+  <tech-frame v-bind="frameInitOptions "  :content-style="{overflow: 'hidden'}">
+    <div id="onlinestatus4-l1">平台预警</div>
+    <div id="onlinestatus4-r1">
       <select value="">
         <option >一级260</option>
         <option >二级136</option>
@@ -31,6 +31,7 @@
     NORMAL: '#5ab943'
   };
 
+  //currentWarn
   export default {
     name: "OnlineStatus2",
     data () {
@@ -39,28 +40,28 @@
           needIdx: true,
           idxOccupancyRate: 5,
           overallStyle: null,
-          rowHeight: '25px',
+          rowHeight: '32px',
           rowMinHeight: '20px',
           titleRowStyle: null,
           oddRowStyle: null,
           evenRowStyle: null,
           columns: [
-            {title: '序号', key: 'number', style: {width: '10%', 'font-size': '14px'}},
-            {title: '车型', key: 'station', style: {width: '20%', 'font-size': '14px'}},
-            {title: '车组号', key: 'alloc', style: {width: '15%', 'font-size': '14px'}},
-            {title: '车辆号', key: 'online', style: {width: '10%', 'font-size': '14px'}},
-            {title: '所属系统', key: 'trans', style: {width: '25%', 'font-size': '14px'}},
-            {title: '故障代码', key: 'stopped', style: {width: '20%', 'font-size': '14px'}}
+            // {title: '序号', key: 'number', style: {width: '10%', 'font-size': '14px'}},
+            {title: '车型', key: 'trainType', style: {width: '15%', 'font-size': '14px'}},
+            {title: '车组号', key: 'sn', style: {width: '15%', 'font-size': '14px'}},
+            {title: '车辆号', key: 'coach', style: {width: '10%', 'font-size': '14px'}},
+            {title: '预警项目', key: 'warnName', style: {width: '40%', 'font-size': '14px'}},
+            {title: '预警类型', key: 'warnType', style: {width: '10%', 'font-size': '14px'}}
 
           ]
         },
         // dataItems: null,
         dataItems:[
-          {number:"1",station: 'CRH380B', alloc: '3616',online: '08',stopped: '6812', trans:'辅助电器系统' },
-          {number:"2",station: 'CRH380B', alloc: '3616',online: '08',stopped: '6812', trans:'辅助电器系统' },
-          {number:"3",station: 'CRH380B', alloc: '3616',online: '08',stopped: '6812', trans:'辅助电器系统' },
-          {number:"4",station: 'CRH380B', alloc: '3616',online: '08',stopped: '6812', trans:'辅助电器系统' },
-          {number:"5",station: 'CRH380B', alloc: '3616',online: '08',stopped: '6812', trans:'辅助电器系统' }
+          // {number:"1",station: 'CRH380B', alloc: '3616',online: '08',stopped: '-', trans:'-' },
+          // {number:"2",station: 'CRH380B', alloc: '3616',online: '08',stopped: '-', trans:'-' },
+          // {number:"3",station: 'CRH380B', alloc: '3616',online: '08',stopped: '-', trans:'-' },
+          // {number:"4",station: 'CRH380B', alloc: '3616',online: '08',stopped: '-', trans:'-' },
+          // {number:"5",station: 'CRH380B', alloc: '3616',online: '08',stopped: '-', trans:'-' }
           // {number:"6",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
           // {number:"7",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
           // {number:"8",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
@@ -95,12 +96,13 @@
     },
     computed:{
       ...mapGetters([
-        'getTrains'
+        'getCurrentWarn'
       ])
     },
     watch: {
-      getTrains (newv) { //newv 就是改变后的getTrains值
-        this.parseData(newv);
+      getCurrentWarn (newv) { //newv 就是改变后的getTrains值
+        console.log(newv,'bbbbb');
+        this.dataItems=newv
       }
     },
     components: {WrapTable, TechFrame},
@@ -250,17 +252,17 @@
   .level-normal {
     background-color: #5ab943;
   }
-  #onlinestatus3-l1 {
+  #onlinestatus4-l1 {
     color: #09f2e1;
     font-weight: bolder;
     font-size: 18px;
     margin-top: 30px;
   }
-  #onlinestatus3-r1 {
+  #onlinestatus4-r1 {
     position: relative;
 
   }
-  #onlinestatus3-r1 select {
+  #onlinestatus4-r1 select {
     position: absolute;
     top: -20px;
     right: 30px;

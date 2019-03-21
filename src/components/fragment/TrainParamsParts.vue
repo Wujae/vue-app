@@ -1,5 +1,5 @@
 <template>
-  <tech-frame v-bind="frameInitOptions">
+  <tech-frame v-bind="frameInitOptions"  :content-style="{overflow: 'hidden'}">
     <div id="onlinestatus3-l1">列 车 部 件 参 数</div>
 
     <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
@@ -25,47 +25,49 @@
     NORMAL: '#5ab943'
   };
 
+  //trainParamsParts
   export default {
     name: "",
     data () {
       return {
         columnSetting: {
           needIdx: true,
-          idxOccupancyRate: 5,
+          idxOccupancyRate: 10,
           overallStyle: {'border-bottom':'1px solid #23a2da'},
-          rowHeight: '40px',
+          rowHeight: '46px',
           rowMinHeight: '20px',
 
           titleRowStyle: {'background-color': '#1b3b65','border':'1px solid #23a2da'},
           oddRowStyle:{'background-color': '#1a4069'},
           evenRowStyle:{'background-color': '#1c3759'},
-          columns: [
-            {title: '项目', key: 'number', style: {width: '30%', 'font-size': '14px', color:'white'},  titleStyle: {width: '30%', 'font-size': '14px', color:' #09f2e1'}},
-            {title: '1车', key: 'station', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
-            {title: '2车', key: 'alloc', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
-            {title: '3车', key: 'online', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
-            {title: '4车', key: 'trans', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
-            {title: '5车', key: 'five',style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
-            {title: '6车', key: 'six', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
-            {title: '7车', key: 'seven',style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
-            {title: '8车', key: 'eight', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}}
-
-          ]
+          columns:null
+          //   [
+          //   {title: '项目', key: 'number', style: {width: '30%', 'font-size': '14px', color:'white'},  titleStyle: {width: '30%', 'font-size': '14px', color:' #09f2e1'}},
+          //   {title: '1车', key: 'station', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
+          //   {title: '2车', key: 'alloc', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
+          //   {title: '3车', key: 'online', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
+          //   {title: '4车', key: 'trans', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
+          //   {title: '5车', key: 'five',style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
+          //   {title: '6车', key: 'six', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
+          //   {title: '7车', key: 'seven',style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}},
+          //   {title: '8车', key: 'eight', style: {width: '10%', 'font-size': '14px', color:'white'},  titleStyle: {width: '10%', 'font-size': '14px', color:' #09f2e1'}}
+          //
+          // ]
         },
         // dataItems: null,
         dataItems:[
-          {number:"转向架1一轴左侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
-          {number:"转向架1二轴左侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
-          {number:"转向架1一轴右侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37' },
-          {number:"转向架1二轴右侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37' },
-          {number:"转向架2三轴左侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
-          {number:"转向架2四轴左侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37' },
-          {number:"转向架2三轴右侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37' },
-          {number:"转向架2四轴右侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
-          {number:"电机1驱动侧轴承温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37' },
-          {number:"电机2驱动侧轴承温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
-          {number:"电机3驱动侧轴承温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
-          {number:"电机4驱动侧轴承温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'}
+          // {number:"转向架1一轴左侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
+          // {number:"转向架1二轴左侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
+          // {number:"转向架1一轴右侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37' },
+          // {number:"转向架1二轴右侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37' },
+          // {number:"转向架2三轴左侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
+          // {number:"转向架2四轴左侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37' },
+          // {number:"转向架2三轴右侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37' },
+          // {number:"转向架2四轴右侧温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
+          // {number:"电机1驱动侧轴承温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37' },
+          // {number:"电机2驱动侧轴承温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
+          // {number:"电机3驱动侧轴承温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'},
+          // {number:"电机4驱动侧轴承温度",station: '40.75', alloc: '40.75',online:'40.75' ,trans:'37.33',five:'43.02',six:'36.2',seven:'31.65',eight:'29.37'}
           // {number:"6",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
           // {number:"7",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
           // {number:"8",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
@@ -100,11 +102,12 @@
     },
     computed:{
       ...mapGetters([
-        'getTrains'
+        'getTrainParamsParts'
       ])
     },
     watch: {
-      getTrains (newv) { //newv 就是改变后的getTrains值
+      getTrainParamsParts (newv) { //newv 就是改变后的getTrains值
+        console.log(newv,'lllllll')
         this.parseData(newv);
       }
     },
@@ -113,110 +116,51 @@
 
     },
     methods : {
-      parseData (rawdata) {
-        if(!rawdata || rawdata.length === 0 ) return;
+      parseData (rawdatas) {
+        let newlist = rawdatas.map((data, idx) =>{
 
-        let stations = [];
+          if(idx === 0) {
+            //拼columns
+            let result = [{
+              title: '项目',
+              key: 'key',
+              style: {width: '50%', 'font-size': '14px', color: 'white'},
+              titleStyle: {width: '50%', 'font-size': '14px', color: ' #09f2e1'}
+            }];
+            data.coaches.forEach((coach, idxe) => {
 
-        /*
-         *{
-         * ​​​al_a: "15",
-         * ​​​al_all: "159"​,
-         * ​​al_b: "31"​​​,
-         * al_c: "113",
-         * ​​​alertCount: "15/31/113/159",
-         * ​​​delayTime: ""​,
-         * ​​from: "",
-         * ​​​gps_lat: "26.1964"​,
-         * ​​gps_long: "105.8619"​,
-         * ​​isOnLine: "否"​,
-         * ​​jcode: "11",
-         * ​​​jname: "成都铁路局"​​​,
-         * level: null​,
-         * ​​mileage: "5098183",
-         * ​​​position: "",
-         * ​​​scode: "842",
-         * ​​​sn: "3050"​,
-         * ​​sname: "重庆北动车组运用所"​​​,
-         * speed: "",
-         * ​​​station: "重庆服务站"​​,
-         * ​stationCode: "3C01010311",
-         * ​​​status: "断开连接",
-         * ​​​suit: "8"​,
-         * ​​to: ""​​​,
-         * train_no: "G2878"​,
-         * ​​train_type: "CRH3C",
-         * ​​​update_time: "2019-03-04 15:44:57",
-         * ​​​warnCount: "2/0/0/2"​​
-         * }
-         */
-        let result = rawdata.reduce((p, c, i) => {
-
-          let stationIdx = stations.indexOf(c.station)
-
-          //找到服务站
-          if (stationIdx > -1) {
-
-            p[stationIdx].alloc++;
-
-          } else {
-
-            stations.push(c.station)
-
-            p.push({
-              station: c.station.replace("服务站", ''),
-              alloc: 0,
-              ala: parseInt(c.al_a || 0),
-              alb: parseInt(c.al_b || 0),
-              alc: parseInt(c.al_c || 0)
-            })
-            stationIdx = stations.length - 1
-
-            TRAIN_STATUS_ALIAS.forEach( alias => {
-              p[stationIdx][alias] = 0;
+              result.push({
+                title: `${coach}车设备`,
+                key: `param_${idxe}`,
+                style: {width: '50%', 'font-size': '14px', color: 'white'},
+                titleStyle: {width: '50%', 'font-size': '14px', color: ' #09f2e1'}
+              })
             })
 
+            this.columnSetting.columns = result
+
           }
 
-          let dataPt = p[stationIdx]
-
-
-          dataPt.alloc ++
-          dataPt.ala += parseInt(c.al_a || 0)
-          dataPt.alb += parseInt(c.al_b || 0)
-          dataPt.alc += parseInt(c.al_c || 0)
-
-          let thisStatusIdx = TRAIN_STATUS.indexOf(c.status)
-
-          if(thisStatusIdx > -1){
-            dataPt[TRAIN_STATUS_ALIAS[thisStatusIdx]]++
+          let resultData = {
+            key: data.key
           }
 
-          return p;
+          data.valueList.forEach((value, idxe) => {
+            resultData[`param_${idxe}`] = value.param_value
 
-        }, []);
+          })
 
-        this.updateData(result)
-      },
-      updateData (data) {
+          //数据处理
 
-        this.dataItems = data.map( dt => {
-
-          let mark = {
-            special: true,
-            style: {
-              'background-color': dt.ala > 0 ? LVL_COLOR.A : dt.alb > 0 ? LVL_COLOR.B : dt.alc > 0 ? LVL_COLOR.C : LVL_COLOR.NORMAL,
-              height:'12px',
-              width:'16px'
-            }
-          }
-
-          return Object.assign({
-            mark: mark,
-            faultCount: `${dt.ala}/${dt.alb}/${dt.alc}`
-          }, dt)
+          return resultData
         })
-      }
+
+        // 数据的赋值
+        this.dataItems = newlist
+
+
+      },
+
     }
   }
 </script>
