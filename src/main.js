@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import './plugins/element.js' //引入element ui
 import './plugins/echarts.js' //引入echarts
+import './plugins/filter.js' //引入filter
 import store from './store'//引入store
 import axios from 'axios'
 import VueJsonp from 'vue-jsonp'

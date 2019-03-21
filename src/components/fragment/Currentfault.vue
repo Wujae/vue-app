@@ -53,12 +53,28 @@
             {title: '故障代码', key: 'faultCode', style: {width: '10%', 'font-size': '14px'}},
             {title: '故障现象', key: 'descer', style: {width: '18%', 'font-size': '14px'}},
             {title: '故障时间', key: 'faultTime', style: {width: '27%', 'font-size': '14px'}},
-            {title: '故障等级', key: 'faultLevel', style: {width: '10%','font-size': '14px'}},
-            {title: '故障状态', key: 'occrStatus', style: {width: '10%', 'font-size': '14px'}},
+            {title: '故障等级', key: 'lvl', style: {width: '10%','font-size': '14px'}},
+            {
+              title: '故障状态', key: 'occrStatus',
+              style: {width: '10%', 'font-size': '14px'},
+              keyTranslate: {'1': '发生', '0': '恢复'}
+            },
             {title: '故障类型', key: 'errorType', style: {width: '10%', 'font-size': '14px'}},
-            {title: '故障模式', key: 'mode', style: {width: '10%', 'font-size': '14px'}},
-            {title: '是否上线', key: 'isOnLine', style: {width: '10%', 'font-size': '14px'}},
-            {title: '处理状态', key: 'dealStatus', style: {width: '10%', 'font-size': '14px'}}
+            {
+              title: '故障模式', key: 'mode',
+              style: {width: '10%', 'font-size': '14px'},
+              keyTranslate: {'1': '维护', '0': '非维护'}
+            },
+            {
+              title: '是否上线', key: 'isOnLine',
+              style: {width: '10%', 'font-size': '14px'},
+              keyTranslate: {'1': '是', '0': '否'}
+            },
+            {
+              title: '处理状态', key: 'dealStatus',
+              style: {width: '10%', 'font-size': '14px'},
+              keyTranslate: {'1': '已处理', '0': '未处理'}
+            }
           ]
         },
         dataItems: [],

@@ -211,9 +211,41 @@ export default {
 
   },
   /**
+   * 获取空调健康评估分级数量
+   * @param {Vue} v - vue实例
+   */
+  getAirConditionerCount(v) {
+
+    let startDate = '20180901', endDate = '20190315'
+
+    let params = {
+      startDate: startDate,
+      endDate: endDate
+    }
+
+    this.createServerURL(v, '/air-conditioner/base-summary').then((requestURI) => {
+
+      let start = new Date();
+
+      v.$jsonp(requestURI, params).then(response => {
+
+        console.log(`get mdp air-conditioner base summary complete in ${ new Date() - start }ms`);
+        console.log(response)
+
+        v.$store.commit('updateAirConditionerCount', response)
+
+      }).catch(error => {
+
+        console.log(error)
+      })
+    }, reason => {
+
+      console.log(reason);
+    })
+  },
+  /**
    * 获取空调数据
    * @param {Vue} v - vue实例
-   * @param v
    */
   getAirConditioner(v) {
 
@@ -231,6 +263,125 @@ export default {
         console.log(error)
       }
     })
+  },
+  /**
+   * 获取规则关注数量
+   * @param {Vue} v - vue实例
+   */
+  getRuleAttentionCount(v) {
+
+    let startDate = '20180901', endDate = '20190315'
+
+    let params = {
+      startDate: startDate,
+      endDate: endDate,
+      trainSn: null
+    }
+
+    let levelCount = [
+      {
+        key: 'A',
+        count: 0
+      },
+      {
+        key: 'B',
+        count: 0
+
+      },
+      {
+        key: 'C',
+        count: 0
+      }
+    ]
+    v.$store.commit('updateRuleAttentionCount', levelCount)
+
+
+  },
+  /**
+   * 获取规则关注
+   * @param {Vue} v - vue实例
+   */
+  getRuleAttention(v) {
+
+    let startDate = '20180901', endDate = '20190315'
+
+    let params = {
+      startDate: startDate,
+      endDate: endDate,
+      trainSn: '',
+      rows: 5
+    }
+
+    this.createServerURL(v, '/monitor/monitorcheck/queryMonitorCheck').then((requestURI) => {
+
+      let start = new Date();
+
+      v.$jsonp(requestURI, params).then(response => {
+
+        console.log(`get mdp rule attention complete in ${ new Date() - start }ms`);
+        console.log(response)
+
+        this.getRuleAttentionTrend(v, response)
+
+      }).catch(error => {
+
+        console.log(error)
+      })
+    }, reason => {
+
+      console.log(reason);
+    })
+  },
+  /**
+   * 获取参数点趋势数据
+   * @param {Vue} v - vue实例
+   * @param {Object} ruleAttentionData - 关注数据
+   * @param {Array} rowDatas.rows - 参数点数据
+   */
+  getRuleAttentionTrend(v, ruleAttentionData){
+
+
+    if(ruleAttentionData && ruleAttentionData.rows.length > 0) {
+
+      let result = ruleAttentionData.rows
+
+      this.createServerURL(v, '/monitor/monitorcheck/getNewRedisData').then((requestURI) => {
+
+        let start = new Date();
+
+        requestURI += '?1=1'
+
+        result.forEach((data) => {
+          requestURI += `&partId=${data.partId}`
+          requestURI += `&trainId=${data.trainId}`
+          requestURI += `&vehicleNo=${data.vehicleNo}`
+
+        })
+
+        v.$jsonp(requestURI).then(response => {
+
+          console.log(`get mdp rule attention trend complete in ${ new Date() - start }ms`);
+          console.log(response)
+          if(response.status === 'success'){
+            response.data.datas.forEach( (trend, idx) => {
+              result[idx].paramValue = trend.paramValue
+            })
+          }
+
+          v.$store.commit('updateRuleAttention', result)
+
+        }).catch(error => {
+
+          throw error
+        })
+      }, reason => {
+
+        v.$store.commit('updateRuleAttention', result)
+
+        console.log(reason);
+      })
+    }
+
   },
   /**
    * 获取MDP服务器路径

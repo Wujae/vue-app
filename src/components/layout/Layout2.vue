@@ -35,10 +35,8 @@
           {"x":40, "y":9, "w":20, "h":9, "i":"2", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa2", "componentPath": "fragment/CurrentWarn"  },
           {"x":40, "y":18, "w":20, "h":9, "i":"3", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa3", "componentPath": "fragment/AirConditioner"  },
           {"x":40, "y":27, "w":20, "h":9, "i":"4", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa4", "componentPath": "fragment/RuleAttention"  },
-          {"x":0, "y":36, "w":15, "h":9, "i":"5", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa5", "componentPath": "fragment/CurrentWarn"  },
-          {"x":15, "y":36, "w":15, "h":9, "i":"6", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa6", "componentPath": "fragment/CurrentWarn"  },
-          {"x":30, "y":36, "w":15, "h":9, "i":"7", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa7", "componentPath": "fragment/CurrentWarn"  },
-          {"x":45, "y":36, "w":15, "h":9, "i":"8", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa8", "componentPath": "fragment/CurrentWarn"  },
+          {"x":0, "y":36, "w":60, "h":9, "i":"5", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa5", "componentPath": "fragment/CurrentFaultCards"  }
+
         ],
         gridVolume: [
           {size: {width: 40 * 30, height: 30 * 36}, blurDistance: 3, connerClip: [0, 0,  0, 0] },
@@ -46,10 +44,7 @@
           {size: {width: 20 * 30, height: 30 * 9}, blurDistance: 3, connerClip: [0, 0,0, 0] },
           {size: {width: 20 * 30, height: 30 * 9}, blurDistance: 3, connerClip: [0, 0, 0, 0] },
           {size: {width: 20 * 30, height: 30 * 9}, blurDistance: 3, connerClip: [0, 0, 0, 0] },
-          {size: {width:15 * 30, height: 30 * 9}, blurDistance: 3, connerClip: [0, 0, 0, 10] },
-          {size: {width:15 * 30, height: 30 * 9}, blurDistance: 3, connerClip: [0, 0, 10, 0] },
-          {size: {width:15 * 30, height: 30 * 9}, blurDistance: 3, connerClip: [0, 0, 0, 10] },
-          {size: {width:15 * 30, height: 30 * 9}, blurDistance: 3, connerClip: [0, 0, 10, 0] },
+          {size: {width: 30 * 30, height: 30 * 9}, blurDistance: 3, connerClip: [0, 0, 0, 10] }
         ],
         callbackdata:{},//返回数据
       }
@@ -66,7 +61,13 @@
       //开启接口服务
       thmInterfaceService.getFaultData(this);
       thmInterfaceService.getWarnData(this);
+      mdpInterfaceService.getAirConditionerCount(this);
       mdpInterfaceService.getAirConditioner(this);
+      mdpInterfaceService.getRuleAttentionCount(this);
+      mdpInterfaceService.getRuleAttention(this);
+      thmInterfaceService.getOnlineStatusData(this);
+
+
     },
     // methods: {
     //
@@ -101,7 +102,7 @@
     /*border: 1px solid gray;*/
     /*font-size: 150px;*/
   }
-  
+
   .header {
     height: 40px;
     position: relative;

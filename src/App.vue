@@ -66,8 +66,15 @@
     background-color: #151923;
   }
 
+  @font-face {
+    /* font-test*/
+    font-family: Jura-light;
+    src: url('/static/font/Jura-Light.ttf');
+
+  }
+
   #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-family: 'Jura-light', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;

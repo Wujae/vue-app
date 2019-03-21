@@ -50,7 +50,7 @@ export default {
 
     console.log("全图车组GPS位置信息API", serverAddress);
 
-    this.getOnlineStatusDataTimer(serverAddress, v, requestInterval,callback)
+    this.getOnlineStatusDataTimer(serverAddress, v, requestInterval || 60000, callback)
 
   },
   getOnlineStatusDataTimer(url, v, interval, callback){
@@ -68,11 +68,11 @@ export default {
       }).then(response => {
 
       console.log(`get thm online status complete in ${ new Date() - start }ms`)
+      console.log(response)
 
       //存储为全局车组基础信息
       v.$store.commit('updateTrains', response)
-      console.log(response)
-
+      this.parseFaultCount(v, response)
 
       setTimeout(() => {
         this.getOnlineStatusDataTimer(url, v, interval, callback)
@@ -90,6 +90,53 @@ export default {
       console.log(error)
 
     })
+
+  },
+  /**
+   * 处理故障记录数量
+   * @param {Vue} v - vue实例
+   * @param {Array} rawData 原始数据
+   */
+  parseFaultCount(v, rawData){
+
+    let levelCount = [
+      {
+        key: 'A',
+        count: 0
+      },
+      {
+        key: 'B',
+        count: 0
+
+      },
+      {
+        key: 'C',
+        count: 0
+
+      }
+    ]
+    let result = rawData.reduce((p, c, i) => {
+
+      let a_count = c.al_a, b_count = c.al_b, c_count = c.al_c
+
+      if(a_count && isFinite(parseInt(a_count))){
+        p[0].count += parseInt(a_count)
+      }
+
+      if(b_count && isFinite(parseInt(b_count))){
+        p[1].count += parseInt(b_count)
+      }
+
+      if(c_count && isFinite(parseInt(c_count))){
+        p[2].count += parseInt(c_count)
+      }
+
+      return p;
+
+    }, levelCount);
+
+    v.$store.commit('updateCurrentFaultCount', result)
+
 
   },
   /**

@@ -22,7 +22,7 @@
                   <div :style="item[column.key].style">{{item[column.key].value}}</div>
                 </template>
                 <template v-if="!item[column.key] ||!item[column.key].special">
-                  {{item[column.key] | dealNull(column.nullVal)}}
+                  {{item[column.key] | dealNull(column.nullVal) |  keyTranslate(column.keyTranslate)}}
                 </template>
               </div>
             </template>
@@ -112,13 +112,6 @@
         }
       }
     },
-    filters: {
-      dealNull: (value, nullVal) => {
-        if (!value || (value+"").trim().length === 0 ) return nullVal
-
-        return value
-      }
-    },
     methods: {
       discardAnimation() {
         this.shows.forEach((show, idx) => this.$set(this.shows, idx, false))
@@ -140,9 +133,11 @@
       }
     },
     mounted () {
-      this.displayItems = this.dataItems
-      this.shows = Array(this.dataItems.length).fill(false)
-      this.nextShow(-1)
+      if(this.dataItems && this.dataItems.length){
+        this.displayItems = this.dataItems
+        this.shows = Array(this.dataItems.length).fill(false)
+        this.nextShow(-1)
+      }
 
     }
   }

@@ -17,20 +17,6 @@
   import WrapTable from '../base/WrapTable'
   import { mapGetters } from 'vuex'
 
-  const TRAIN_STATUS = [
-    '运行中', '传输中', '停止运行', '离线', '断开连接'
-  ];
-  const  TRAIN_STATUS_ALIAS = [
-    'online', 'trans', 'stopped', 'offline', 'disconnect'
-  ];
-
-  const  LVL_COLOR = {
-    A: '#c43838',
-    B: '#cf8c2d',
-    C:'#cdcd40',
-    NORMAL: '#5ab943'
-  };
-
   //airConditioner
   export default {
     name: "OnlineStatus2",
@@ -83,119 +69,14 @@
       getAirConditioner (newv) { //newv 就是改变后的getTrains值
         console.log(newv.rows,'nnnnn')
         this.dataItems=newv.rows
-        this.parseData(newv);
       }
     },
     components: {WrapTable, TechFrame},
     mounted () {
 
     },
-    methods : {
-      parseData (rawdata) {
-        if(!rawdata || rawdata.length === 0 ) return;
+    methods : { }
 
-        let stations = [];
-
-        /*
-         *{
-         * ​​​al_a: "15",
-         * ​​​al_all: "159"​,
-         * ​​al_b: "31"​​​,
-         * al_c: "113",
-         * ​​​alertCount: "15/31/113/159",
-         * ​​​delayTime: ""​,
-         * ​​from: "",
-         * ​​​gps_lat: "26.1964"​,
-         * ​​gps_long: "105.8619"​,
-         * ​​isOnLine: "否"​,
-         * ​​jcode: "11",
-         * ​​​jname: "成都铁路局"​​​,
-         * level: null​,
-         * ​​mileage: "5098183",
-         * ​​​position: "",
-         * ​​​scode: "842",
-         * ​​​sn: "3050"​,
-         * ​​sname: "重庆北动车组运用所"​​​,
-         * speed: "",
-         * ​​​station: "重庆服务站"​​,
-         * ​stationCode: "3C01010311",
-         * ​​​status: "断开连接",
-         * ​​​suit: "8"​,
-         * ​​to: ""​​​,
-         * train_no: "G2878"​,
-         * ​​train_type: "CRH3C",
-         * ​​​update_time: "2019-03-04 15:44:57",
-         * ​​​warnCount: "2/0/0/2"​​
-         * }
-         */
-        let result = rawdata.reduce((p, c, i) => {
-
-          let stationIdx = stations.indexOf(c.station)
-
-          //找到服务站
-          if (stationIdx > -1) {
-
-            p[stationIdx].alloc++;
-
-          } else {
-
-            stations.push(c.station)
-
-            p.push({
-              station: c.station.replace("服务站", ''),
-              alloc: 0,
-              ala: parseInt(c.al_a || 0),
-              alb: parseInt(c.al_b || 0),
-              alc: parseInt(c.al_c || 0)
-            })
-            stationIdx = stations.length - 1
-
-            TRAIN_STATUS_ALIAS.forEach( alias => {
-              p[stationIdx][alias] = 0;
-            })
-
-          }
-
-          let dataPt = p[stationIdx]
-
-
-          dataPt.alloc ++
-          dataPt.ala += parseInt(c.al_a || 0)
-          dataPt.alb += parseInt(c.al_b || 0)
-          dataPt.alc += parseInt(c.al_c || 0)
-
-          let thisStatusIdx = TRAIN_STATUS.indexOf(c.status)
-
-          if(thisStatusIdx > -1){
-            dataPt[TRAIN_STATUS_ALIAS[thisStatusIdx]]++
-          }
-
-          return p;
-
-        }, []);
-
-        this.updateData(result)
-      },
-      updateData (data) {
-
-        this.dataItems = data.map( dt => {
-
-          let mark = {
-            special: true,
-            style: {
-              'background-color': dt.ala > 0 ? LVL_COLOR.A : dt.alb > 0 ? LVL_COLOR.B : dt.alc > 0 ? LVL_COLOR.C : LVL_COLOR.NORMAL,
-              height:'12px',
-              width:'16px'
-            }
-          }
-
-          return Object.assign({
-            mark: mark,
-            faultCount: `${dt.ala}/${dt.alb}/${dt.alc}`
-          }, dt)
-        })
-      }
-    }
   }
 </script>
 
