@@ -2,11 +2,7 @@
   <tech-frame v-bind="frameInitOptions">
     <div id="onlinestatus6-l1">规则关注</div>
     <div id="onlinestatus6-r1">
-      <select value="">
-        <option >一级260</option>
-        <option >二级136</option>
-        <option >三级136</option>
-      </select>
+      <level-dropdown v-bind:style="styleObject5"></level-dropdown>
     </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
   </tech-frame>
@@ -16,6 +12,7 @@
   import TechFrame from '../base/TechFrame'
   import WrapTable from '../base/WrapTable'
   import { mapGetters } from 'vuex'
+  import LevelDropdown from "../base/LevelDropdown";
 
   const TRAIN_STATUS = [
     '运行中', '传输中', '停止运行', '离线', '断开连接'
@@ -80,7 +77,14 @@
           // {number:"19",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
           // {number:"20",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
 
-        ]
+        ],
+        styleObject5:{
+          position: 'absolute',
+          top: '-20px',
+          right: '30px',
+          width: '100px',
+          height: '20px'
+        }
 
       }
     },
@@ -106,7 +110,7 @@
         this.parseData(newv);
       }
     },
-    components: {WrapTable, TechFrame},
+    components: {WrapTable, TechFrame,LevelDropdown},
     mounted () {
 
     },

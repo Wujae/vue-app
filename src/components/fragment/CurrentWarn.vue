@@ -2,11 +2,8 @@
   <tech-frame v-bind="frameInitOptions "  :content-style="{overflow: 'hidden'}">
     <div id="onlinestatus4-l1">平台预警</div>
     <div id="onlinestatus4-r1">
-      <select value="">
-        <option >一级260</option>
-        <option >二级136</option>
-        <option >三级136</option>
-      </select>
+
+      <level-dropdown   :drop-down-items="dropDownItems" v-bind:style="styleObject" ></level-dropdown>
     </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
   </tech-frame>
@@ -16,6 +13,7 @@
   import TechFrame from '../base/TechFrame'
   import WrapTable from '../base/WrapTable'
   import { mapGetters } from 'vuex'
+  import LevelDropdown from "../base/LevelDropdown"
 
   //currentWarn
   export default {
@@ -42,10 +40,36 @@
           ]
         },
         // dataItems: null,
-        dataItems:[
-
-        ]
-
+        dataItems:[],
+        dropDownItems: [
+          {
+            key: 'A',
+            name: 'A 级  251',
+            style: {'background-color': '#bf3131', color: '#fff'}
+          },
+          {
+            key: 'B',
+            name: 'B 级  251',
+            style: {'background-color': '#c08528', color: '#fff'}
+          },
+          {
+            key: 'C',
+            name: 'C 级  251',
+            style: {'background-color': '#ac990a', color: '#fff'}
+          },
+          {
+            key: 'D',
+            name: 'D 级  251',
+            style: {'background-color': '#25ac48', color: '#fff'}
+          },
+        ],
+        styleObject:{
+          position: 'absolute',
+          top: '-20px',
+          right: '30px',
+          width: '100px',
+          height: '20px'
+        }
       }
     },
     props: {
@@ -67,18 +91,62 @@
     },
     watch: {
       getCurrentWarn (newv) { //newv 就是改变后的getTrains值
-        console.log(newv,'bbbbb');
-        this.dataItems=newv
+        console.log(newv,'currentWarn');
+        this.dataItems=newv;
+        this.parseData(newv);
       }
     },
-    components: {WrapTable, TechFrame},
+    components: {WrapTable, TechFrame,LevelDropdown},
     mounted () {
 
     },
     methods : {
       parseData (rawdata) {
-        if(!rawdata || rawdata.length === 0 ) return;
+        let contA=0
+        let contB=0
+        let contC=0
+        let contD=0
+        //rawdata.forEach  data. warnLevel
+        rawdata.forEach((data,index) => {
 
+          switch (data.warnLevel) {
+            case 'A':
+              contA++;
+              break;
+            case 'B':
+              contB++;
+              break;
+            case 'C':
+              contC++;
+              break;
+            case 'D':
+              contD++;
+              break;
+          }
+        })
+
+          let result = [{
+            key: 'A',
+            name: `A 级 ${contA}`,
+            style: {'background-color': '#bf3131', color: '#fff'}
+          },
+          {
+            key: 'B',
+            name: `B 级 ${contB}`,
+            style: {'background-color': '#c08528', color: '#fff'}
+          },
+          {
+            key: 'C',
+            name: `C 级 ${contC}`,
+            style: {'background-color': '#ac990a', color: '#fff'}
+          },
+          {
+            key: 'D',
+            name: `D 级 ${contD}`,
+            style: {'background-color': '#25ac48', color: '#fff'}
+          }]
+
+         this.dropDownItems=result
 
       }
     }
@@ -129,7 +197,7 @@
     position: relative;
 
   }
-  #onlinestatus4-r1 select {
+  .selectCW {
     position: absolute;
     top: -20px;
     right: 30px;

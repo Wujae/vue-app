@@ -119,7 +119,7 @@
             })
 
             this.columnSetting.columns = result
-
+            console.log(this.columnSetting.columns,'this.columnSetting.columns')
           }
 
           let resultData = {

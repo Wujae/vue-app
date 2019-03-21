@@ -154,7 +154,7 @@ export default {
       {
         begin_date: '2019-03-09',
         car_no: '',
-        end_date: '2019-03-09',
+        end_date: '2019-03-21',
         fault_level: '',
         isMultiMonitor: '1',
         jcode: '',
@@ -168,7 +168,7 @@ export default {
 
       console.log(`get thm warn complete in ${ new Date() - start }ms`)
       console.log(response)
-
+      
       v.$store.commit('updateCurrentWarn', response)
 
     }).catch(error => {
