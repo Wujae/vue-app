@@ -1,5 +1,5 @@
 <template>
-  <tech-frame v-bind="frameInitOptions">
+  <tech-frame v-bind="frameInitOptions" :content-style="{overflow: 'hidden'}">
     <div id="onlinestatus5-l1">空调健康评估</div>
     <div id="onlinestatus5-r1">
       <select value="">
@@ -40,47 +40,25 @@
           needIdx: true,
           idxOccupancyRate: 5,
           overallStyle: null,
-          rowHeight: '25px',
+          rowHeight: '31.5px',
           rowMinHeight: '20px',
           titleRowStyle: null,
           oddRowStyle: null,
           evenRowStyle: null,
           columns: [
-            {title: '配属局', key: 'number', style: {width: '20%', 'font-size': '14px'}},
-            {title: '服务站', key: 'station', style: {width: '10%', 'font-size': '14px'}},
-            {title: '车型', key: 'alloc', style: {width: '15%', 'font-size': '14px'}},
-            {title: '车组号', key: 'online', style: {width: '15%', 'font-size': '14px'}},
-            {title: '车辆号', key: 'trans', style: {width: '10%', 'font-size': '14px'}},
-            {title: '空调序号', key: 'stopped', style: {width: '15%', 'font-size': '14px'}},
-            {title: '健康状况', key: 'healthy', style: {width: '13%', 'font-size': '14px'}},
-            {title: '评估日期', key: 'assess', style: {width: '20%', 'font-size': '14px'}}
+            {title: '配属局', key: 'ALLOCATE_BUREAU', style: {width: '18%', 'font-size': '14px'}},
+            {title: '服务站', key: 'SERVICE_STATION', style: {width: '20%', 'font-size': '14px'}},
+            {title: '车型', key: 'TRAIN_MODEL', style: {width: '15%', 'font-size': '14px'}},
+            {title: '车组号', key: 'TRAIN_NO', style: {width: '15%', 'font-size': '14px'}},
+            {title: '车辆号', key: 'COACH', style: {width: '10%', 'font-size': '14px'}},
+            {title: '空调序号', key: 'AC_NUM', style: {width: '13%', 'font-size': '14px'}},
+            {title: '健康状况', key: 'HEALTH_STATUS', style: {width: '13%', 'font-size': '14px'}},
+            {title: '评估日期', key: 'EVALUATE_DATE', style: {width: '20%', 'font-size': '14px'}}
 
           ]
         },
         // dataItems: null,
-        dataItems:[
-          {number:"上海配属局",station: '南京南', alloc: 'CR400BF',online: '3007BF',stopped: '1', trans:'1',healthy:'健康',assess:'2018-09-17', titleStyle: {'font-size':'12px'}},
-          {number:"上海配属局",station: '南京南', alloc: 'CR400BF',online: '3007BF',stopped: '1', trans:'1',healthy:'健康',assess:'2018-09-17',style:{'font-size':'12px'}},
-          {number:"上海配属局",station: '南京南', alloc: 'CR400BF',online: '3007BF',stopped: '1', trans:'1',healthy:'健康',assess:'2018-09-17',style:{'font-size':'12px'}},
-          {number:"上海配属局",station: '南京南', alloc: 'CR400BF',online: '3007BF',stopped: '1', trans:'1',healthy:'健康',assess:'2018-09-17',style:{'font-size':'12px'}},
-          {number:"上海配属局",station: '南京南', alloc: 'CR400BF',online: '3007BF',stopped: '1', trans:'1',healthy:'健康',assess:'2018-09-17',style:{'font-size':'12px'}}
-          // {number:"6",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"7",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"8",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"9",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"10",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"11",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"12",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"13",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"14",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"15",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"16",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"17",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"18",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"19",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-          // {number:"20",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
-
-        ]
+        dataItems:[]
 
       }
     },
@@ -98,11 +76,13 @@
     },
     computed:{
       ...mapGetters([
-        'getTrains'
+        'getAirConditioner'
       ])
     },
     watch: {
-      getTrains (newv) { //newv 就是改变后的getTrains值
+      getAirConditioner (newv) { //newv 就是改变后的getTrains值
+        console.log(newv.rows,'nnnnn')
+        this.dataItems=newv.rows
         this.parseData(newv);
       }
     },

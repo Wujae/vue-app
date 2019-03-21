@@ -66,6 +66,7 @@
       //开启接口服务
       thmInterfaceService.getFaultData(this);
       thmInterfaceService.getWarnData(this);
+      mdpInterfaceService.getAirConditioner(this);
     },
     // methods: {
     //
