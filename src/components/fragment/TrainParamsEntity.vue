@@ -16,25 +16,15 @@
     data () {
       return {
         columnSetting: {
-          needIdx: true,
+          needIdx: false,
           idxOccupancyRate: 10,
-          overallStyle: {'border-bottom':'1px solid #23a2da'},
-          rowHeight: '46px',
+          overallStyle: {'border-bottom':'1px solid #23a2da', width: '96%', margin: '0 2%'},
+          rowHeight: '35px',
           rowMinHeight: '20px',
-          titleRowStyle: {'background-color': '#1b3b65','border':'1px solid #23a2da'},
-          oddRowStyle:{'background-color': '#1a4069'},
-          evenRowStyle:{'background-color': '#1c3759'},
+          titleRowStyle: {'background-color': '#1b3b65','border':'1px solid #23a2da', height: '35px', 'font-weight': 'normal'},
+          oddRowStyle:{'background-color': '#1a4069', 'border-top': '1px solid #1d2d47'},
+          evenRowStyle:{'background-color': '#1c3759', 'border-top': '1px solid #1d2d47'},
           columns:null
-
-          //   [
-          //   {title: '项目', key: 'number', style: {width: '30%', 'font-size': '14px', color:'white'},  titleStyle: {width: '30%', 'font-size': '14px', color:' #09f2e1'}},
-          //   {title: '1车设备', key: 'station', style: {width: '40%', 'font-size': '14px', color:'white'},  titleStyle: {width: '40%', 'font-size': '14px', color:' #09f2e1'}},
-          //   {title: '8车设备', key: 'alloc', style: {width: '30%', 'font-size': '14px', color:'white'},  titleStyle: {width: '30%', 'font-size': '14px', color:' #09f2e1'}}
-          //   // {title: '车辆号', key: 'online', style: {width: '10%', 'font-size': '14px'}},
-          //   // {title: '所属系统', key: 'trans', style: {width: '25%', 'font-size': '14px'}},
-          //   // {title: '故障代码', key: 'stopped', style: {width: '20%', 'font-size': '14px'}}
-          //
-          // ]
         },
         dataItems:[]
 
@@ -77,16 +67,16 @@
             let result = [{
               title: '项目',
               key: 'key',
-              style: {width: '50%', 'font-size': '14px', color: 'white'},
-              titleStyle: {width: '50%', 'font-size': '14px', color: ' #09f2e1'}
+              style: {width: '50%', 'font-size': '13px', color: 'white'},
+              titleStyle: {width: '50%', 'font-size': '13px', color: ' #09f2e1'}
             }];
             data.coaches.forEach((coach, idxe) => {
 
               result.push({
                 title: `${coach}车设备`,
                 key: `param_${idxe}`,
-                style: {width: '50%', 'font-size': '14px', color: 'white'},
-                titleStyle: {width: '50%', 'font-size': '14px', color: ' #09f2e1'}
+                style: {width: '50%', 'font-size': '13px', color: 'white'},
+                titleStyle: {width: '50%', 'font-size': '13px', color: ' #09f2e1'}
               })
             })
 
@@ -154,22 +144,8 @@
     color: #09f2e1;
     font-weight: bolder;
     font-size: 18px;
-    margin-top: 30px;
-    margin-right:500px;
+    margin: 20px auto;
   }
-  #onlinestatus3-r1 {
-    position: relative;
 
-  }
-  #onlinestatus3-r1 select {
-    position: absolute;
-    top: -20px;
-    right: 0px;
-    width: 150px;
-    height: 20px;
-    background: #1b3b65;
-    border-color: #23a2da;
-    color: white;
-  }
 
 </style>
