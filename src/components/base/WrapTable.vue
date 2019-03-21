@@ -106,8 +106,8 @@
       dataItems(newV) {
         if(newV){
           this.discardAnimation()
-          this.displayItems = this.dataItems
-          this.shows = Array(this.dataItems.length).fill(false)
+          this.displayItems = newV
+          this.shows = Array(newV.length).fill(false)
           this.nextShow(-1)
         }
       }

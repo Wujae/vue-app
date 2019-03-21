@@ -1,7 +1,10 @@
 <template>
   <div class="train-part-level-div">
     <div class="scroll-tool-content">
-      <tech-frame v-for="(part, idx ) in displayData" v-if="idx === nodeSelected"
+      <template  v-for="(part, idx ) in displayData" >
+      <transition :name="animationName" @after-enter="nextShow(idx)" >
+        <div v-show="shows[idx]">
+      <tech-frame v-if="idx === nodeSelected"
                   v-bind="trainPartExpandBtnOptions">
         <div class="train-part-btn-div" style="color: black" @click="selectNode(idx, part)" :title="part.funcLocName">
           {{part.funcLocName}}
@@ -20,6 +23,9 @@
           </div>
         </div>
       </tech-frame>
+        </div>
+      </transition>
+      </template>
     </div>
     <div class="scroll-tool-div">
       <tech-frame v-bind="scrollToolUpBtnOptions">
@@ -41,6 +47,8 @@
     components: {TechFrame},
     data () {
       return {
+        shows: [],
+        animationName: "el-zoom-in-top",
         scrollToolUpBtnOptions: {
           size: {width: 30, height: 30},
           blurDistance: 1,
@@ -75,6 +83,7 @@
         nodeSelected: 0,
         foldBtnHeight: 50,
         heightFix: 60,
+        displayItems: []
       }
     },
     props: {
@@ -87,11 +96,31 @@
       displayData(newData){
         if(newData && newData.length){
 
+          this.discardAnimation()
+          this.displayItems = newData
+          this.shows = Array(newData.length).fill(false)
+          this.nextShow(-1)
+
           this.selectNode(0, newData[0])
+
         }
       }
     },
     methods: {
+      discardAnimation() {
+        this.shows.forEach((show, idx) => this.$set(this.shows, idx, false))
+
+      },
+      nextShow(idx){
+        setTimeout(() => {
+
+          if(idx++ < this.shows.length){
+            this.$set(this.shows, idx, true)
+          }
+          //console.log("show", idx)
+
+        }, 10)
+      },
       scrollEv (delta) {
         this.$bScroll.scrollBy(0, 200 * delta, 500)
       },
@@ -126,6 +155,10 @@
 
           this.$emit('part-lane-scrolled',pos);
         })
+
+        this.discardAnimation()
+        this.shows = Array(this.displayData.length).fill(false)
+        this.nextShow(-1)
 
         this.selectNode(0, this.displayData[0])
 

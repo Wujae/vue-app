@@ -41,6 +41,7 @@ axios.get('static/properties.json').then(response => {
       this.$store.state.displayMaincys = response.data.displayMaincys;
       this.$store.state.queryFunctions = response.data.queryFunctions;
       this.$store.state.token = response.data.token;
+      this.$store.state.requestInterval = response.data.requestInterval;
 
     }
   })

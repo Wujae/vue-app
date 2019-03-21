@@ -28,6 +28,7 @@
     "password_thm": "f27dd74b6048db0456afbc13345897c6e0dada66",
     "password_mdp": "39851116466ba80098b72b9794dbfd89"
   },
+  "requestInterval": 60000,
   "displayMaincys": [
     {"NAME":"I1","ID":"000006","IS_ADVANCE":"0"},
     {"NAME":"I2","ID":"000004","IS_ADVANCE":"0"},

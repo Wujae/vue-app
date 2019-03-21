@@ -14,6 +14,7 @@ export default new Vuex.Store({
       mdpServer: null,
       phmDataMdpServer: null,
     },
+    requestInterval: 60000,
     queryFunctions: null,
     displayMaincys: null,
     token: null,
