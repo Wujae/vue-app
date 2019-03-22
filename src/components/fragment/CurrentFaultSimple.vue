@@ -1,6 +1,8 @@
 <template>
   <tech-frame v-bind="frameInitOptions" :content-style="{overflow: 'hidden'}">
-    <div id="onlinestatus3-l1">车组报警</div>
+    <div id="onlinestatus3-l1">
+      <arrow-title :title-text="'车组报警'"></arrow-title>
+    </div>
     <div id="onlinestatus3-r1">
       <level-dropdown v-bind:style="styleObject2" :drop-down-items="dropDownItems"></level-dropdown>
     </div>
@@ -13,6 +15,7 @@
   import WrapTable from '../base/WrapTable'
   import { mapGetters } from 'vuex'
   import LevelDropdown from "../base/LevelDropdown";
+  import ArrowTitle from '../base/ArrowTitle'
 
   const TRAIN_STATUS = [
     '运行中', '传输中', '停止运行', '离线', '断开连接'
@@ -79,7 +82,7 @@
         dropDownItems: [],
         styleObject2:{
           position: 'absolute',
-          top: '-20px',
+          top: '-30px',
           right: '30px',
           width: '100px',
           height: '20px',
@@ -130,7 +133,7 @@
         ]
       }
     },
-    components: {WrapTable, TechFrame,LevelDropdown},
+    components: {ArrowTitle, WrapTable, TechFrame,LevelDropdown},
     mounted () {
 
     },
@@ -278,6 +281,7 @@
     background-color: #5ab943;
   }
   #onlinestatus3-l1 {
+    display: inline-block;
     color: #09f2e1;
     font-weight: bolder;
     font-size: 18px;

@@ -3,7 +3,6 @@
     <div class="header">
       <div class="title">资源中心</div>
       <train-select></train-select>
-      <level-dropdown></level-dropdown>
     </div>
     <grid-layout class="grid-layout" :layout.sync="layout" :col-num="12" :row-height="270" :is-draggable="true"
                  :is-resizable="true"

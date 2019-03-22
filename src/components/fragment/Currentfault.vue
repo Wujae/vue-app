@@ -1,6 +1,8 @@
 <template>
   <tech-frame v-bind="frameInitOptions">
-    <div id="onlinestatus2-l1">实 时 故 障 信 息</div>
+    <div id="onlinestatus2-l1">
+      <slash-title :title-text="'实 时 故 障 信 息'"/>
+    </div>
     <div id="onlinestatus2-r1">
       <level-dropdown v-bind:style="styleObject4" :drop-down-items="dropDownItems"></level-dropdown>
 
@@ -14,6 +16,8 @@
   import WrapTable from '../base/WrapTable'
   import { mapGetters } from 'vuex'
   import LevelDropdown from "../base/LevelDropdown";
+  import ArrowTitle from '../base/ArrowTitle'
+  import SlashTitle from '../base/SlashTitle'
 
   const TRAIN_STATUS = [
     '运行中', '传输中', '停止运行', '离线', '断开连接'
@@ -30,7 +34,7 @@
   };
   //currentfault
   export default {
-    name: "OnlineStatus2",
+    name: "CurrentFault",
     data () {
       return {
         columnSetting: {
@@ -79,7 +83,7 @@
         dropDownItems: [],
         styleObject4:{
           position: 'absolute',
-          top: '-20px',
+          top: '-30px',
           right: '30px',
           width: '100px',
           height: '20px'
@@ -117,7 +121,7 @@
 
       }
     },
-    components: {LevelDropdown, WrapTable, TechFrame},
+    components: {SlashTitle, ArrowTitle, LevelDropdown, WrapTable, TechFrame},
     mounted () {
 
     },
@@ -184,6 +188,7 @@
     background-color: #5ab943;
   }
   #onlinestatus2-l1 {
+    display: inline-block;
     color: #09f2e1;
     font-weight: bolder;
     font-size: 18px;

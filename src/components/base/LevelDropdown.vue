@@ -1,6 +1,6 @@
 <template>
   <div class="level-dropdown-holder">
-    <div @command="handleCommand" :style="{width: width+ 'px'}" :class="{'holder-border': !showPopper}">
+    <div :style="{width: width+ 'px'}" :class="{'holder-border': !showPopper}">
       <span class="level-dropdown-link" @click="handleClick($event)"
             :style="Object.assign({width: (showPopper? width: width - 2) + 'px'}, selectedItem.style )">
       {{selectedItem.name ? selectedItem.name : placeHolder}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -69,9 +69,6 @@
       }
     },
     methods: {
-      handleCommand (command) {
-        this.$message('click on item ' + command);
-      },
       handleClick ($event, idx) {
         this.showPopper = !this.showPopper
 
@@ -81,6 +78,8 @@
         }
 
         console.log(idx, this.selectedItem)
+        this.$emit('levelSelected', this.selectedItem);
+
       }
     },
     created () {

@@ -48,12 +48,20 @@ export default {
 
     let requestInterval = v.$store.state.requestInterval
 
-    console.log("全图车组GPS位置信息API", serverAddress);
-
-    this.getOnlineStatusDataTimer(serverAddress, v, requestInterval || 60000, callback)
+    this.getOnlineStatusDataTimer(v, serverAddress, requestInterval || 60000, callback)
 
   },
-  getOnlineStatusDataTimer(url, v, interval, callback){
+  /**
+   * 屏幕一-全图监控-GPS地图车组位置信息定时器
+   * @param {Vue} v - vue实例
+   * @param {String} url 请求地址
+   * @param {Number} interval 时间间隔
+   * @param {Object} callback 回调方法
+   * @param {Object} callback.params - 请求参数
+   * @param {Function} callback.onSuccess - onSuccess (response){}
+   * @param {Function} callback.onError - onError (error){}
+   */
+  getOnlineStatusDataTimer(v, url, interval, callback){
 
     let start = new Date()
 
@@ -68,14 +76,14 @@ export default {
       }).then(response => {
 
       console.log(`get thm online status complete in ${ new Date() - start }ms`)
-      console.log(response)
+      //console.log(response)
 
       //存储为全局车组基础信息
       v.$store.commit('updateTrains', response)
       this.parseFaultCount(v, response)
 
       setTimeout(() => {
-        this.getOnlineStatusDataTimer(url, v, interval, callback)
+        this.getOnlineStatusDataTimer(v, url, interval, callback)
       }, interval)
 
       if (callback.onSuccess) {
@@ -87,7 +95,7 @@ export default {
       if (callback.onError) {
         callback.onError(error)
       }
-      console.log(error)
+      console.error(error)
 
     })
 
@@ -142,84 +150,150 @@ export default {
   /**
    * 屏幕-事件中心-实时故障信息
    * @param {Vue} v - vue实例
+   * @param {Object} callback 回调方法
+   * @param {Object} callback.params - 请求参数
+   * @param {Function} callback.onSuccess - onSuccess (response){}
+   * @param {Function} callback.onError - onError (error){}
    */
-  getFaultData (v) {
+  getFaultData (v, callback) {
 
     let serverAddress = this.createServerURL(v, 'faultWarn/listFaultWarnByParams')
 
+    //console.log("故障API",serverAddress);
+
+    let requestInterval = v.$store.state.requestInterval
+
+    this.getFaultDataTimer(v, serverAddress, requestInterval || 60000, callback)
+
+  },
+  /**
+   * 屏幕-事件中心-实时故障信息定时器
+   * @param {Vue} v - vue实例
+   * @param {String} url 请求地址
+   * @param {Number} interval 时间间隔
+   * @param {Object} callback 回调方法
+   * @param {Object} callback.params - 请求参数
+   * @param {Function} callback.onSuccess - onSuccess (resp
+   * @param {Function} callback.onError - onError (error){}
+   */
+  getFaultDataTimer(v, url, interval, callback) {
+
     let start = new Date()
 
-    console.log("实时故障信息API",serverAddress);
+    let params = {
+      beginDate: `${(new Date()).Format("yyyyMMdd")}000000`,
+      car_no: '',
+      dealStatus: '',
+      endDate: `${(new Date()).Format("yyyyMMdd")}235959`,
+      errorType: '',
+      fault_code: '',
+      fault_desc: '',
+      fault_level: '',
+      isMultiMonitor: 1,
+      jcode: '',
+      mode: 0,
+      occrStatus: '',
+      pageNo: 1,
+      pageSize: 20,
+      sn: '',
+      stationCode: '',
+      status: '',
+      sys_code: '',
+      trainCate: '',
+      train_type: '',
+      type: ''
+    }
 
-    v.$jsonp(serverAddress,
-      {
-        beginDate: '20190309000000',
-        car_no: '',
-        dealStatus: '',
-        endDate: '20190309235959',
-        errorType: '',
-        fault_code: '',
-        fault_desc: '',
-        fault_level: '',
-        isMultiMonitor: 1,
-        jcode: '',
-        mode: 0,
-        occrStatus: '',
-        pageNo: 1,
-        pageSize: 20,
-        sn: '',
-        stationCode: '',
-        status: '',
-        sys_code: '',
-        trainCate: '',
-        train_type: '',
-        type: ''
-      }).then(response => {
+    v.$jsonp(url, params).then(response => {
 
       console.log(`get thm fault complete in ${ new Date() - start }ms`)
       console.log(response)
       //请求回来的数据commit到vuex
       v.$store.commit('updateCurrentFault', response)
 
-    }).catch(error => {
-      console.log(error)
-    })
+      setTimeout(() => {
+        this.getFaultDataTimer(v, url, interval, callback)
+      }, interval)
 
+      if (callback.onSuccess) {
+        callback.onSuccess(response)
+      }
+
+    }).catch(error => {
+
+      if (callback.onError) {
+        callback.onError(error)
+      }
+      console.error(error)
+    })
   },
   /**
    * 屏幕-事件中心-平台预警
    * @param {Vue} v - vue实例
+   * @param {Object} callback 回调方法
+   * @param {Object} callback.params - 请求参数
+   * @param {Function} callback.onSuccess - onSuccess (resp
+   * @param {Function} callback.onError - onError (error){}
    */
-  getWarnData (v) {
+  getWarnData (v, callback) {
     let serverAddress = this.createServerURL(v, 'faultrec/selectFaultWarnOnDay')
 
-    console.log("预警API",serverAddress);
+    //console.log("预警API",serverAddress);
 
+    let requestInterval = v.$store.state.requestInterval
+
+    this.getWarnDataTimer(v, serverAddress, requestInterval || 60000, callback)
+
+  },
+  /**
+   * 屏幕-事件中心-实时故障信息定时器
+   * @param {Vue} v - vue实例
+   * @param {String} url 请求地址
+   * @param {Number} interval 时间间隔
+   * @param {Object} callback 回调方法
+   * @param {Object} callback.params - 请求参数
+   * @param {Function} callback.onSuccess - onSuccess (resp
+   * @param {Function} callback.onError - onError (error){}
+   */
+  getWarnDataTimer(v, url, interval, callback) {
     let start = new Date()
 
-    v.$jsonp(serverAddress,
-      {
-        begin_date: '2019-03-09',
-        car_no: '',
-        end_date: '2019-03-21',
-        fault_level: '',
-        isMultiMonitor: '1',
-        jcode: '',
-        sn: '',
-        station: '',
-        sys_name: '',
-        train_type: '',
-        type: '',
-        warnName: '',
-      }).then(response => {
+    let params = {
+      begin_date: (new Date()).Format("yyyy-MM-dd"),
+      car_no: '',
+      end_date: (new Date()).Format("yyyy-MM-dd"),
+      fault_level: '',
+      isMultiMonitor: '1',
+      jcode: '',
+      sn: '',
+      station: '',
+      sys_name: '',
+      train_type: '',
+      type: '',
+      warnName: '',
+    }
+
+    v.$jsonp(url, params).then(response => {
 
       console.log(`get thm warn complete in ${ new Date() - start }ms`)
       console.log(response)
-      
+
       v.$store.commit('updateCurrentWarn', response)
 
+      setTimeout(() => {
+        this.getWarnDataTimer(v, url, interval, callback)
+      }, interval)
+
+      if (callback.onSuccess) {
+        callback.onSuccess(response)
+      }
+
     }).catch(error => {
-      console.log(error)
+
+      if (callback.onError) {
+        callback.onError(error)
+      }
+      console.error(error)
     })
   },
   /**

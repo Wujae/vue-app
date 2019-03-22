@@ -57,14 +57,15 @@
       });
     },
     mounted () {
-
+      console.log('layout2 mounted')
       //开启接口服务
       thmInterfaceService.getFaultData(this);
       thmInterfaceService.getWarnData(this);
       mdpInterfaceService.getAirConditionerCount(this);
       mdpInterfaceService.getAirConditioner(this);
       //mdpInterfaceService.getRuleAttentionCount(this);
-      mdpInterfaceService.getRuleAttention(this);
+      //mdpInterfaceService.getRuleAttention(this);
+
       thmInterfaceService.getOnlineStatusData(this);
 
 

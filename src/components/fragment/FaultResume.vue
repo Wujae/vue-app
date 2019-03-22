@@ -1,6 +1,8 @@
 <template>
   <tech-frame v-bind="frameInitOptions" :content-style="{overflow: 'hidden'}">
-    <div class="title">故障履历</div>
+    <div class="title">
+      <arrow-title :title-text="'故障履历'"></arrow-title>
+    </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
   </tech-frame>
 </template>
@@ -10,10 +12,11 @@
   import mdpInterfaceService from '../../service/MdpInterfaceService'
   import WrapTable from '../base/WrapTable'
   import { mapGetters } from 'vuex'
+  import ArrowTitle from '../base/ArrowTitle'
 
   export default {
     name: "FaultResume",
-    components: {WrapTable, TechFrame},
+    components: {ArrowTitle, WrapTable, TechFrame},
     data () {
       return {
         columnSetting: {

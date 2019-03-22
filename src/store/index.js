@@ -81,6 +81,8 @@ export default new Vuex.Store({
      * @return {null|*}
      */
     getRuleAttentionCount : state => {
+      console.log('getRuleAttentionCount in vuex', state.ruleAttentionCount)
+
       return state.ruleAttentionCount;
     },
     getRuleAttention : state => {
@@ -129,6 +131,7 @@ export default new Vuex.Store({
       state.airConditioner = data
     },
     updateRuleAttentionCount (state, data){
+      console.log('updateRuleAttentionCount', data)
       state.ruleAttentionCount = data
     },
     updateRuleAttention (state, data){

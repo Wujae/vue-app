@@ -89,6 +89,8 @@
     },
     methods: {
       getRemoteData(sn) {
+        //车组上线状态数据
+
         thmInterfaceService.getTrainParamsData(this, {
           params: {sn: sn}, onSuccess: (resp) => {
             //[0,1,2] O:整车， 1：牵引 2：部件
@@ -112,8 +114,6 @@
       });
     },
     mounted() {
-      //车组上线状态数据
-      thmInterfaceService.getTrainParamsData(this, {params: {sn: newTrain}})
 
     },
     // methods: {

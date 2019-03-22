@@ -1,6 +1,8 @@
 <template>
   <tech-frame v-bind="frameInitOptions">
-    <div id="onlinestatus6-l1">规则关注</div>
+    <div id="onlinestatus6-l1">
+      <arrow-title :title-text="'规则关注'" />
+    </div>
     <div id="onlinestatus6-r1">
       <level-dropdown v-bind:style="styleObject5" :drop-down-items="dropDownItems"></level-dropdown>
     </div>
@@ -14,6 +16,7 @@
   import { mapGetters } from 'vuex'
   import LevelDropdown from "../base/LevelDropdown";
   import mdpInterfaceService from '../../service/MdpInterfaceService'
+  import ArrowTitle from '../base/ArrowTitle'
 
   const  LVL_COLOR = {
     A: '#c43838',
@@ -31,7 +34,7 @@
           needIdx: true,
           idxOccupancyRate: 5,
           overallStyle: null,
-          rowHeight: '25px',
+          rowHeight: '30px',
           rowMinHeight: '20px',
           titleRowStyle: null,
           oddRowStyle: null,
@@ -41,7 +44,10 @@
             {title: '车型', key: 'trainTypeName', style: {width: '10%', 'font-size': '14px'}},
             {title: '车组号', key: 'trainId', style: {width: '10%', 'font-size': '14px'}},
             {title: '车辆号', key: 'vehicleNo', style: {width: '10%', 'font-size': '14px'}},
-            {title: '关注参数', key: 'partName', style: {width: '20%', 'font-size': '14px', overflow: 'hidden', 'word-break': 'keep-all', 'text-overflow': 'ellipsis'}},
+            {title: '关注参数', key: 'partName',
+              style: {width: '20%', 'font-size': '14px', overflow: 'hidden', 'word-break': 'keep-all', 'text-overflow': 'ellipsis', 'justify-content': 'start'},
+              titleStyle: {width: '20%', 'font-size': '14px', 'justify-content': 'center'}
+             },
             {title: '参数值', key: 'paramValue', style: {width: '10%', 'font-size': '14px'}},
             {title: '参数趋势', key: 'changeTrend', style: {width: '10%', 'font-size': '14px'}}
 
@@ -52,7 +58,7 @@
         dropDownItems:[],
         styleObject5:{
           position: 'absolute',
-          top: '-20px',
+          top: '-30px',
           right: '30px',
           width: '100px',
           height: '20px'
@@ -102,12 +108,15 @@
             style: {'background-color': '#ac990a', color: '#fff'}
           }
         ]
+        console.log('getRuleAttentionCount',newv)
       }
     },
-    components: {WrapTable, TechFrame,LevelDropdown},
+    components: {ArrowTitle, WrapTable, TechFrame,LevelDropdown},
     mounted () {
-      mdpInterfaceService.getRuleAttentionCount(this);
+      console.log('ruleAttention mounted')
 
+      mdpInterfaceService.getRuleAttentionCount(this);
+      mdpInterfaceService.getRuleAttention(this);
     },
     methods : {
       parseData (rawdata) {
@@ -153,6 +162,7 @@
     background-color: #5ab943;
   }
   #onlinestatus6-l1 {
+    display: inline-block;
     color: #09f2e1;
     font-weight: bolder;
     font-size: 18px;

@@ -216,7 +216,9 @@ export default {
    */
   getAirConditionerCount(v) {
 
-    let startDate = '20180901', endDate = '20190315'
+    //180天内
+    let startDate = (new Date()).addDate(-360).Format("yyyyMMdd"),
+      endDate = (new Date()).Format("yyyy-MM-dd")
 
     let params = {
       startDate: startDate,
@@ -246,21 +248,41 @@ export default {
   /**
    * 获取空调数据
    * @param {Vue} v - vue实例
+   * @param {Object} callback 回调方法
+   * @param {Object} callback.params - 请求参数
+   * @param {Function} callback.onSuccess - onSuccess (resp
+   * @param {Function} callback.onError - onError (error){}
    */
-  getAirConditioner(v) {
+  getAirConditioner(v, callback) {
 
-    let startDate = '2018-09-01 00:00:00', endDate = '2019-03-15 23:59:59'
+    let requestInterval = v.$store.state.requestInterval || 60000
+
+    //360天内
+    let startDate = `${(new Date()).addDate(-360).Format("yyyy-MM-dd")} 00:00:00`,
+      endDate = `${(new Date()).Format("yyyy-MM-dd")} 23:59:59`
 
     let querySql = `EVALUATE_DATE BETWEEN '${startDate}' AND '${endDate}'`
 
     this.queryBy(v, "T_MA_AC_HEALTH", {params: {queryResultFilterSql: querySql},
       onSuccess: (resp) => {
-
-
+          
+        //console.log(resp)
         v.$store.commit('updateAirConditioner', resp)
+
+        setTimeout(() => {
+          this.getAirConditioner(v, callback)
+        }, requestInterval)
+
+        if (callback && callback.onSuccess) {
+          callback.onSuccess(response)
+        }
 
       }, onError: (error) => {
         console.log(error)
+
+        if (callback && callback.onError) {
+          callback.onError(error)
+        }
       }
     })
   },
@@ -336,10 +358,11 @@ export default {
    * 获取参数点趋势数据
    * @param {Vue} v - vue实例
    * @param {Object} ruleAttentionData - 关注数据
-   * @param {Array} rowDatas.rows - 参数点数据
+   * @param {Array} ruleAttentionData.rows - 参数点数据
    */
   getRuleAttentionTrend(v, ruleAttentionData){
 
+    let requestInterval = v.$store.state.requestInterval || 60000
 
     if(ruleAttentionData && ruleAttentionData.rows.length > 0) {
 
@@ -370,6 +393,10 @@ export default {
 
           v.$store.commit('updateRuleAttention', result)
 
+          setTimeout(() => {
+            this.getRuleAttention(v)
+          }, requestInterval)
+
         }).catch(error => {
 
           throw error
@@ -377,8 +404,12 @@ export default {
       }, reason => {
 
         v.$store.commit('updateRuleAttention', result)
-
         console.log(reason);
+
+        setTimeout(() => {
+          this.getRuleAttention(v)
+        }, requestInterval)
+
       })
     }
 
