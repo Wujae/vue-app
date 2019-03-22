@@ -109,13 +109,6 @@
     box-sizing: border-box;
   }
 
-  @font-face {
-    /* font-test*/
-    font-family: Jura-light;
-    src: url('/static/font/Jura-Light.ttf');
-
-  }
-
   .container {
     background-color: #181419;
     overflow: hidden;

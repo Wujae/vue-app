@@ -8,6 +8,7 @@ import './plugins/echarts.js' //引入echarts
 import './plugins/filter.js' //引入filter
 import './plugins/polyfill.js' //引入polyfill外源性增强
 import store from './store'//引入store
+import './assets/font.css'  //引入外部字体样式
 import axios from 'axios'
 import VueJsonp from 'vue-jsonp'
 

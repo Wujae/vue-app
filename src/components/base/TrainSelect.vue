@@ -76,8 +76,8 @@
 
 
   .train-select-popper-class {
-    background-color: #1b3b65;
-    border-color: #23a2da;
+    background-color: #1b3b65 !important;
+    border-color: #23a2da !important;
     color: #fff;
   }
 
