@@ -61,8 +61,8 @@
       //开启接口服务
       thmInterfaceService.getFaultData(this);
       thmInterfaceService.getWarnData(this);
-      mdpInterfaceService.getAirConditionerCount(this);
-      mdpInterfaceService.getAirConditioner(this);
+      //mdpInterfaceService.getAirConditionerCount(this);
+      //mdpInterfaceService.getAirConditioner(this);
       //mdpInterfaceService.getRuleAttentionCount(this);
       //mdpInterfaceService.getRuleAttention(this);
 

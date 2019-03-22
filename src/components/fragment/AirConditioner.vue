@@ -16,7 +16,8 @@
   import { mapGetters } from 'vuex'
   import LevelDropdown from "../base/LevelDropdown";
   import ArrowTitle from '../base/ArrowTitle'
-
+  import mdpInterfaceService from '../../service/MdpInterfaceService'
+  
   //airConditioner
   export default {
     name: "OnlineStatus2",
@@ -112,7 +113,8 @@
     },
     components: {ArrowTitle, WrapTable, TechFrame,LevelDropdown},
     mounted () {
-
+      mdpInterfaceService.getAirConditionerCount(this);
+      mdpInterfaceService.getAirConditioner(this);
     },
     methods : { }
 
