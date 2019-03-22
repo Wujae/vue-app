@@ -177,13 +177,14 @@ export default {
    * @param {Function} callback.onError - onError (error){}
    */
   getFaultDataTimer(v, url, interval, callback) {
+
     let start = new Date()
 
     let params = {
-      beginDate: '20190309000000',
+      beginDate: `${(new Date()).Format("yyyyMMdd")}000000`,
       car_no: '',
       dealStatus: '',
-      endDate: '20190309235959',
+      endDate: `${(new Date()).Format("yyyyMMdd")}235959`,
       errorType: '',
       fault_code: '',
       fault_desc: '',
@@ -258,9 +259,9 @@ export default {
     let start = new Date()
 
     let params = {
-      begin_date: '2019-03-09',
+      begin_date: (new Date()).Format("yyyy-MM-dd"),
       car_no: '',
-      end_date: '2019-03-21',
+      end_date: (new Date()).Format("yyyy-MM-dd"),
       fault_level: '',
       isMultiMonitor: '1',
       jcode: '',

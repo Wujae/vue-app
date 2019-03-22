@@ -216,7 +216,9 @@ export default {
    */
   getAirConditionerCount(v) {
 
-    let startDate = '20180901', endDate = '20190315'
+    //180天内
+    let startDate = (new Date()).addDate(-360).Format("yyyyMMdd"),
+      endDate = (new Date()).Format("yyyy-MM-dd")
 
     let params = {
       startDate: startDate,
@@ -255,7 +257,9 @@ export default {
 
     let requestInterval = v.$store.state.requestInterval || 60000
 
-    let startDate = '2018-09-01 00:00:00', endDate = '2019-03-15 23:59:59'
+    //360天内
+    let startDate = `${(new Date()).addDate(-360).Format("yyyy-MM-dd")} 00:00:00`,
+      endDate = `${(new Date()).Format("yyyy-MM-dd")} 23:59:59`
 
     let querySql = `EVALUATE_DATE BETWEEN '${startDate}' AND '${endDate}'`
 

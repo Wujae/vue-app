@@ -34,7 +34,7 @@
   };
   //currentfault
   export default {
-    name: "OnlineStatus2",
+    name: "CurrentFault",
     data () {
       return {
         columnSetting: {
@@ -82,7 +82,7 @@
         dataItems: [],
         styleObject4:{
           position: 'absolute',
-          top: '-20px',
+          top: '-30px',
           right: '30px',
           width: '100px',
           height: '20px'

@@ -81,7 +81,7 @@
         ],
         styleObject2:{
           position: 'absolute',
-          top: '-20px',
+          top: '-30px',
           right: '30px',
           width: '100px',
           height: '20px'
