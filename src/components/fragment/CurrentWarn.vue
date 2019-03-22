@@ -1,8 +1,9 @@
 <template>
   <tech-frame v-bind="frameInitOptions "  :content-style="{overflow: 'hidden'}">
-    <div id="onlinestatus4-l1">平台预警</div>
+    <div id="onlinestatus4-l1">
+      <arrow-title :title-text="'平台预警'" />
+    </div>
     <div id="onlinestatus4-r1">
-
       <level-dropdown   :drop-down-items="dropDownItems" v-bind:style="styleObject" ></level-dropdown>
     </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
@@ -14,6 +15,7 @@
   import WrapTable from '../base/WrapTable'
   import { mapGetters } from 'vuex'
   import LevelDropdown from "../base/LevelDropdown"
+  import ArrowTitle from '../base/ArrowTitle'
 
   //currentWarn
   export default {
@@ -96,7 +98,7 @@
         this.parseData(newv);
       }
     },
-    components: {WrapTable, TechFrame,LevelDropdown},
+    components: {ArrowTitle, WrapTable, TechFrame,LevelDropdown},
     mounted () {
 
     },
@@ -188,6 +190,7 @@
     background-color: #5ab943;
   }
   #onlinestatus4-l1 {
+    display: inline-block;
     color: #09f2e1;
     font-weight: bolder;
     font-size: 18px;

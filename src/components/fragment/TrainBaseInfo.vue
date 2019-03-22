@@ -1,6 +1,8 @@
 <template>
   <tech-frame v-bind="frameInitOptions">
-    <div class="title">基础信息</div>
+    <div class="title">
+      <slash-title :title-text="'基础信息'"/>
+    </div>
     <div class="base-info-content">
       <div style="height: 150px">
         <div class="section-title"><span>基本信息</span></div>
@@ -170,10 +172,11 @@
   import TechFrame from '../base/TechFrame'
   import mdpInterfaceService from '../../service/MdpInterfaceService'
   import { mapGetters } from 'vuex'
+  import SlashTitle from '../base/SlashTitle'
 
   export default {
     name: "TrainSetting",
-    components: {TechFrame},
+    components: {SlashTitle, TechFrame},
     data() {
       return {
         shows: [false, false, false, false, false, false, false, false, false],
@@ -258,6 +261,7 @@
     font-size: 20px;
     font-weight: bold;
     color: #10ffeb;
+    display: inline-block;
   }
 
   .base-info-content {

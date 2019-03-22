@@ -1,6 +1,8 @@
 <template>
   <tech-frame v-bind="frameInitOptions" :content-style="{overflow: 'hidden'}">
-    <div id="onlinestatus5-l1">空调健康评估</div>
+    <div id="onlinestatus5-l1">
+      <arrow-title :title-text="'空调健康评估'" />
+    </div>
     <div id="onlinestatus5-r1">
       <level-dropdown v-bind:style="styleObject3"></level-dropdown>
     </div>
@@ -13,6 +15,7 @@
   import WrapTable from '../base/WrapTable'
   import { mapGetters } from 'vuex'
   import LevelDropdown from "../base/LevelDropdown";
+  import ArrowTitle from '../base/ArrowTitle'
 
   //airConditioner
   export default {
@@ -75,7 +78,7 @@
         this.dataItems=newv.rows
       }
     },
-    components: {WrapTable, TechFrame,LevelDropdown},
+    components: {ArrowTitle, WrapTable, TechFrame,LevelDropdown},
     mounted () {
 
     },
@@ -119,6 +122,7 @@
     background-color: #5ab943;
   }
   #onlinestatus5-l1 {
+    display: inline-block;
     color: #09f2e1;
     font-weight: bolder;
     font-size: 18px;

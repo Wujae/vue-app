@@ -1,6 +1,8 @@
 <template>
   <tech-frame v-bind="frameInitOptions"  :content-style="{overflow: 'hidden'}">
-    <div id="onlinestatus3-l1">列 车 整 车 参 数</div>
+    <div id="onlinestatus3-l1">
+      <slash-title :title-text="'列 车 整 车 参 数'"/>
+    </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
   </tech-frame>
 </template>
@@ -9,6 +11,7 @@
   import TechFrame from '../base/TechFrame'
   import WrapTable from '../base/WrapTable'
   import { mapGetters } from 'vuex'
+  import SlashTitle from '../base/SlashTitle'
 
   //trainParamsEntity
   export default {
@@ -53,7 +56,7 @@
         this.parseData(newv);
       }
     },
-    components: {WrapTable, TechFrame},
+    components: {SlashTitle, WrapTable, TechFrame},
     mounted () {
 
     },
@@ -141,6 +144,7 @@
     background-color: #5ab943;
   }
   #onlinestatus3-l1 {
+    display: inline-block;
     color: #09f2e1;
     font-weight: bolder;
     font-size: 18px;
