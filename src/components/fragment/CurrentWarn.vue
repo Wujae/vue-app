@@ -91,7 +91,7 @@
     },
     watch: {
       getCurrentWarn (newv) { //newv 就是改变后的getTrains值
-        console.log(newv,'currentWarn');
+
         this.dataItems=newv;
         this.parseData(newv);
       }

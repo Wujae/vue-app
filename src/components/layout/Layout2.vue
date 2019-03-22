@@ -63,7 +63,7 @@
       thmInterfaceService.getWarnData(this);
       mdpInterfaceService.getAirConditionerCount(this);
       mdpInterfaceService.getAirConditioner(this);
-      mdpInterfaceService.getRuleAttentionCount(this);
+      //mdpInterfaceService.getRuleAttentionCount(this);
       mdpInterfaceService.getRuleAttention(this);
       thmInterfaceService.getOnlineStatusData(this);
 

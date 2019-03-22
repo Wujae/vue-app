@@ -2,7 +2,7 @@
   <tech-frame v-bind="frameInitOptions" :content-style="{overflow: 'hidden'}">
     <div id="onlinestatus5-l1">空调健康评估</div>
     <div id="onlinestatus5-r1">
-      <level-dropdown v-bind:style="styleObject3"></level-dropdown>
+      <level-dropdown v-bind:style="styleObject3" :drop-down-items="dropDownItems"></level-dropdown>
     </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
   </tech-frame>
@@ -42,6 +42,7 @@
         },
         // dataItems: null,
         dataItems:[],
+        dropDownItems:[],
         styleObject3:{
           position: 'absolute',
           top: '-20px',
@@ -66,13 +67,44 @@
     },
     computed:{
       ...mapGetters([
-        'getAirConditioner'
+        'getAirConditioner','getAirConditionerCount'
       ])
     },
     watch: {
       getAirConditioner (newv) { //newv 就是改变后的getTrains值
-        console.log(newv.rows,'nnnnn')
+
         this.dataItems=newv.rows
+      },
+      getAirConditionerCount (newv) { //newv 就是改变后的getTrains值
+
+        this.dropDownItems = [
+          {
+            key: 'A',
+            name: `A 疾病  ${newv[0].amount}`,
+            style: {'background-color': '#bf3131', color: '#fff'}
+          },
+          {
+            key: 'B',
+            name: `B 恶化  ${newv[1].amount}`,
+            style: {'background-color': '#c08528', color: '#fff'}
+          },
+          {
+            key: 'C',
+            name: `C 注意  ${newv[2].amount}`,
+            style: {'background-color': '#ac990a', color: '#fff'}
+          },
+          {
+            key: 'D',
+              name: `D 良好  ${newv[3].amount}`,
+            style: {'background-color': '#88ac33', color: '#fff'}
+          },
+          {
+            key: 'E',
+              name: `E 健康  ${newv[4].amount}`,
+            style: {'background-color': '#11ac68', color: '#fff'}
+          }
+        ]
+
       }
     },
     components: {WrapTable, TechFrame,LevelDropdown},

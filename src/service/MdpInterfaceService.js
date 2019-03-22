@@ -256,7 +256,7 @@ export default {
     this.queryBy(v, "T_MA_AC_HEALTH", {params: {queryResultFilterSql: querySql},
       onSuccess: (resp) => {
 
-        console.log(resp)
+
         v.$store.commit('updateAirConditioner', resp)
 
       }, onError: (error) => {

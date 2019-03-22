@@ -2,7 +2,7 @@
   <tech-frame v-bind="frameInitOptions">
     <div id="onlinestatus2-l1">实 时 故 障 信 息</div>
     <div id="onlinestatus2-r1">
-      <level-dropdown v-bind:style="styleObject4"></level-dropdown>
+      <level-dropdown v-bind:style="styleObject4" :drop-down-items="dropDownItems"></level-dropdown>
 
     </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
@@ -76,6 +76,7 @@
           ]
         },
         dataItems: [],
+        dropDownItems: [],
         styleObject4:{
           position: 'absolute',
           top: '-20px',
@@ -100,16 +101,20 @@
     computed:{
 
       ...mapGetters([
-        'getCurrentFault'
+        'getCurrentFault','getCurrentFaultCount'
       ])
     },
     watch: {
       getCurrentFault (newv) { //newv 就是改变后的getCurrentFault值（请求回来的数据）
 
         this.dataItems=newv.list
-        console.log(newv,'currentfault')
+
 
         //this.parseData(newv);
+      },
+      getCurrentFaultCount (newv){
+        this.parseData(newv)
+
       }
     },
     components: {LevelDropdown, WrapTable, TechFrame},
@@ -118,109 +123,28 @@
     },
     methods : {
       parseData (rawdata) {
-        if(!rawdata || rawdata.length === 0 ) return;
-
-        let stations = [];
-
-        /*
-         *{
-         * ​​​al_a: "15",
-         * ​​​al_all: "159"​,
-         * ​​al_b: "31"​​​,
-         * al_c: "113",
-         * ​​​alertCount: "15/31/113/159",
-         * ​​​delayTime: ""​,
-         * ​​from: "",
-         * ​​​gps_lat: "26.1964"​,
-         * ​​gps_long: "105.8619"​,
-         * ​​isOnLine: "否"​,
-         * ​​jcode: "11",
-         * ​​​jname: "成都铁路局"​​​,
-         * level: null​,
-         * ​​mileage: "5098183",
-         * ​​​position: "",
-         * ​​​scode: "842",
-         * ​​​sn: "3050"​,
-         * ​​sname: "重庆北动车组运用所"​​​,
-         * speed: "",
-         * ​​​station: "重庆服务站"​​,
-         * ​stationCode: "3C01010311",
-         * ​​​status: "断开连接",
-         * ​​​suit: "8"​,
-         * ​​to: ""​​​,
-         * train_no: "G2878"​,
-         * ​​train_type: "CRH3C",
-         * ​​​update_time: "2019-03-04 15:44:57",
-         * ​​​warnCount: "2/0/0/2"​​
-         * }
-         */
-        let result = rawdata.reduce((p, c, i) => {
-
-          let stationIdx = stations.indexOf(c.station)
-
-          //找到服务站
-          if (stationIdx > -1) {
-
-            p[stationIdx].alloc++;
-
-          } else {
-
-            stations.push(c.station)
-
-            p.push({
-              station: c.station.replace("服务站", ''),
-              alloc: 0,
-              ala: parseInt(c.al_a || 0),
-              alb: parseInt(c.al_b || 0),
-              alc: parseInt(c.al_c || 0)
-            })
-            stationIdx = stations.length - 1
-
-            TRAIN_STATUS_ALIAS.forEach( alias => {
-              p[stationIdx][alias] = 0;
-            })
-
-          }
-
-          let dataPt = p[stationIdx]
 
 
-          dataPt.alloc ++
-          dataPt.ala += parseInt(c.al_a || 0)
-          dataPt.alb += parseInt(c.al_b || 0)
-          dataPt.alc += parseInt(c.al_c || 0)
-
-          let thisStatusIdx = TRAIN_STATUS.indexOf(c.status)
-
-          if(thisStatusIdx > -1){
-            dataPt[TRAIN_STATUS_ALIAS[thisStatusIdx]]++
-          }
-
-          return p;
-
-        }, []);
-
-        this.updateData(result)
+       let list = [
+         {
+           key: 'A',
+           name: `A 级  ${rawdata[0].count}`,
+           style: {'background-color': '#bf3131', color: '#fff'}
+         },
+         {
+           key: 'B',
+           name: `B 级  ${rawdata[1].count}`,
+           style: {'background-color': '#c08528', color: '#fff'}
+         },
+         {
+           key: 'C',
+           name: `C 级  ${rawdata[2].count}`,
+           style: {'background-color': '#ac990a', color: '#fff'}
+         }
+       ]
+        this.dropDownItems = list
       },
-      updateData (data) {
 
-        this.dataItems = data.map( dt => {
-
-          let mark = {
-            special: true,
-            style: {
-              'background-color': dt.ala > 0 ? LVL_COLOR.A : dt.alb > 0 ? LVL_COLOR.B : dt.alc > 0 ? LVL_COLOR.C : LVL_COLOR.NORMAL,
-              height:'12px',
-              width:'16px'
-            }
-          }
-
-          return Object.assign({
-            mark: mark,
-            faultCount: `${dt.ala}/${dt.alb}/${dt.alc}`
-          }, dt)
-        })
-      }
     }
   }
 </script>

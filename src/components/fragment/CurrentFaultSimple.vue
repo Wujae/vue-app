@@ -2,7 +2,7 @@
   <tech-frame v-bind="frameInitOptions" :content-style="{overflow: 'hidden'}">
     <div id="onlinestatus3-l1">车组报警</div>
     <div id="onlinestatus3-r1">
-      <level-dropdown v-bind:style="styleObject2"></level-dropdown>
+      <level-dropdown v-bind:style="styleObject2" :drop-down-items="dropDownItems"></level-dropdown>
     </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems" ></wrap-table>
   </tech-frame>
@@ -76,12 +76,14 @@
           // {number:"20",station: 'CRH380B', alloc: '3616',stopped: '6812', online: '08', offline: '电器设备炬火警', faultCount: 'A', disconnect: '2019-01-08 15：07：25',trans:'辅助电器系统' ,faultStation:'否',faultType:'司机故障',faultModel:'非维护',isOnline:'是',transType:'未处理'},
 
         ],
+        dropDownItems: [],
         styleObject2:{
           position: 'absolute',
           top: '-20px',
           right: '30px',
           width: '100px',
-          height: '20px'
+          height: '20px',
+          opacity:1
         }
 
       }
@@ -100,13 +102,32 @@
     },
     computed:{
       ...mapGetters([
-        'getCurrentFault'
+        'getCurrentFault','getCurrentFaultCount'
       ])
     },
     watch: {
       getCurrentFault (newv) { //newv 就是改变后的getTrains值
         console.log(newv,'vvvvvvv')
         this.dataItems=newv.list
+      },
+      getCurrentFaultCount (newv){
+        this.dropDownItems = [
+          {
+          key: 'A',
+          name: `A 级  ${newv[0].count}`,
+          style: {'background-color': '#bf3131', color: '#fff'}
+          },
+          {
+            key: 'B',
+            name: `B 级  ${newv[1].count}`,
+            style: {'background-color': '#c08528', color: '#fff'}
+          },
+          {
+            key: 'C',
+            name: `C 级  ${newv[2].count}`,
+            style: {'background-color': '#ac990a', color: '#fff'}
+          }
+        ]
       }
     },
     components: {WrapTable, TechFrame,LevelDropdown},

@@ -2,7 +2,7 @@
   <tech-frame v-bind="frameInitOptions">
     <div id="onlinestatus6-l1">规则关注</div>
     <div id="onlinestatus6-r1">
-      <level-dropdown v-bind:style="styleObject5"></level-dropdown>
+      <level-dropdown v-bind:style="styleObject5" :drop-down-items="dropDownItems"></level-dropdown>
     </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
   </tech-frame>
@@ -13,6 +13,7 @@
   import WrapTable from '../base/WrapTable'
   import { mapGetters } from 'vuex'
   import LevelDropdown from "../base/LevelDropdown";
+  import mdpInterfaceService from '../../service/MdpInterfaceService'
 
   const  LVL_COLOR = {
     A: '#c43838',
@@ -48,6 +49,7 @@
         },
         // dataItems: null,
         dataItems:[],
+        dropDownItems:[],
         styleObject5:{
           position: 'absolute',
           top: '-20px',
@@ -75,16 +77,36 @@
         'getRuleAttentionCount'
       ])
     },
+
     watch: {
       getRuleAttention (newv) { //newv 就是改变后的ruleAttention值
         this.dataItems = newv
+
       },
       getRuleAttentionCount (newv) { //newv 就是改变后的ruleAttentionCount值
-        console.log(newv)
+        console.log(newv,'getRuleAttentionCount')
+        this.dropDownItems = [
+          {
+            key: 'A',
+            name: `A 级  ${newv[0].count}`,
+            style: {'background-color': '#bf3131', color: '#fff'}
+          },
+          {
+            key: 'B',
+            name: `B 级 ${newv[1].count}`,
+            style: {'background-color': '#c08528', color: '#fff'}
+          },
+          {
+            key: 'C',
+            name: `C 级  ${newv[2].count}`,
+            style: {'background-color': '#ac990a', color: '#fff'}
+          }
+        ]
       }
     },
     components: {WrapTable, TechFrame,LevelDropdown},
     mounted () {
+      mdpInterfaceService.getRuleAttentionCount(this);
 
     },
     methods : {
