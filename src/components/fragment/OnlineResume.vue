@@ -25,13 +25,13 @@
           overallStyle: {"font-size": "13px"},
           rowHeight: '30px',
           rowMinHeight: '10px',
-          titleRowStyle: {"font-size": "13px"},
+          titleRowStyle: {"font-size": "13px", "background-color": "#1d2d47"},
           oddRowStyle: null,
           evenRowStyle: null,
           columns: [
             {title: '前车', key: 'JAE_0', nullVal:'-', style: {width: '8%'}},
             {title: '后车', key: 'JAG_0', nullVal:'-', style: {width: '8%'}},
-            {title: '车次', key: 'AA', nullVal:'-', style: {width: '10%'}},
+            {title: '首发车次', key: 'AA', nullVal:'-', style: {width: '10%'}},
             {title: '开行日期', key: 'JDATE', nullVal:'-', style: {width: '15%'}},
             {title: '始发站', key: 'AF', nullVal:'-', style: {width: '10%'}},
             {title: '终到站', key: 'AG', nullVal:'-', style: {width: '10%'}},
@@ -70,7 +70,7 @@
     },
     methods : {
       getRemoteData(train) {
-        let querySql = `JAE_0 = '${train}' OR JAG_0 = '${train}'`
+        let querySql = ` REGEXP_INSTR( JAE_0 || ',' ||JAG_0, '^${train},|,${train}$' ) > 0 `
 
         mdpInterfaceService.queryBy(this, "V_KXQK", {params: {queryResultFilterSql: querySql},
           onSuccess: (resp) => {

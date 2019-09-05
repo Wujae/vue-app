@@ -24,15 +24,22 @@ export default new Vuex.Store({
     trainSelected: null,
     currentFaultCount: null,
     currentFault: null,
+    currentFaultSimple: null,
     currentWarnCount: null,
     currentWarn: null,
+    currentFaultCard: null,
     airConditionerCount: null,
     airConditioner: null,
     ruleAttentionCount: null,
     ruleAttention: null,
     trainParamsEntity:null,
     trainParamsUnit:null,
-    trainParamsParts:null
+    trainParamsParts:null,
+    levels: {
+      faultLevel: null,
+      faultLevelSimple: null,
+      warnLevel: null,
+    }
   },
   getters: {
     getTrains: state => {
@@ -48,6 +55,20 @@ export default new Vuex.Store({
       return state.trainSelected;
     },
     /**
+     * 等级
+     * @param state
+     * @return {string}
+     */
+    getFaultLevel: state => {
+      return state.levels.faultLevel;
+    },
+    getFaultLevelSimple: state => {
+      return state.levels.faultLevelSimple;
+    },
+    getWarnLevel: state => {
+      return state.levels.warnLevel;
+    },
+    /**
      * 报警数量
      * @param state
      * @return {null|*}
@@ -58,11 +79,17 @@ export default new Vuex.Store({
     getCurrentFault: state => {
       return state.currentFault;
     },
+    getCurrentFaultSimple: state => {
+      return state.currentFaultSimple;
+    },
     getCurrentWarnCount: state => {
       return state.currentWarnCount;
     },
     getCurrentWarn: state => {
       return state.currentWarn;
+    },
+    getCurrentFaultCard: state => {
+      return state.currentFaultCard;
     },
     /**
      * 空调数量
@@ -115,14 +142,34 @@ export default new Vuex.Store({
     updateCurrentFaultCount (state, data) {
       state.currentFaultCount = data
     },
+    /**
+     * 更新等级
+     * @param state
+     * @param data
+     */
+    updateFaultLevel (state, data) {
+      state.levels.faultLevel = data
+    },
+    updateFaultLevelSimple (state, data) {
+      state.levels.faultLevelSimple = data
+    },
+    updateWarnLevel(state, data) {
+      state.levels.warnLevel= data
+    },
     updateCurrentFault (state, data) {
       state.currentFault = data
+    },
+    updateCurrentFaultSimple (state, data) {
+      state.currentFaultSimple = data
     },
     updateCurrentWarnCount (state, data) {
       state.currentWarnCount = data
     },
     updateCurrentWarn (state, data) {
       state.currentWarn = data
+    },
+    updateCurrentFaultCard (state, data) {
+      state.currentFaultCard = data
     },
     updateAirConditionerCount (state, data){
       state.airConditionerCount = data

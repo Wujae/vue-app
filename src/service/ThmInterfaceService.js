@@ -1,4 +1,10 @@
 export default {
+  timers :{
+    faultTimer: null,
+    faultSimpleTimer: null,
+    warnTimer: null,
+    faultCardTimer: null
+  },
   /**
    * @deprecated
    * 全图车组GPS位置信息
@@ -21,12 +27,12 @@ export default {
         //存储为全局车组基础信息
         v.$store.commit('updateGpsMap', response)
 
-        if (callback.onSuccess) {
+        if (callback && callback.onSuccess) {
           callback.onSuccess(response)
         }
       }).catch(error => {
 
-      if (callback.onError) {
+      if (callback && callback.onError) {
         callback.onError(error)
       }
       console.log(error)
@@ -86,13 +92,13 @@ export default {
         this.getOnlineStatusDataTimer(v, url, interval, callback)
       }, interval)
 
-      if (callback.onSuccess) {
+      if (callback && callback.onSuccess) {
         callback.onSuccess(response)
       }
 
     }).catch(error => {
 
-      if (callback.onError) {
+      if (callback && callback.onError) {
         callback.onError(error)
       }
       console.error(error)
@@ -159,9 +165,12 @@ export default {
 
     let serverAddress = this.createServerURL(v, 'faultWarn/listFaultWarnByParams')
 
-    //console.log("故障API",serverAddress);
+    //console.log("thm 故障API",serverAddress);
 
     let requestInterval = v.$store.state.requestInterval
+
+    //清除 timer
+    clearTimeout(this.timers.faultTimer)
 
     this.getFaultDataTimer(v, serverAddress, requestInterval || 60000, callback)
 
@@ -204,24 +213,121 @@ export default {
       type: ''
     }
 
+    if(callback && callback.params){
+        Object.assign(params, callback.params)
+    }
+
     v.$jsonp(url, params).then(response => {
 
       console.log(`get thm fault complete in ${ new Date() - start }ms`)
       console.log(response)
+
+      //this.parseFaultCount(v, response)
+
       //请求回来的数据commit到vuex
       v.$store.commit('updateCurrentFault', response)
 
-      setTimeout(() => {
+      this.timers.faultTimer = setTimeout(() => {
         this.getFaultDataTimer(v, url, interval, callback)
       }, interval)
 
-      if (callback.onSuccess) {
+      if (callback && callback.onSuccess) {
         callback.onSuccess(response)
       }
 
     }).catch(error => {
 
-      if (callback.onError) {
+      if (callback && callback.onError) {
+        callback.onError(error)
+      }
+      console.error(error)
+    })
+  },
+  /**
+   * 屏幕-事件中心-车组报警信息
+   * @param {Vue} v - vue实例
+   * @param {Object} callback 回调方法
+   * @param {Object} callback.params - 请求参数
+   * @param {Function} callback.onSuccess - onSuccess (response){}
+   * @param {Function} callback.onError - onError (error){}
+   */
+  getFaultDataSimple (v, callback) {
+
+    let serverAddress = this.createServerURL(v, 'faultWarn/listFaultWarnByParams')
+
+    //console.log("thm 故障API",serverAddress);
+
+    let requestInterval = v.$store.state.requestInterval
+
+    //清除 timer
+    clearTimeout(this.timers.faultSimpleTimer)
+
+    this.getFaultDataSimpleTimer(v, serverAddress, requestInterval || 60000, callback)
+
+  },
+  /**
+   * 屏幕-事件中心-车组报警信息定时器
+   * @param {Vue} v - vue实例
+   * @param {String} url 请求地址
+   * @param {Number} interval 时间间隔
+   * @param {Object} callback 回调方法
+   * @param {Object} callback.params - 请求参数
+   * @param {Function} callback.onSuccess - onSuccess (resp
+   * @param {Function} callback.onError - onError (error){}
+   */
+  getFaultDataSimpleTimer(v, url, interval, callback) {
+
+    let start = new Date()
+
+    let params = {
+      beginDate: `${(new Date()).Format("yyyyMMdd")}000000`,
+      car_no: '',
+      dealStatus: '',
+      endDate: `${(new Date()).Format("yyyyMMdd")}235959`,
+      errorType: '',
+      fault_code: '',
+      fault_desc: '',
+      fault_level: '',
+      isMultiMonitor: 1,
+      jcode: '',
+      mode: 0,
+      occrStatus: '',
+      pageNo: 1,
+      pageSize: 5,
+      sn: '',
+      stationCode: '',
+      status: '',
+      sys_code: '',
+      trainCate: '',
+      train_type: '',
+      type: ''
+    }
+
+    if(callback && callback.params){
+      Object.assign(params, callback.params)
+    }
+
+    v.$jsonp(url, params).then(response => {
+
+      console.log(`get thm fault simple complete in ${ new Date() - start }ms`)
+      console.log(response)
+
+      //this.parseFaultCount(v, response)
+
+      //请求回来的数据commit到vuex
+      v.$store.commit('updateCurrentFaultSimple', response)
+
+      this.timers.faultSimpleTimer = setTimeout(() => {
+        this.getFaultDataSimpleTimer(v, url, interval, callback)
+      }, interval)
+
+      if (callback && callback.onSuccess) {
+        callback.onSuccess(response)
+      }
+
+    }).catch(error => {
+
+      if (callback && callback.onError) {
         callback.onError(error)
       }
       console.error(error)
@@ -241,6 +347,9 @@ export default {
     //console.log("预警API",serverAddress);
 
     let requestInterval = v.$store.state.requestInterval
+
+    //清除 timer
+    clearTimeout(this.timers.warnTimer)
 
     this.getWarnDataTimer(v, serverAddress, requestInterval || 60000, callback)
 
@@ -280,17 +389,17 @@ export default {
 
       v.$store.commit('updateCurrentWarn', response)
 
-      setTimeout(() => {
+      this.timers.warnTimer = setTimeout(() => {
         this.getWarnDataTimer(v, url, interval, callback)
       }, interval)
 
-      if (callback.onSuccess) {
+      if (callback && callback.onSuccess) {
         callback.onSuccess(response)
       }
 
     }).catch(error => {
 
-      if (callback.onError) {
+      if (callback && callback.onError) {
         callback.onError(error)
       }
       console.error(error)
@@ -328,6 +437,74 @@ export default {
         callback.onError(error)
       }
       console.log(error)
+    })
+  },
+  /**
+   * 屏幕-事件中心-故障卡片信息
+   * @param {Vue} v - vue实例
+   * @param {Object} callback 回调方法
+   * @param {Object} callback.params - 请求参数
+   * @param {Function} callback.onSuccess - onSuccess (response){}
+   * @param {Function} callback.onError - onError (error){}
+   */
+  getFaultCardData (v, callback) {
+
+    let serverAddress = this.createServerURL(v, 'faultWarn/getLastFaultDetails')
+
+    //console.log("thm 故障API",serverAddress);
+
+    let requestInterval = v.$store.state.requestInterval
+
+    //清除 timer
+    clearTimeout(this.timers.faultCardTimer)
+
+    this.getFaultCardDataTimer(v, serverAddress, requestInterval || 60000, callback)
+
+  },
+  /**
+   * 屏幕-事件中心-故障卡片信息定时器
+   * @param {Vue} v - vue实例
+   * @param {String} url 请求地址
+   * @param {Number} interval 时间间隔
+   * @param {Object} callback 回调方法
+   * @param {Object} callback.params - 请求参数
+   * @param {Function} callback.onSuccess - onSuccess (resp
+   * @param {Function} callback.onError - onError (error){}
+   */
+  getFaultCardDataTimer(v, url, interval, callback) {
+
+    let start = new Date()
+
+    let params = {}
+
+    if(callback && callback.params){
+      Object.assign(params, callback.params)
+    }
+
+    v.$jsonp(url, params).then(response => {
+
+      console.log(`get thm fault card complete in ${ new Date() - start }ms`)
+      console.log(response)
+
+      //this.parseFaultCount(v, response)
+
+      //请求回来的数据commit到vuex
+      v.$store.commit('updateCurrentFaultCard', response)
+
+      this.timers.faultCardTimer = setTimeout(() => {
+        this.getFaultCardDataTimer(v, url, interval, callback)
+      }, interval)
+
+      if (callback && callback.onSuccess) {
+        callback.onSuccess(response)
+      }
+
+    }).catch(error => {
+
+      if (callback && callback.onError) {
+        callback.onError(error)
+      }
+      console.error(error)
     })
   },
   /**

@@ -46,11 +46,11 @@
     },
     computed:{
       ...mapGetters([
-        'getTrains'
+        'getCurrentFaultCard'
       ])
     },
     watch: {
-      getTrains (newv) { //newv 就是改变后的getTrains值
+      getCurrentFaultCard (newv) { //newv 就是改变后的getTrains值
         this.getTopFour(newv);
       }
     },
@@ -58,27 +58,25 @@
       getTopFour (rawdata) {
         if (!rawdata || rawdata.length === 0) return;
 
-        let tmpData = rawdata.map((ele)=>{
+        let result = rawdata.map((ele)=>{
 
           return {
-            count: ele.al_all,
             sn: ele.sn,
-            freq: ele.train_no,
-            position: ele.position,
-            speed: ele.speed,
-            control: ele.control,
+            freq: ele.trainNo,
+            position: (ele.from ? ele.from : "") + '-' + (ele.to ? ele.to : ""),
+            speed: ele.trainSleep,
+            control: ele.master,
             temperature: ele.temperature,
-            lvl: ele.al_a > 0 ? 'danger' : ele.al_b > 0 ? 'warning' : ele.al_c > 0 ? 'check' : 'check'
-        };
-        })
-
-        let result = tmpData.sort((a, b) =>{
-          return b.count - a.count;
-        }).slice(0, 4 )
+            lvl: ele.lvl === 'A' ? 'danger' : ele.lvl === 'B' ? 'warning' : ele.lvl === 'C' ? 'check' : 'check'
+          };
+        }).slice(0, 4)
 
         console.log('top 4 fault trains' ,result)
         this.renderData = result
       }
+
+    },
+    mounted (){
 
     }
   }

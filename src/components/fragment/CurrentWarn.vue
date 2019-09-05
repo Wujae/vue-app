@@ -4,9 +4,9 @@
       <arrow-title :title-text="'平台预警'" />
     </div>
     <div id="onlinestatus4-r1">
-      <level-dropdown   :drop-down-items="dropDownItems" v-bind:style="styleObject" ></level-dropdown>
+      <level-dropdown   :drop-down-items="dropDownItems" v-bind:style="styleObject" @levelSelected="handleLevelChange"></level-dropdown>
     </div>
-    <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
+    <wrap-table :column-setting="columnSetting" :data-items="dataItems[this.levelSelected]"></wrap-table>
   </tech-frame>
 </template>
 
@@ -28,7 +28,7 @@
           overallStyle: null,
           rowHeight: '32px',
           rowMinHeight: '20px',
-          titleRowStyle: null,
+          titleRowStyle: {"background-color": "#1d2d47"},
           oddRowStyle: null,
           evenRowStyle: null,
           columns: [
@@ -42,36 +42,21 @@
           ]
         },
         // dataItems: null,
-        dataItems:[],
-        dropDownItems: [
-          {
-            key: 'A',
-            name: 'A 级  251',
-            style: {'background-color': '#bf3131', color: '#fff'}
-          },
-          {
-            key: 'B',
-            name: 'B 级  251',
-            style: {'background-color': '#c08528', color: '#fff'}
-          },
-          {
-            key: 'C',
-            name: 'C 级  251',
-            style: {'background-color': '#ac990a', color: '#fff'}
-          },
-          {
-            key: 'D',
-            name: 'D 级  251',
-            style: {'background-color': '#25ac48', color: '#fff'}
-          },
-        ],
+        dataItems:{
+          A: [],
+          B: [],
+          C: [],
+          D: []
+        },
+        dropDownItems: [ ],
         styleObject:{
           position: 'absolute',
           top: '-30px',
           right: '30px',
           width: '100px',
           height: '20px'
-        }
+        },
+        levelSelected: null
       }
     },
     props: {
@@ -94,7 +79,6 @@
     watch: {
       getCurrentWarn (newv) { //newv 就是改变后的getTrains值
 
-        this.dataItems=newv;
         this.parseData(newv);
       }
     },
@@ -108,48 +92,69 @@
         let contB=0
         let contC=0
         let contD=0
+
+        this.dataItems.A.length = 0;
+        this.dataItems.B.length = 0;
+        this.dataItems.C.length = 0;
+        this.dataItems.D.length = 0;
+
         //rawdata.forEach  data. warnLevel
         rawdata.forEach((data,index) => {
 
           switch (data.warnLevel) {
             case 'A':
               contA++;
+              if(this.dataItems.A.length <= 5) this.dataItems.A.push(data)
               break;
             case 'B':
               contB++;
+              if(this.dataItems.B.length <= 5) this.dataItems.B.push(data)
               break;
             case 'C':
               contC++;
+              if(this.dataItems.C.length <= 5) this.dataItems.C.push(data)
               break;
             case 'D':
               contD++;
+              if(this.dataItems.D.length <= 5) this.dataItems.D.push(data)
               break;
           }
         })
 
           let result = [{
             key: 'A',
+            selected: this.levelSelected === 'A',
             name: `A 级 ${contA}`,
             style: {'background-color': '#bf3131', color: '#fff'}
           },
           {
             key: 'B',
+            selected: this.levelSelected === 'B',
             name: `B 级 ${contB}`,
             style: {'background-color': '#c08528', color: '#fff'}
           },
           {
             key: 'C',
+            selected: this.levelSelected === 'C',
             name: `C 级 ${contC}`,
             style: {'background-color': '#ac990a', color: '#fff'}
           },
           {
             key: 'D',
+            selected: this.levelSelected === 'D',
             name: `D 级 ${contD}`,
             style: {'background-color': '#25ac48', color: '#fff'}
           }]
 
-         this.dropDownItems=result
+         this.dropDownItems = result
 
+      },
+      handleLevelChange(event) {
+
+        // console.log(event)
+        this.levelSelected = event.key
+
+        this.$store.commit('updateWarnLevel', event.key)
       }
     }
   }

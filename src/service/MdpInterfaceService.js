@@ -4,6 +4,13 @@ const SECRET_KEY = "098f6bcd4621d373cade4e832627b4f6";
 
 export default {
   /**
+   * 定时器实例对象
+   */
+  timers : {
+    airConTimer: null,
+    ruleAttTimer: null
+  },
+  /**
    * 屏幕-全图监控-运用信息
    * @param {Vue} v - vue实例
    * @param {Object} callback 回调方法
@@ -129,7 +136,7 @@ export default {
    */
   getTrainBaseInfo (v, callback) {
 
-    this.createServerURL(v, '/resume/trainCarFile/baseTrainInfo').then((requestURI) => {
+    this.createServerURL(v, 'resume/trainCarFile/baseTrainInfo').then((requestURI) => {
 
       let start = new Date();
 
@@ -216,16 +223,16 @@ export default {
    */
   getAirConditionerCount(v) {
 
-    //180天内
-    let startDate = (new Date()).addDate(-360).Format("yyyyMMdd"),
-      endDate = (new Date()).Format("yyyy-MM-dd")
+    //30天内
+    let startDate = (new Date()).addDate(-30).Format("yyyyMMdd"),
+      endDate = (new Date()).Format("yyyyMMdd")
 
     let params = {
       startDate: startDate,
       endDate: endDate
     }
 
-    this.createServerURL(v, '/air-conditioner/base-summary').then((requestURI) => {
+    this.createServerURL(v, 'air-conditioner/base-summary').then((requestURI) => {
 
       let start = new Date();
 
@@ -257,11 +264,17 @@ export default {
 
     let requestInterval = v.$store.state.requestInterval || 60000
 
-    //360天内
-    let startDate = `${(new Date()).addDate(-360).Format("yyyy-MM-dd")} 00:00:00`,
+    clearTimeout(this.timers.airConTimer);
+
+    //30天内
+    let startDate = `${(new Date()).addDate(-30).Format("yyyy-MM-dd")} 00:00:00`,
       endDate = `${(new Date()).Format("yyyy-MM-dd")} 23:59:59`
 
     let querySql = `EVALUATE_DATE BETWEEN '${startDate}' AND '${endDate}'`
+
+    if(callback && callback.params){
+      querySql += ` AND HEALTH_STATUS = '${callback.params.level}' `
+    }
 
     this.queryBy(v, "T_MA_AC_HEALTH", {params: {queryResultFilterSql: querySql},
       onSuccess: (resp) => {
@@ -269,7 +282,7 @@ export default {
         //console.log(resp)
         v.$store.commit('updateAirConditioner', resp)
 
-        setTimeout(() => {
+        this.timers.airConTimer = setTimeout(() => {
           this.getAirConditioner(v, callback)
         }, requestInterval)
 
@@ -292,7 +305,8 @@ export default {
    */
   getRuleAttentionCount(v) {
 
-    let startDate = '20180901', endDate = '20190315'
+    //查询30天内的规则关注
+    let startDate = (new Date()).addDate(-30).Format("yyyyMMdd"), endDate = (new Date()).Format("yyyyMMdd");
 
     let params = {
       startDate: startDate,
@@ -334,7 +348,7 @@ export default {
       rows: 5
     }
 
-    this.createServerURL(v, '/monitor/monitorcheck/queryMonitorCheck').then((requestURI) => {
+    this.createServerURL(v, 'monitor/monitorcheck/queryMonitorCheck').then((requestURI) => {
 
       let start = new Date();
 
@@ -368,7 +382,7 @@ export default {
 
       let result = ruleAttentionData.rows
 
-      this.createServerURL(v, '/monitor/monitorcheck/getNewRedisData').then((requestURI) => {
+      this.createServerURL(v, 'monitor/monitorcheck/getNewRedisData').then((requestURI) => {
 
         let start = new Date();
 

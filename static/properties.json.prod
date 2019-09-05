@@ -5,19 +5,19 @@
   },
   "server": {
     "remoteThmServerProperties": {
-      "useRelativeUrl": true,
+      "useRelativeUrl": false,
       "serverIp": "phm.tangche.com",
       "serverPort": "",
       "ctx": "thm"
     },
     "remoteMdpServerProperties": {
-      "useRelativeUrl": true,
+      "useRelativeUrl": false,
       "serverIp": "phm.tangche.com",
       "serverPort": "",
       "ctx": "MDP"
     },
     "remotePhmDataMdpServerProperties": {
-      "useRelativeUrl": true,
+      "useRelativeUrl": false,
       "serverIp": "phm.tangche.com",
       "serverPort": "",
       "ctx": "PHM-DATA-MDP"

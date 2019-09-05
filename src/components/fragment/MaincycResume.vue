@@ -25,7 +25,7 @@
           overallStyle: {"font-size": "13px"},
           rowHeight: '30px',
           rowMinHeight: '10px',
-          titleRowStyle: {"font-size": "13px"},
+          titleRowStyle: {"font-size": "13px", "background-color": "#1d2d47"},
           oddRowStyle: null,
           evenRowStyle: null,
           columns: [
@@ -68,7 +68,7 @@
       getRemoteData(train) {
         let querySql = `AA_0 = '${train}'`
 
-        mdpInterfaceService.queryBy(this, "LLCZ", {params: {queryResultFilterSql: querySql},
+        mdpInterfaceService.queryBy(this, "LLCZ_LATEST_M", {params: {queryResultFilterSql: querySql},
           onSuccess: (resp) => {
 
             // console.log(resp)

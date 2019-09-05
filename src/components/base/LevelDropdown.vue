@@ -64,8 +64,19 @@
     watch: {
       dropDownItems(newv){
         if(newv && newv.length){
+
+          for(let i = 0; i < newv.length; i++) {
+            if (newv[i].selected) {
+              this.selectedItem = newv[i];
+              return;
+            }
+          }
           this.selectedItem = newv[0]
         }
+      },
+      selectedItem(newv) {
+
+        this.$emit('levelSelected', newv);
       }
     },
     methods: {
@@ -76,9 +87,6 @@
 
           this.selectedItem = this.dropDownItems[idx]
         }
-
-        console.log(idx, this.selectedItem)
-        this.$emit('levelSelected', this.selectedItem);
 
       }
     },

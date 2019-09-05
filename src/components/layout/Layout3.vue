@@ -95,13 +95,15 @@
           params: {sn: sn}, onSuccess: (resp) => {
             //[0,1,2] O:整车， 1：牵引 2：部件
             //resp
-            console.log(resp, '999999')
-            console.log(resp[0],'ddddd',this) //commit updateTrainParamsEntity
+            //console.log(resp, '999999')
+            //console.log(resp[0],'ddddd') //commit updateTrainParamsEntity
             this.$store.commit('updateTrainParamsEntity', resp[0]);
+            //commit updateTrainParamsUnit resp[1]
             this.$store.commit('updateTrainParamsUnit', resp[1]);
+
+            //commit updateTrainParamsParts resp[2]
             this.$store.commit('updateTrainParamsParts', resp[2])
-            resp[1] //commit updateTrainParamsUnit
-            resp[2] //commit updateTrainParamsParts
+
           }
         })
       }

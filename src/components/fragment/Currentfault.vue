@@ -4,8 +4,7 @@
       <slash-title :title-text="'实 时 故 障 信 息'"/>
     </div>
     <div id="onlinestatus2-r1">
-      <level-dropdown v-bind:style="styleObject4" :drop-down-items="dropDownItems"></level-dropdown>
-
+      <level-dropdown v-bind:style="styleObject4" :drop-down-items="dropDownItems" @levelSelected="handleLevelChange($event)"></level-dropdown>
     </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
   </tech-frame>
@@ -43,7 +42,7 @@
           overallStyle: null,
           rowHeight: '45px',
           rowMinHeight: '20px',
-          titleRowStyle: null,
+          titleRowStyle: {"background-color": "#1d2d47"},
           oddRowStyle: null,
           evenRowStyle: null,
           columns: [
@@ -87,7 +86,8 @@
           right: '30px',
           width: '100px',
           height: '20px'
-        }
+        },
+        levelSelected: null
       }
     },
     props: {
@@ -103,7 +103,6 @@
       }
     },
     computed:{
-
       ...mapGetters([
         'getCurrentFault','getCurrentFaultCount'
       ])
@@ -111,7 +110,7 @@
     watch: {
       getCurrentFault (newv) { //newv 就是改变后的getCurrentFault值（请求回来的数据）
 
-        this.dataItems=newv.list
+        this.dataItems = newv.list
 
 
         //this.parseData(newv);
@@ -128,27 +127,33 @@
     methods : {
       parseData (rawdata) {
 
-
        let list = [
          {
            key: 'A',
+           selected: this.levelSelected === 'A',
            name: `A 级  ${rawdata[0].count}`,
            style: {'background-color': '#bf3131', color: '#fff'}
          },
          {
            key: 'B',
+           selected: this.levelSelected === 'B',
            name: `B 级  ${rawdata[1].count}`,
            style: {'background-color': '#c08528', color: '#fff'}
          },
          {
            key: 'C',
+           selected: this.levelSelected === 'C',
            name: `C 级  ${rawdata[2].count}`,
            style: {'background-color': '#ac990a', color: '#fff'}
          }
        ]
         this.dropDownItems = list
       },
+      handleLevelChange(event) {
 
+        this.levelSelected = event.key
+        this.$store.commit('updateFaultLevel', event.key)
+      }
     }
   }
 </script>

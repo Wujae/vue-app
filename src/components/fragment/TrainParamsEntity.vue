@@ -3,7 +3,7 @@
     <div id="onlinestatus3-l1">
       <slash-title :title-text="'列 车 整 车 参 数'"/>
     </div>
-    <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
+    <wrap-table :column-setting="columnSetting" :data-items="dataItems" style="height: calc(100% - 58px)"></wrap-table>
   </tech-frame>
 </template>
 
@@ -52,7 +52,7 @@
     },
     watch: {
       getTrainParamsEntity (newv) { //newv 就是改变后的getTrains值
-        console.log(newv,'jjjjj')
+        //console.log(newv,'jjjjj')
         this.parseData(newv);
       }
     },

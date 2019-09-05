@@ -63,10 +63,11 @@
         mdpInterfaceService.getUsageData(this, {
           params: {
             station: seletedTrains.join(","),
-            startDate: '2017-01-01',
-            endDate: '2018-12-30'
+            startDate: (new Date()).Format("yyyy-MM-dd"),
+            endDate: (new Date()).addDate(1).Format("yyyy-MM-dd")
           },
           onSuccess: (response) => {
+            console.log(response, 'train status data')
             this.doBuildData(response);
           }
         });
@@ -91,7 +92,6 @@
         });
 
         //console.log(areas);
-
         this.prepareDrawCharts(result);
 
       },

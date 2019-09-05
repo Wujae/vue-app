@@ -4,7 +4,7 @@
       <arrow-title :title-text="'空调健康评估'" />
     </div>
     <div id="onlinestatus5-r1">
-      <level-dropdown v-bind:style="styleObject3" :drop-down-items="dropDownItems"></level-dropdown>
+      <level-dropdown v-bind:style="styleObject3" :drop-down-items="dropDownItems" @levelSelected="handleLevelChange"></level-dropdown>
     </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
   </tech-frame>
@@ -17,7 +17,7 @@
   import LevelDropdown from "../base/LevelDropdown";
   import ArrowTitle from '../base/ArrowTitle'
   import mdpInterfaceService from '../../service/MdpInterfaceService'
-  
+
   //airConditioner
   export default {
     name: "OnlineStatus2",
@@ -29,7 +29,7 @@
           overallStyle: null,
           rowHeight: '31.5px',
           rowMinHeight: '20px',
-          titleRowStyle: null,
+          titleRowStyle: {"background-color": "#1d2d47"},
           oddRowStyle: null,
           evenRowStyle: null,
           columns: [
@@ -53,8 +53,8 @@
           right: '30px',
           width: '100px',
           height: '20px'
-        }
-
+        },
+        levelSelected: null
       }
     },
     props: {
@@ -75,36 +75,44 @@
       ])
     },
     watch: {
+      levelSelected (newv){
+        mdpInterfaceService.getAirConditioner(this, {params : {level: newv}});
+      },
       getAirConditioner (newv) { //newv 就是改变后的getTrains值
 
-        this.dataItems=newv.rows
+        this.dataItems = newv.rows
       },
       getAirConditionerCount (newv) { //newv 就是改变后的getTrains值
 
         this.dropDownItems = [
           {
-            key: 'A',
+            key: '疾病',
+            selected: this.levelSelected === '疾病',
             name: `A 疾病  ${newv[0].amount}`,
             style: {'background-color': '#bf3131', color: '#fff'}
           },
           {
-            key: 'B',
+            key: '恶化',
+            selected: this.levelSelected === '恶化',
             name: `B 恶化  ${newv[1].amount}`,
             style: {'background-color': '#c08528', color: '#fff'}
           },
           {
-            key: 'C',
+            key: '注意',
+            selected: this.levelSelected === '注意',
             name: `C 注意  ${newv[2].amount}`,
             style: {'background-color': '#ac990a', color: '#fff'}
           },
           {
-            key: 'D',
-              name: `D 良好  ${newv[3].amount}`,
+            key: '良好',
+            selected: this.levelSelected === '良好',
+            name: `D 良好  ${newv[3].amount}`,
             style: {'background-color': '#88ac33', color: '#fff'}
           },
           {
-            key: 'E',
-              name: `E 健康  ${newv[4].amount}`,
+            key: '健康',
+            selected: this.levelSelected === '健康',
+            name: `E 健康  ${newv[4].amount}`,
             style: {'background-color': '#11ac68', color: '#fff'}
           }
         ]
@@ -114,9 +122,15 @@
     components: {ArrowTitle, WrapTable, TechFrame,LevelDropdown},
     mounted () {
       mdpInterfaceService.getAirConditionerCount(this);
-      mdpInterfaceService.getAirConditioner(this);
     },
-    methods : { }
+    methods : {
+      handleLevelChange(event) {
+
+        // console.log(event)
+        this.levelSelected = event.key
+
+      }
+    }
 
   }
 </script>

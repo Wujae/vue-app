@@ -4,7 +4,7 @@
       <slash-title :title-text="'列 车 部 件 参 数'" />
     </div>
 
-    <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
+    <wrap-table :column-setting="columnSetting" :data-items="dataItems" style="height: calc(100% - 58px)"></wrap-table>
   </tech-frame>
 </template>
 
@@ -66,7 +66,7 @@
     },
     watch: {
       getTrainParamsParts (newv) { //newv 就是改变后的getTrains值
-        console.log(newv,'lllllll')
+        //console.log(newv,'lllllll')
         this.parseData(newv);
       }
     },

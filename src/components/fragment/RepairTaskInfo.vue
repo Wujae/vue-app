@@ -111,8 +111,8 @@
         mdpInterfaceService.getMaincycData(this, {
           params: {
             station: seletedTrains.join(","),
-            startDate: '2017-01-01',
-            endDate: '2018-12-30'
+            startDate: (new Date()).Format("yyyy-MM-dd"),
+            endDate: (new Date()).Format("yyyy-MM-dd")
           },
           onSuccess: (response) => {
             this.doBuildData(response);

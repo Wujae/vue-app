@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="header">
-      <div class="title">列车参数</div>
+      <div class="title">事件中心</div>
     </div>
     <grid-layout class="grid-layout" :layout.sync="layout" :col-num="60" :row-height="30" :is-draggable="true"
                  :is-resizable="true"
@@ -19,6 +19,7 @@
   import VueGridLayout from 'vue-grid-layout';
   import thmInterfaceService from '../../service/ThmInterfaceService'
   import mdpInterfaceService from '../../service/MdpInterfaceService'
+  import { mapGetters } from 'vuex'
 
   //eventCenter
   export default {
@@ -49,8 +50,22 @@
         callbackdata:{},//返回数据
       }
     },
-    created () {
+    computed:{
+      ...mapGetters([
+        'getFaultLevel', 'getFaultLevelSimple'
+      ])
+    },
+    watch: {
+      getFaultLevel (newv) {
+        thmInterfaceService.getFaultData(this, {params: {fault_level: newv}});
 
+      },
+      getFaultLevelSimple (newv) {
+        thmInterfaceService.getFaultDataSimple(this, {params: {fault_level: newv}});
+
+      },
+    },
+    created () {
       this.layout.forEach(item => {
 
         this.registerComponent(item.innerComponent, item.componentPath);
@@ -59,8 +74,9 @@
     mounted () {
       console.log('layout2 mounted')
       //开启接口服务
-      thmInterfaceService.getFaultData(this);
+      //thmInterfaceService.getFaultData(this);
       thmInterfaceService.getWarnData(this);
+
       //mdpInterfaceService.getAirConditionerCount(this);
       //mdpInterfaceService.getAirConditioner(this);
       //mdpInterfaceService.getRuleAttentionCount(this);
@@ -68,6 +84,7 @@
 
       thmInterfaceService.getOnlineStatusData(this);
 
+      thmInterfaceService.getFaultCardData(this);
 
     },
     // methods: {

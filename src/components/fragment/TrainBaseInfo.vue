@@ -120,17 +120,17 @@
         <el-row v-show="shows[6]" :gutter="12" :justify="'start'" :align="'middle'" :type="'flex'" class="table-row table-row-odd">
           <el-col :span="8" >
             <div class="form-control">
-              <span class="form-title">累计走行：</span><span class="form-text">{{trainBaseInfo.gzzr.累计走行}}</span>
+              <span class="form-title">累计走行：</span><span class="form-text">{{trainBaseInfo.zxxx.cag}}</span>
             </div>
           </el-col>
           <el-col :span="8">
             <div class="form-control">
-              <span class="form-title">更新时间：</span><span class="form-text">{{trainBaseInfo.gzzr.cab}}</span>
+              <span class="form-title">更新时间：</span><span class="form-text">{{trainBaseInfo.zxxx.cab}}</span>
             </div>
           </el-col>
           <el-col :span="8">
             <div class="form-control">
-              <span class="form-title">上次高级修后走行：</span><span class="form-text">{{trainBaseInfo.gzzr.agak}}</span>
+              <span class="form-title">上次高级修后走行：</span><span class="form-text">{{trainBaseInfo.zxxx.agak}}</span>
             </div>
           </el-col>
         </el-row>
@@ -139,17 +139,17 @@
         <el-row v-show="shows[7]" :gutter="12" :justify="'start'" :align="'middle'" :type="'flex'" class="table-row table-row-even">
           <el-col :span="8" >
             <div class="form-control">
-              <span class="form-title">上次高级修程：</span><span class="form-text">{{trainBaseInfo.gzzr.xaa}}</span>
+              <span class="form-title">上次高级修程：</span><span class="form-text">{{trainBaseInfo.zxxx.xaa}}</span>
             </div>
           </el-col>
           <el-col :span="8">
             <div class="form-control">
-              <span class="form-title">上次高级修日期：</span><span class="form-text">{{trainBaseInfo.gzzr.lae}}</span>
+              <span class="form-title">上次高级修日期：</span><span class="form-text">{{trainBaseInfo.zxxx.lae}}</span>
             </div>
           </el-col>
           <el-col :span="8">
             <div class="form-control">
-              <span class="form-title">上次高级修公里数：</span><span class="form-text">{{trainBaseInfo.gzzr.lak}}</span>
+              <span class="form-title">上次高级修公里数：</span><span class="form-text">{{trainBaseInfo.zxxx.lak}}</span>
             </div>
           </el-col>
         </el-row>
@@ -158,7 +158,7 @@
         <el-row v-show="shows[8]" :gutter="12" :justify="'start'" :align="'middle'" :type="'flex'" class="table-row table-row-odd">
           <el-col :span="8" >
             <div class="form-control">
-              <span class="form-title">下次高级修程：</span><span class="form-text">{{trainBaseInfo.gzzr.xcgjx}}</span>
+              <span class="form-title">下次高级修程：</span><span class="form-text">{{trainBaseInfo.zxxx.xcgjx}}</span>
             </div>
           </el-col>
         </el-row>

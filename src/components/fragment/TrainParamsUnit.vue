@@ -4,7 +4,7 @@
       <slash-title :title-text="'列 车 牵 引 单 元 参 数'" />
     </div>
 
-    <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
+    <wrap-table :column-setting="columnSetting" :data-items="dataItems" style="height: calc(100% - 58px)"></wrap-table>
   </tech-frame>
 </template>
 
@@ -83,7 +83,8 @@
             })
 
             this.columnSetting.columns = result
-            console.log(this.columnSetting.columns,'this.columnSetting.columns')
+
+            //console.log(this.columnSetting.columns,'this.columnSetting.columns')
           }
 
           let resultData = {

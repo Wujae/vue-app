@@ -25,7 +25,7 @@
           overallStyle: {"font-size": "13px"},
           rowHeight: '30px',
           rowMinHeight: '10px',
-          titleRowStyle: {"font-size": "13px"},
+          titleRowStyle: {"font-size": "13px", "background-color": "#1d2d47"},
           oddRowStyle: null,
           evenRowStyle: null,
           columns: [
@@ -34,7 +34,7 @@
             {title: '故障来源', key: 'FAULTFROM_0', nullVal:'-', style: {width: '15%'}},
             {title: '车辆号', key: 'COACH_0', nullVal:'-', style: {width: '15%'}},
             {title: '任务描述', key: 'TASKDESC', nullVal:'-', style: {width: '15%'}},
-            {title: '任务状态', key: 'TASKSTATUS', nullVal:'-', style: {width: '15%'}},
+            {title: '任务状态', key: 'TASKSTATUS', nullVal:'-', style: {width: '15%'}, keyTranslate:{'00':'不处理', '10':'待审核', '20':'已建单', '30':'处理中', '99':'已关闭'}},
             {title: '发生时间', key: 'FAULTTIME', nullVal:'-', style: {width: '15%'}}
           ]
         },
