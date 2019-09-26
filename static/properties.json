@@ -5,19 +5,19 @@
   },
   "server": {
     "remoteThmServerProperties": {
-      "useRelativeUrl": true,
+      "useRelativeUrl": false,
       "serverIp": "phm.tangche.com",
       "serverPort": "",
       "ctx": "thm"
     },
     "remoteMdpServerProperties": {
-      "useRelativeUrl": true,
+      "useRelativeUrl": false,
       "serverIp": "phm.tangche.com",
       "serverPort": "",
       "ctx": "MDP"
     },
     "remotePhmDataMdpServerProperties": {
-      "useRelativeUrl": true,
+      "useRelativeUrl": false,
       "serverIp": "phm.tangche.com",
       "serverPort": "",
       "ctx": "PHM-DATA-MDP"
@@ -29,6 +29,7 @@
     "password_mdp": "8c97677e7cf25c075d5a0f8c907daaca"
   },
   "requestInterval": 30000,
+  "trainAllocationInterval": 7200000,
   "displayMaincys": [
     {"NAME":"I1","ID":"000006","IS_ADVANCE":"0"},
     {"NAME":"I2","ID":"000004","IS_ADVANCE":"0"},

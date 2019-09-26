@@ -15,10 +15,12 @@ export default new Vuex.Store({
       phmDataMdpServer: null,
     },
     requestInterval: 60000,
+    trainAllocationInterval: 1800000,
     queryFunctions: null,
     displayMaincys: null,
     token: null,
     trains: null,
+    trainsAllocation: null,
     gpsMap: null,
     stationSelected: null,
     trainSelected: null,
@@ -44,6 +46,9 @@ export default new Vuex.Store({
   getters: {
     getTrains: state => {
       return state.trains;
+    },
+    getTrainsAllocation: state => {
+      return state.trainsAllocation;
     },
     getGpsData: state => {
       return state.gpsMap;
@@ -128,6 +133,9 @@ export default new Vuex.Store({
   mutations: {
     updateTrains (state, data) {
       state.trains = data
+    },
+    updateTrainsAllocation (state, data) {
+      state.trainsAllocation  = data
     },
     updateGpsMapData (state, data) {
       state.gpsMap = data

@@ -53,11 +53,11 @@
     },
     computed:{
       ...mapGetters([
-        'getTrains'
+        'getTrainsAllocation'
       ])
     },
     watch: {
-      getTrains (newv) { //newv 就是改变后的getTrains值
+      getTrainsAllocation (newv) { //newv 就是改变后的getTrains值
 
         this.separatedByStation = this.separateStation(newv);
 

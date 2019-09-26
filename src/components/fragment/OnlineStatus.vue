@@ -140,7 +140,6 @@
           //找到服务站
           if (stationIdx > -1) {
 
-            p[stationIdx].alloc++;
 
           } else {
 
@@ -162,7 +161,6 @@
           }
 
           let dataPt = p[stationIdx]
-
 
           dataPt.alloc ++
           dataPt.ala += parseInt(c.al_a || 0)

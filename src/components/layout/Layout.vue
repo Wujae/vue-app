@@ -105,6 +105,9 @@
       //车组上线状态数据
       thmInterfaceService.getOnlineStatusData(this);
 
+      //车组配属
+      thmInterfaceService.getTrainAllocationData(this);
+
       //mInterfaceService.getFaultData(this);
       //thmInterfaceService.getWarnData(this);
       //thmInterfaceService.getTrainParamsData(this);

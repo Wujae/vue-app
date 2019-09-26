@@ -107,6 +107,71 @@ export default {
 
   },
   /**
+   * 屏幕一-全图监控-车组配属
+   * @param {Vue} v - vue实例
+   * @param {Object} callback 回调方法
+   * @param {Object} callback.params - 请求参数
+   * @param {Function} callback.onSuccess - onSuccess (response){}
+   * @param {Function} callback.onError - onError (error){}
+   */
+  getTrainAllocationData(v, callback) {
+
+    let serverAddress = this.createServerURL(v, 'monitor/runStatusMonitor')
+
+    let requestInterval = v.$store.state.trainAllocationInterval
+
+    this.getTrainAllocationDataTimer(v, serverAddress, requestInterval || (30 * 60 * 1000), callback)
+
+  },
+  /**
+   * 屏幕一-全图监控-车组配属定时器
+   * @param {Vue} v - vue实例
+   * @param {String} url 请求地址
+   * @param {Number} interval 时间间隔
+   * @param {Object} callback 回调方法
+   * @param {Object} callback.params - 请求参数
+   * @param {Function} callback.onSuccess - onSuccess (response){}
+   * @param {Function} callback.onError - onError (error){}
+   */
+  getTrainAllocationDataTimer(v, url, interval, callback){
+
+    let start = new Date()
+
+    v.$jsonp(url,
+      {
+        islate: '',
+        jcode: '',
+        sn: '',
+        stationCode: '',
+        status: '',
+        train_type: ''
+      }).then(response => {
+
+      console.log(`get thm online status for train allocation complete in ${ new Date() - start }ms`)
+      //console.log(response)
+
+      //存储为全局车组基础信息
+      v.$store.commit('updateTrainsAllocation', response)
+
+      setTimeout(() => {
+        this.getTrainAllocationDataTimer(v, url, interval, callback)
+      }, interval)
+
+      if (callback && callback.onSuccess) {
+        callback.onSuccess(response)
+      }
+
+    }).catch(error => {
+
+      if (callback && callback.onError) {
+        callback.onError(error)
+      }
+      console.error(error)
+
+    })
+
+  },
+  /**
    * 处理故障记录数量
    * @param {Vue} v - vue实例
    * @param {Array} rawData 原始数据
