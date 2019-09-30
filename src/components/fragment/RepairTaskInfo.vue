@@ -274,7 +274,7 @@
           tooltip: {
             show: true,
             trigger: 'item',
-            alwaysShowContent: true
+            alwaysShowContent: false
           },
           xAxis:  {
             type: 'category',

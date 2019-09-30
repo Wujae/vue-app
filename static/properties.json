@@ -5,19 +5,19 @@
   },
   "server": {
     "remoteThmServerProperties": {
-      "useRelativeUrl": false,
+      "useRelativeUrl": true,
       "serverIp": "phm.tangche.com",
       "serverPort": "",
       "ctx": "thm"
     },
     "remoteMdpServerProperties": {
-      "useRelativeUrl": false,
+      "useRelativeUrl": true,
       "serverIp": "phm.tangche.com",
       "serverPort": "",
       "ctx": "MDP"
     },
     "remotePhmDataMdpServerProperties": {
-      "useRelativeUrl": false,
+      "useRelativeUrl": true,
       "serverIp": "phm.tangche.com",
       "serverPort": "",
       "ctx": "PHM-DATA-MDP"
@@ -83,7 +83,7 @@
       "viewCode": "V_GZLL_1",
       "rows": 10,
       "page": 1,
-      "queryResultFilterSql": "TRAINNO_0='${trainNo}'"
+      "queryResultFilterSql": "TRAINNO_0 = '${trainNo}'"
     }
   }
 }
