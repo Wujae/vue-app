@@ -6,12 +6,13 @@
 <script>
 
   const STATION_COLOR = [
-    '#00cddb',
-    '#2a54de',
     '#37516c',
+    '#15de57',
     '#3420e6',
     '#1ddd98',
-    '#15de57',
+    '#0090ee',
+    '#00cddb',
+    '#13aa45',
   ]
 
   export default {
@@ -45,10 +46,12 @@
 
         if (!data || data.length === 0) return null;
 
-        let model = [], ci = 0;
-        let stationMap = {};
+        let model = [];
 
         return data.reduce((p, c, i) => {
+
+          //0301这个车是BJ的，比较特殊，额外处理。
+          if(c.sn === '0301') c.train_type = 'CRH380BJ'
 
           let modelIdx = model.indexOf(c.train_type);
           //找到车型
@@ -73,7 +76,7 @@
           p.nodes.push({
             "name": c.sn,
             "value": 1,
-            "category": modelIdx
+            "category": modelIdx === -1 ? model.length - 1 : modelIdx
           });
 
           p.links.push({
@@ -138,13 +141,13 @@
 
         let result = this.parseRelation(this.rawData);
 
-        //console.log(result);
+        console.log(result);
         if (!result || result.length === 0) return;
 
         let option = {
           color: STATION_COLOR,
           legend: {
-            data: ['CRH380B', 'CRH3C', 'CRH380BL', 'CR400BF', 'CR400BF-A', 'CRH3A'],
+            data: ['CRH380B', 'CRH3C', 'CRH380BL', 'CR400BF', 'CR400BF-A', 'CRH3A', 'CRH380BJ'],
             textStyle: {
               color: 'white'
             }
@@ -153,7 +156,7 @@
             name: '车组力反馈图',
             type: 'graph',
             layout: 'force',
-            animation: false,
+            animation: true,
             label: {
               normal: {
                 position: 'right',

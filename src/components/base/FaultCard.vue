@@ -70,7 +70,7 @@
       </span>
     </div>
     <div class="control">
-      <span class="block-span title-text-effect  ">[ 操纵 ]</span>
+      <span class="block-span title-text-effect  ">[ 主控 ]</span>
       <span class="block-span context-text-effect ">{{renderData.control | dealNull('--')}}</span>
     </div>
 

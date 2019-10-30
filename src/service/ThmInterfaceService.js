@@ -53,6 +53,10 @@ export default {
     let serverAddress = this.createServerURL(v, 'monitor/runStatusMonitor')
 
     let requestInterval = v.$store.state.requestInterval
+    let trainAllocationInterval = v.$store.state.trainAllocationInterval
+    let gap = parseInt(trainAllocationInterval / requestInterval)
+    callback = callback ? callback : {};
+    callback.others = {gap: gap, counter: 0}
 
     this.getOnlineStatusDataTimer(v, serverAddress, requestInterval || 60000, callback)
 
@@ -66,6 +70,7 @@ export default {
    * @param {Object} callback.params - 请求参数
    * @param {Function} callback.onSuccess - onSuccess (response){}
    * @param {Function} callback.onError - onError (error){}
+   * @param {Object} callback.others - 其他参数
    */
   getOnlineStatusDataTimer(v, url, interval, callback){
 
@@ -86,9 +91,19 @@ export default {
 
       //存储为全局车组基础信息
       v.$store.commit('updateTrains', response)
+      if(callback.others){
+        let gap = callback.others.gap
+        let counter = callback.others.counter
+        if(counter % gap === 0 ){
+          this.trainAllocationDataParser(v, response);
+        }
+      }
       this.parseFaultCount(v, response)
 
       setTimeout(() => {
+
+        callback.others.counter++;
+
         this.getOnlineStatusDataTimer(v, url, interval, callback)
       }, interval)
 
@@ -150,7 +165,7 @@ export default {
       console.log(`get thm online status for train allocation complete in ${ new Date() - start }ms`)
       //console.log(response)
 
-      //存储为全局车组基础信息
+      //存储为车组配属信息
       v.$store.commit('updateTrainsAllocation', response)
 
       setTimeout(() => {
@@ -169,6 +184,16 @@ export default {
       console.error(error)
 
     })
+
+  },
+  /**
+   * 车组配属处理
+   * @param {Vue} v - vue实例
+   * @param {Object} data 服务端数据
+   */
+  trainAllocationDataParser(v, data){
+
+    v.$store.commit('updateTrainsAllocation', data)
 
   },
   /**

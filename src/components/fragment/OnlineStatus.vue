@@ -57,13 +57,13 @@
           columns: [
             {title: '', key: 'mark', style: {width: '5%'}},
             {title: '服务站', key: 'station', style: {width: '10%'}},
-            {title: '配置', key: 'alloc', style: {width: '15%'}},
+            {title: '配属', key: 'alloc', style: {width: '15%'}},
             {title: '运行', key: 'online', style: {width: '10%'}},
             {title: '传输中', key: 'trans', style: {width: '10%'}},
             {title: '停止运行', key: 'stopped', style: {width: '15%'}},
             {title: '离线', key: 'offline', style: {width: '10%'}},
             {title: '断开连接', key: 'disconnect', style: {width: '15%'}},
-            {title: '故障', key: 'faultCount', style: {width: '20%', color: LVL_COLOR.A, 'font-size': '14px'}, titleStyle: {color: 'white', width: '20%'}}
+            {title: '故障', key: 'faultCount', style: {width: '20%', color: LVL_COLOR.C, 'font-size': '16px', 'font-weight': 600}, titleStyle: {color: 'white', width: '20%'}}
           ]
         },
         dataItems: null

@@ -70,12 +70,13 @@
               title: '是否上线', key: 'isOnLine',
               style: {width: '10%', 'font-size': '14px'},
               keyTranslate: {'1': '是', '0': '否'}
-            },
+            }
+            /*,
             {
               title: '处理状态', key: 'dealStatus',
               style: {width: '10%', 'font-size': '14px'},
               keyTranslate: {'1': '已处理', '0': '未处理'}
-            }
+            }*/
           ]
         },
         dataItems: [],
