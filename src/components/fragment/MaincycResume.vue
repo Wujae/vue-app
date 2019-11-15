@@ -4,6 +4,9 @@
       <arrow-title :title-text="'检修信息'"></arrow-title>
     </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
+    <auto-fresh-pagination class="pagination"
+                           :hideRefresh="true" :dataLoading="dataLoading" :pager="pagerInfo"
+                           @to-page="handle2Page" ></auto-fresh-pagination>
   </tech-frame>
 </template>
 
@@ -13,10 +16,11 @@
   import { mapGetters } from 'vuex'
   import WrapTable from '../base/WrapTable'
   import ArrowTitle from '../base/ArrowTitle'
+  import AutoFreshPagination from '../base/AutoFreshPagination'
 
   export default {
     name: "FaultResume",
-    components: {ArrowTitle, WrapTable, TechFrame},
+    components: {AutoFreshPagination, ArrowTitle, WrapTable, TechFrame},
     data () {
       return {
         columnSetting: {
@@ -38,7 +42,14 @@
             {title: '监控人', key: 'AG', nullVal:'-', style: {width: '15%'}}
           ]
         },
-        dataItems: null
+        dataItems: null,
+        pagerInfo: {
+          total:0,
+          pageSize: 5,
+          currentPage: 1
+        },
+        currentTrain: null,
+        dataLoading: true
       }
     },
     props: {
@@ -61,24 +72,47 @@
     watch: {
       getTrainSelected (newTrain) { //newv 就是改变后的trainSelected值
 
-        this.getRemoteData(newTrain)
+        this.currentTrain = newTrain;
+        this.getRemoteData()
       }
     },
     methods : {
-      getRemoteData(train) {
+      getRemoteData(page) {
+        let train = this.currentTrain;
+
         let querySql = `AA_0 = '${train}'`
 
-        mdpInterfaceService.queryBy(this, "LLCZ_LATEST_M", {params: {queryResultFilterSql: querySql},
-          onSuccess: (resp) => {
+        this.dataLoading = true;
 
-            // console.log(resp)
-            this.dataItems = resp.rows
+        mdpInterfaceService.queryBy(this, "LLCZ_LATEST_M",
+          {
+            params: {
+              rows: 5,
+              page: page ? page: 1,
+              queryResultFilterSql: querySql
+            },
+            onSuccess: (resp) => {
 
-          }, onError: (error) => {
-            console.log(error)
-          }
-        })
-      }
+              // console.log(resp)
+              this.dataItems = resp.rows
+
+              this.pagerInfo.total = resp.records
+
+              this.dataLoading = false;
+
+
+            }, onError: (error) => {
+
+              this.dataLoading = false;
+              console.log(error)
+            }
+          })
+      },
+      handle2Page(page) {
+        console.log(`当前页: ${page}`);
+        this.getRemoteData(page)
+
+      },
     },
     mounted () {
 
@@ -94,6 +128,12 @@
     display: inline-block;
     font-weight: bold;
     color: #10ffeb;
+  }
+
+  .pagination{
+    position: absolute;
+    bottom: 0;
+    right: 20px;
   }
 
 </style>

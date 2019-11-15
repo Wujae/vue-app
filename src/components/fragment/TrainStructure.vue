@@ -14,8 +14,10 @@
       </div>
 
       <template v-for="(dataTree, treeIdx) in dataTrees">
-        <part-lane :display-data="dataTree" @lane-node-selected="nodeSelectedHandler($event, treeIdx)" @part-lane-scrolled="laneScrollHandler($event, treeIdx)"></part-lane>
+        <part-lane :display-data="dataTree" @lane-node-clicked="getNodeSelectedInfo($event, treeIdx)" @lane-node-expanded="nodeExpandedHandler($event, treeIdx)" @part-lane-scrolled="laneScrollHandler($event, treeIdx)"></part-lane>
       </template>
+
+      <structure-info v-show="showInfo" class="structure-info" :display-data="bomInfo"></structure-info>
     </div>
   </tech-frame>
 </template>
@@ -25,10 +27,11 @@
   import mdpInterfaceService from '../../service/MdpInterfaceService'
   import { mapGetters } from 'vuex'
   import PartLane from '../base/PartLane'
+  import StructureInfo from './StructureInfo'
 
   export default {
     name: "TrainStructure",
-    components: {PartLane, TechFrame},
+    components: {StructureInfo, PartLane, TechFrame},
     data() {
       return {
         scrollToolBtnOptions: {
@@ -62,7 +65,20 @@
           yeFix: 0,
         },
         gap: 300,
-        lineGap: 160
+        lineGap: 160,
+        bomInfo: {
+          sapCode: 'CNR0000006923',
+          batchNo: 'DEMO',
+          typeNo: 'DEMO',
+          trainMileTotal: 1986569,
+          mountOnDate: 'DEMO',
+          supplier: 'DEMO',
+          trainNo: 'DEMO',
+          sn: 'DEMO',
+          version: 'V.DEMO',
+          partMileTotal: 1258956
+        },
+        showInfo: false
       }
     },
     props: {
@@ -135,13 +151,31 @@
 
         this.updateLine(pos, idx, "scroll")
       },
-      nodeSelectedHandler(nodeSelected, idx) {
+      nodeExpandedHandler(nodeSelected, idx) {
 
-        // console.log("node select handler", nodeSelected.pos, idx)
+        //console.log("node select handler", nodeSelected.pos, idx)
 
         this.getNextStructure(nodeSelected.funcLocPath, nodeSelected.train, idx + 1)
 
         this.updateLine(nodeSelected.pos, idx, "node")
+      },
+      getNodeSelectedInfo(nodeSelected){
+        console.log("node selected on ", nodeSelected)
+
+        this.showInfo = false;
+
+        mdpInterfaceService.getBomByFuncLocPath(this, {
+          params: {funcLocPath: nodeSelected.funcLocPath, train: nodeSelected.train},
+          onSuccess: result => {
+
+            if(result.status === 'success'){
+
+              this.showInfo = true;
+              this.bomInfo = result.data;
+            }
+          }
+        })
+
       },
       updateLine(pos, nodeIdx, mode){
 
@@ -207,6 +241,11 @@
 </script>
 
 <style scoped>
+
+  .structure-info{
+    position: absolute !important;
+    right: 0;
+  }
 
   .title {
     width: 40px;

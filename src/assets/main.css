@@ -1,0 +1,44 @@
+@font-face {
+  /* font-test*/
+  font-family: Jura-light;
+  src: url('font/Jura-Light.ttf');
+
+}
+
+.el-pagination .btn-prev, .el-pagination .btn-next , .el-pagination button:disabled{
+  background-color: unset !important;
+  color: gray;
+}
+
+.el-pager li {
+  background-color: unset !important;
+  color: gray;
+}
+
+.el-pager li.active {
+  color: white;
+}
+
+.el-pager li.btn-quicknext, .el-pager li.btn-quickprev {
+  color: gray;
+}
+
+.el-pagination__total {
+  color: white;
+}
+.el-switch__core {
+  width: 20px;
+  height: 15px;
+}
+
+
+.el-switch__core::after {
+  left: 1px;
+  top:0;
+  width: 13px;
+  height: 13px;
+}
+
+.el-switch.is-checked .el-switch__core::after {
+  margin-left: -14px;
+}

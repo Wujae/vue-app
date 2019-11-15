@@ -126,6 +126,43 @@ export default {
 
   },
   /**
+   * 屏幕-资源中心-部件信息
+   * @param {Vue} v - vue实例
+   * @param {Object} callback 回调方法
+   * @param {Object} callback.params - 请求参数
+   * @param {String} callback.params.train  - 请求参数-车组号
+   * @param {String} callback.params.funcLocPath - 功能路径
+   * @param {Function} callback.onSuccess - onSuccess (response){}
+   * @param {Function} callback.onError - onError (error){}
+   */
+  getBomByFuncLocPath (v, callback) {
+
+    this.createServerURL(v, 'sap/bom/getBomByFuncLocPath').then((requestURI) => {
+
+      let start = new Date();
+
+      v.$jsonp(requestURI, callback.params).then(response => {
+
+        console.log(`get mdp train part info complete in ${ new Date() - start }ms`);
+
+        if (callback.onSuccess) {
+          callback.onSuccess(response);
+        }
+      }).catch(error => {
+
+        if (callback.onError) {
+          callback.onError(error);
+        }
+        console.log(error)
+
+      })
+    }, reason => {
+
+      console.log(reason);
+    })
+
+  },
+  /**
    * 屏幕-资源中心-基础信息
    * @param {Vue} v - vue实例
    * @param {Object} callback 回调方法

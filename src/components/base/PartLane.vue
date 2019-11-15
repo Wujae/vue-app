@@ -101,7 +101,7 @@
           this.shows = Array(newData.length).fill(false)
           this.nextShow(-1)
 
-          this.selectNode(0, newData[0])
+          this.nodeExpand(0, newData[0])
 
         }
       }
@@ -125,15 +125,22 @@
         this.$bScroll.scrollBy(0, 200 * delta, 500)
       },
       selectNode (idx, data) {
+
+        //console.log("node clicked", data, idx)
+        this.$emit('lane-node-clicked', data);
+
+        this.nodeExpand(idx, data);
+      },
+      nodeExpand (idx, data) {
         this.nodeSelectedPos.y = idx * this.foldBtnHeight + this.heightFix
 
         this.nodeSelected = idx
 
         data.pos = this.nodeSelectedPos
 
-        // console.log("node selected", data.pos, idx)
+        //console.log("node expand", data.pos, idx)
 
-        this.$emit('lane-node-selected', data);
+        this.$emit('lane-node-expanded', data);
 
       }
     },
@@ -160,7 +167,7 @@
         this.shows = Array(this.displayData.length).fill(false)
         this.nextShow(-1)
 
-        this.selectNode(0, this.displayData[0])
+        this.nodeExpand(0, this.displayData[0])
 
       })
     }
