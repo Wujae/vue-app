@@ -31,7 +31,7 @@
     data (){
       return {
         layout: [
-          {"x":0, "y":0, "w":40, "h":36, "i":"0", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa0", "componentPath": "fragment/Currentfault" },
+          {"x":0, "y":0, "w":40, "h":36, "i":"0", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa0", "componentPath": "fragment/CurrentFault" },
           {"x":40, "y":0, "w":20, "h":9, "i":"1", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa1", "componentPath": "fragment/CurrentFaultSimple"  },
           {"x":40, "y":9, "w":20, "h":9, "i":"2", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa2", "componentPath": "fragment/CurrentWarn"  },
           {"x":40, "y":18, "w":20, "h":9, "i":"3", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa3", "componentPath": "fragment/AirConditioner"  },
@@ -56,10 +56,6 @@
       ])
     },
     watch: {
-      getFaultLevel (newv) {
-        thmInterfaceService.getFaultData(this, {params: {fault_level: newv}});
-
-      },
       getFaultLevelSimple (newv) {
         thmInterfaceService.getFaultDataSimple(this, {params: {fault_level: newv}});
 
@@ -73,17 +69,11 @@
     },
     mounted () {
       console.log('layout2 mounted')
+
       //开启接口服务
-      //thmInterfaceService.getFaultData(this);
-      thmInterfaceService.getWarnData(this);
 
-      //mdpInterfaceService.getAirConditionerCount(this);
-      //mdpInterfaceService.getAirConditioner(this);
-      //mdpInterfaceService.getRuleAttentionCount(this);
-      //mdpInterfaceService.getRuleAttention(this);
-
+      //获取故障数记录
       thmInterfaceService.getOnlineStatusData(this);
-
       thmInterfaceService.getFaultCardData(this);
 
     },

@@ -236,6 +236,7 @@
     watch: {
       dataItems (newV) {
         if (newV) {
+          //console.log("wrap table dataItems update", newV)
           this.discardAnimation()
           this.addByStep(newV, -1)
 
@@ -253,7 +254,14 @@
 
           if (++idx < newV.length) {
 
-            this.displayItems.push(newV[idx])
+            if(this.displayItems[idx]){
+              this.$set(this.displayItems, idx, newV[idx])
+
+            }else {
+              this.displayItems.push(newV[idx])
+
+            }
+
 
             this.addByStep(newV, idx);
 

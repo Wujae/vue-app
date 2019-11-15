@@ -4,8 +4,11 @@
       <arrow-title :title-text="'空调健康评估'" />
     </div>
     <div id="onlinestatus5-r1">
-      <level-dropdown v-bind:style="styleObject3" :drop-down-items="dropDownItems" @levelSelected="handleLevelChange"></level-dropdown>
+      <level-dropdown v-bind:style="styleObject3" :drop-down-items="dropDownItems"  @level-clicked="handleLevelClick" @levelSelected="handleLevelChange"></level-dropdown>
     </div>
+    <auto-fresh-pagination class="pagination" @autoed="getRefreshData"
+                           :dataLoading="dataLoading" :pager="pagerInfo"
+                           @to-page="handlePageChange"  @auto-fresh="handleAutoFresh"></auto-fresh-pagination>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
   </tech-frame>
 </template>
@@ -16,15 +19,18 @@
   import { mapGetters } from 'vuex'
   import LevelDropdown from "../base/LevelDropdown";
   import ArrowTitle from '../base/ArrowTitle'
+  import AutoFreshPagination from '../base/AutoFreshPagination'
+
   import mdpInterfaceService from '../../service/MdpInterfaceService'
 
   //airConditioner
   export default {
     name: "OnlineStatus2",
+    components: {AutoFreshPagination, ArrowTitle, WrapTable, TechFrame,LevelDropdown},
     data () {
       return {
         columnSetting: {
-          needIdx: true,
+          needIdx: false,
           idxOccupancyRate: 5,
           overallStyle: null,
           rowHeight: '31.5px',
@@ -54,7 +60,15 @@
           width: '100px',
           height: '20px'
         },
-        levelSelected: null
+        levelSelected: '疾病',
+        pagerInfo: {
+          layout: 'prev, pager, next',
+          total:0,
+          pageSize: 4,
+          currentPage: 1
+        },
+        dataLoading: true,
+        refreshFlag: true
       }
     },
     props: {
@@ -75,11 +89,8 @@
       ])
     },
     watch: {
-      levelSelected (newv){
-        mdpInterfaceService.getAirConditioner(this, {params : {level: newv}});
-      },
       getAirConditioner (newv) { //newv 就是改变后的getTrains值
-
+        console.log(newv)
         this.dataItems = newv.rows
       },
       getAirConditionerCount (newv) { //newv 就是改变后的getTrains值
@@ -119,16 +130,92 @@
 
       }
     },
-    components: {ArrowTitle, WrapTable, TechFrame,LevelDropdown},
     mounted () {
       mdpInterfaceService.getAirConditionerCount(this);
+
     },
     methods : {
+      getData (doEnableTimer){
+
+        this.dataLoading = true;
+
+        mdpInterfaceService.fetchAirConditioner(this,
+          {
+            params: {
+              page: this.pagerInfo.currentPage,
+              level: this.levelSelected
+            },
+            onSuccess:(response) => {
+
+              this.pagerInfo.total = response.records
+              this.dataLoading = false;
+            },
+            onError:() => {
+              this.dataLoading = false;
+            }
+          });
+
+      },
+      parseFaultCountData (rawdata) {
+
+        let list = [
+          {
+            key: 'A',
+            selected: this.levelSelected === 'A',
+            name: `A 级  ${rawdata[0].count}`,
+            style: {'background-color': '#bf3131', color: '#fff'}
+          },
+          {
+            key: 'B',
+            selected: this.levelSelected === 'B',
+            name: `B 级  ${rawdata[1].count}`,
+            style: {'background-color': '#c08528', color: '#fff'}
+          },
+          {
+            key: 'C',
+            selected: this.levelSelected === 'C',
+            name: `C 级  ${rawdata[2].count}`,
+            style: {'background-color': '#ac990a', color: '#fff'}
+          }
+        ]
+        this.dropDownItems = list
+      },
+      handlePageChange(page) {
+        //console.log(`当前页: ${page}`)
+        //切换页面将停止自动刷新逻辑
+        this.pagerInfo.currentPage = page
+
+        //console.log('paging');
+        this.disabledTimerQuery()
+
+      },
+      getRefreshData(flag) {
+        this.refreshFlag = flag
+      },
+      handleAutoFresh(flag) {
+        //切换自动刷新将跳转第一页
+        //console.log(`刷新状态: ${flag}`);
+        if(flag){
+          this.pagerInfo.currentPage = 1
+        }
+      },
+      handleLevelClick(event) {
+        //console.log('handleLevelClick');
+        this.disabledTimerQuery()
+      },
       handleLevelChange(event) {
 
-        // console.log(event)
+        console.log('handleLevelChange');
         this.levelSelected = event.key
-
+        if(this.refreshFlag){
+          this.enabledTimerQuery()
+        }
+      },
+      enabledTimerQuery(){
+        this.getData(true)
+      },
+      disabledTimerQuery(){
+        this.getData(false)
       }
     }
 
@@ -136,39 +223,13 @@
 </script>
 
 <style scoped>
-  .level-band-container-div{
-    position: relative;
-    width: 100%;
-    padding: 10px;
+
+  .pagination{
+    position: absolute;
+    bottom: 0;
+    right: 20px;
   }
 
-  .level-band-holder {
-    width: 20%;
-    height: 30px;
-    display: inline-block;
-  }
-
-  .level-band {
-    width: 100%;
-    height: 15px;
-  }
-
-  .level-a {
-    background-color: #c43838;
-  }
-
-  .level-b {
-    background-color: #cf8c2d;
-
-  }
-
-  .level-c {
-    background-color: #cdcd40;
-  }
-
-  .level-normal {
-    background-color: #5ab943;
-  }
   #onlinestatus5-l1 {
     display: inline-block;
     color: #09f2e1;

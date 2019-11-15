@@ -4,9 +4,12 @@
       <arrow-title :title-text="'车组报警'"></arrow-title>
     </div>
     <div id="onlinestatus3-r1">
-      <level-dropdown v-bind:style="styleObject2" :drop-down-items="dropDownItems" @levelSelected="handleLevelChange"></level-dropdown>
+      <level-dropdown v-bind:style="styleObject2" :drop-down-items="dropDownItems" @level-clicked="handleLevelClick" @levelSelected="handleLevelChange"></level-dropdown>
     </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems" ></wrap-table>
+    <auto-fresh-pagination class="pagination" @autoed="getRefreshData"
+                           :dataLoading="dataLoading" :pager="pagerInfo"
+                           @to-page="handlePageChange"  @auto-fresh="handleAutoFresh"></auto-fresh-pagination>
   </tech-frame>
 </template>
 
@@ -16,20 +19,9 @@
   import { mapGetters } from 'vuex'
   import LevelDropdown from "../base/LevelDropdown";
   import ArrowTitle from '../base/ArrowTitle'
+  import AutoFreshPagination from '../base/AutoFreshPagination'
 
-  const TRAIN_STATUS = [
-    '运行中', '传输中', '停止运行', '离线', '断开连接'
-  ];
-  const  TRAIN_STATUS_ALIAS = [
-    'online', 'trans', 'stopped', 'offline', 'disconnect'
-  ];
-
-  const  LVL_COLOR = {
-    A: '#c43838',
-    B: '#cf8c2d',
-    C:'#cdcd40',
-    NORMAL: '#5ab943'
-  };
+  import thmInterfaceService from '../../service/ThmInterfaceService'
 
   //currentFaultSimple
   export default {
@@ -37,7 +29,7 @@
     data () {
       return {
         columnSetting: {
-          needIdx: true,
+          needIdx: false,
           idxOccupancyRate: 5,
           overallStyle: null,
           rowHeight: '32px',
@@ -66,7 +58,15 @@
           height: '20px',
           opacity:1
         },
-        levelSelected: null
+        levelSelected: 'A',
+        pagerInfo: {
+          layout: 'prev, pager, next',
+          total:0,
+          pageSize: 4,
+          currentPage: 1
+        },
+        dataLoading: true,
+        refreshFlag: true
       }
     },
     props: {
@@ -115,56 +115,80 @@
         ]
       }
     },
-    components: {ArrowTitle, WrapTable, TechFrame,LevelDropdown},
-    mounted () {
-
-    },
+    components: {AutoFreshPagination, ArrowTitle, WrapTable, TechFrame,LevelDropdown},
     methods : {
+      getData (doEnableTimer){
+
+        this.dataLoading = true;
+
+        thmInterfaceService.fetchFaultDataSimple(this,
+          {
+            params: {
+              fault_level: this.levelSelected,
+              pageNo: this.pagerInfo.currentPage,
+            },
+            onSuccess:(response) => {
+
+              this.pagerInfo.total = response.total
+              this.dataLoading = false;
+            },
+            onError:() => {
+              this.dataLoading = false;
+            }
+          }, doEnableTimer);
+
+      },
+      handlePageChange(page) {
+        //console.log(`当前页: ${page}`)
+        //切换页面将停止自动刷新逻辑
+        this.pagerInfo.currentPage = page
+
+        //console.log('paging');
+        this.disabledTimerQuery()
+
+      },
+      getRefreshData(flag) {
+        this.refreshFlag = flag
+      },
+      handleAutoFresh(flag) {
+        //切换自动刷新将跳转第一页
+        //console.log(`刷新状态: ${flag}`);
+        if(flag){
+          this.pagerInfo.currentPage = 1
+        }else{
+          //阻止数据请求
+          thmInterfaceService.stopFaultDataSimplePendingTask()
+        }
+      },
+      handleLevelClick(event) {
+        //console.log('handleLevelClick');
+        this.disabledTimerQuery()
+      },
       handleLevelChange(event) {
 
-        // console.log(event)
+        //console.log('handleLevelChange');
         this.levelSelected = event.key
-
-        this.$store.commit('updateFaultLevelSimple', event.key)
-      }
+        if(this.refreshFlag){
+          this.enabledTimerQuery()
+        }
+      },
+      enabledTimerQuery(){
+        this.getData(true)
+      },
+      disabledTimerQuery(){
+        this.getData(false)
+      },
     }
   }
 </script>
 
 <style scoped>
-  .level-band-container-div{
-    position: relative;
-    width: 100%;
-    padding: 10px;
+  .pagination{
+    position: absolute;
+    bottom: 0;
+    right: 20px;
   }
 
-  .level-band-holder {
-    width: 20%;
-    height: 30px;
-    display: inline-block;
-  }
-
-  .level-band {
-    width: 100%;
-    height: 15px;
-  }
-
-  .level-a {
-    background-color: #c43838;
-  }
-
-  .level-b {
-    background-color: #cf8c2d;
-
-  }
-
-  .level-c {
-    background-color: #cdcd40;
-  }
-
-  .level-normal {
-    background-color: #5ab943;
-  }
   #onlinestatus3-l1 {
     display: inline-block;
     color: #09f2e1;

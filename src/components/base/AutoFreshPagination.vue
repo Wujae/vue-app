@@ -2,14 +2,15 @@
   <div class="main-container">
     <span class="switch-label" v-if="!hideRefresh">自动刷新</span>
     <el-switch class="switch" v-if="!hideRefresh"
-      v-model="autoed" :width="30"
+      v-model="autoed" :width="30" @change="handelChange"
       :active-color="activeColor"
       :inactive-color="inactiveColor">
     </el-switch>
     <el-pagination class="pagination"
                    :page-size="pager.pageSize" @current-change="handleCurrentChange"
-                   layout="prev, pager, next, total"
-                   :total="pager.total">
+                   :layout="pager.layout"
+                   :total="pager.total"
+                   :current-page="pager.currentPage">
     </el-pagination>
     <div v-if="dataLoading" class="disabled-mask" title="数据正在加载，请稍等……"></div>
   </div>
@@ -25,11 +26,6 @@
         inactiveColor: "gray"
       }
     },
-    watch: {
-      autoed (nv, ov){
-        this.$emit('auto-fresh', nv);
-      }
-    },
     props: {
       pager: {
         type: Object,
@@ -37,7 +33,8 @@
           return {
             total: 100,
             pageSize: 5,
-            currentPage: 1
+            currentPage: 1,
+            layout: "prev, pager, next, total"
           }
         }
       },
@@ -54,9 +51,18 @@
         }
       }
     },
+    watch: {
+      autoed (nv){
+        this.$emit('autoed', nv);
+      }
+    },
     methods: {
+      handelChange(val){
+        this.$emit('auto-fresh', val);
+      },
       handleCurrentChange (val) {
         // console.log(`当前页: ${val}`);
+        this.autoed = false;
         this.$emit('to-page', val);
 
       }

@@ -4,9 +4,12 @@
       <arrow-title :title-text="'规则关注'" />
     </div>
     <div id="onlinestatus6-r1">
-      <level-dropdown v-bind:style="styleObject5" :drop-down-items="dropDownItems"></level-dropdown>
+      <!--<level-dropdown v-bind:style="styleObject5" :drop-down-items="dropDownItems"></level-dropdown>-->
     </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems"></wrap-table>
+    <auto-fresh-pagination class="pagination" @autoed="getRefreshData"
+                           :dataLoading="dataLoading" :pager="pagerInfo"
+                           @to-page="handlePageChange"  @auto-fresh="handleAutoFresh"></auto-fresh-pagination>
   </tech-frame>
 </template>
 
@@ -17,21 +20,16 @@
   import LevelDropdown from "../base/LevelDropdown";
   import mdpInterfaceService from '../../service/MdpInterfaceService'
   import ArrowTitle from '../base/ArrowTitle'
-
-  const  LVL_COLOR = {
-    A: '#c43838',
-    B: '#cf8c2d',
-    C:'#cdcd40',
-    NORMAL: '#5ab943'
-  };
+  import AutoFreshPagination from '../base/AutoFreshPagination'
 
   //ruleAttention
   export default {
     name: "OnlineStatus2",
+    components: {AutoFreshPagination, ArrowTitle, WrapTable, TechFrame,LevelDropdown},
     data () {
       return {
         columnSetting: {
-          needIdx: true,
+          needIdx: false,
           idxOccupancyRate: 5,
           overallStyle: null,
           rowHeight: '30px',
@@ -62,7 +60,16 @@
           right: '30px',
           width: '100px',
           height: '20px'
-        }
+        },
+        levelSelected: 'A',
+        pagerInfo: {
+          layout: 'prev, pager, next',
+          total:0,
+          pageSize: 4,
+          currentPage: 1
+        },
+        dataLoading: true,
+        refreshFlag: true
       }
     },
     props: {
@@ -80,7 +87,8 @@
     computed:{
       ...mapGetters([
         'getRuleAttention',
-        'getRuleAttentionCount'
+        'getRuleAttentionCount',
+        'getCurrentFaultCount'
       ])
     },
 
@@ -89,8 +97,12 @@
         this.dataItems = newv
 
       },
+      getCurrentFaultCount (newv){
+        this.handleLevelChange()
+
+      },
       getRuleAttentionCount (newv) { //newv 就是改变后的ruleAttentionCount值
-        console.log(newv,'getRuleAttentionCount')
+        //console.log('getRuleAttentionCount', newv,)
         this.dropDownItems = [
           {
             key: 'A',
@@ -108,59 +120,88 @@
             style: {'background-color': '#ac990a', color: '#fff'}
           }
         ]
-        console.log('getRuleAttentionCount',newv)
       }
     },
-    components: {ArrowTitle, WrapTable, TechFrame,LevelDropdown},
     mounted () {
       console.log('ruleAttention mounted')
 
-      mdpInterfaceService.getRuleAttentionCount(this);
-      mdpInterfaceService.getRuleAttention(this);
+      //mdpInterfaceService.getRuleAttentionCount(this);
+      this.getData(true)
+
     },
     methods : {
+      getData(doTimer){
+        mdpInterfaceService.getRuleAttention(this,
+          {
+            params: {
+              page: this.pagerInfo.currentPage
+            },
+            onSuccess:(response) => {
+
+              this.pagerInfo.total = response.records
+
+              this.dataLoading = false;
+            },
+            onError:() => {
+              this.dataLoading = false;
+            }
+          });
+      },
       parseData (rawdata) {
         if(!rawdata || rawdata.length === 0 ) return;
 
-      }
+      },
+      handlePageChange(page) {
+        //console.log(`当前页: ${page}`)
+        //切换页面将停止自动刷新逻辑
+        this.pagerInfo.currentPage = page
+
+        //console.log('paging');
+        this.disabledTimerQuery()
+
+      },
+      getRefreshData(flag) {
+        this.refreshFlag = flag
+      },
+      handleAutoFresh(flag) {
+        //切换自动刷新将跳转第一页
+        //console.log(`刷新状态: ${flag}`);
+        if(flag){
+          this.pagerInfo.currentPage = 1
+        }else{
+          //阻止数据请求
+          mdpInterfaceService.stopRuleAttentionPendingTask()
+        }
+      },
+      handleLevelClick(event) {
+        //console.log('handleLevelClick');
+        this.disabledTimerQuery()
+      },
+      handleLevelChange(event) {
+
+        //console.log('handleLevelChange');
+        if(this.refreshFlag){
+          this.enabledTimerQuery()
+        }
+      },
+      enabledTimerQuery(){
+        this.getData(true)
+      },
+      disabledTimerQuery(){
+        this.getData(false)
+      },
     }
   }
 </script>
 
 <style scoped>
-  .level-band-container-div{
-    position: relative;
-    width: 100%;
-    padding: 10px;
+
+  .pagination{
+    position: absolute;
+    bottom: 0;
+    right: 20px;
   }
 
-  .level-band-holder {
-    width: 20%;
-    height: 30px;
-    display: inline-block;
-  }
-
-  .level-band {
-    width: 100%;
-    height: 15px;
-  }
-
-  .level-a {
-    background-color: #c43838;
-  }
-
-  .level-b {
-    background-color: #cf8c2d;
-
-  }
-
-  .level-c {
-    background-color: #cdcd40;
-  }
-
-  .level-normal {
-    background-color: #5ab943;
-  }
   #onlinestatus6-l1 {
     display: inline-block;
     color: #09f2e1;

@@ -47,6 +47,7 @@
           ]
         },
         pagerInfo: {
+          layout: "prev, pager, next, total",
           total:0,
           pageSize: 5,
           currentPage: 1

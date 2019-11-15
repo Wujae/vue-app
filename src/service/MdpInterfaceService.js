@@ -8,7 +8,10 @@ export default {
    */
   timers : {
     airConTimer: null,
-    ruleAttTimer: null
+    ruleAttTimer: null,
+  },
+  promisePool:{
+    ruleAttData: [],
   },
   /**
    * 屏幕-全图监控-运用信息
@@ -254,11 +257,17 @@ export default {
 
 
   },
+  getAirConditionerCount(v){
+    let requestInterval = v.$store.state.requestInterval
+
+    this.getAirConditionerCountTimer(v, requestInterval)
+
+  },
   /**
    * 获取空调健康评估分级数量
    * @param {Vue} v - vue实例
    */
-  getAirConditionerCount(v) {
+  getAirConditionerCountTimer(v, interval) {
 
     //30天内
     let startDate = (new Date()).addDate(-30).Format("yyyyMMdd"),
@@ -280,13 +289,18 @@ export default {
 
         v.$store.commit('updateAirConditionerCount', response)
 
+        setTimeout(() => {
+
+          this.getAirConditionerCountTimer(v, interval)
+        }, interval)
+
       }).catch(error => {
 
-        console.log(error)
+        console.error(error)
       })
     }, reason => {
 
-      console.log(reason);
+      console.error(reason);
     })
   },
   /**
@@ -297,43 +311,41 @@ export default {
    * @param {Function} callback.onSuccess - onSuccess (resp
    * @param {Function} callback.onError - onError (error){}
    */
-  getAirConditioner(v, callback) {
-
-    let requestInterval = v.$store.state.requestInterval || 60000
-
-    clearTimeout(this.timers.airConTimer);
+  fetchAirConditioner(v, callback) {
 
     //30天内
-    let startDate = `${(new Date()).addDate(-30).Format("yyyy-MM-dd")} 00:00:00`,
-      endDate = `${(new Date()).Format("yyyy-MM-dd")} 23:59:59`
+    let startDate = (new Date()).addDate(-30).Format("yyyy-MM-dd"),
+      endDate = (new Date()).Format("yyyy-MM-dd")
 
-    let querySql = `EVALUATE_DATE BETWEEN '${startDate}' AND '${endDate}'`
+    let querySql = `EVALUATE_DATE >= '${startDate}'`
 
     if(callback && callback.params){
       querySql += ` AND HEALTH_STATUS = '${callback.params.level}' `
     }
 
-    this.queryBy(v, "T_MA_AC_HEALTH", {params: {queryResultFilterSql: querySql},
-      onSuccess: (resp) => {
+    this.queryBy(v, "T_MA_AC_HEALTH",
+      {
+        params: {
+          rows: 4,
+          page: callback.params.page,
+          queryResultFilterSql: querySql
+        },
+        onSuccess: (resp) => {
 
-        //console.log(resp)
-        v.$store.commit('updateAirConditioner', resp)
+          //console.log(resp)
+          v.$store.commit('updateAirConditioner', resp)
 
-        this.timers.airConTimer = setTimeout(() => {
-          this.getAirConditioner(v, callback)
-        }, requestInterval)
+          if (callback && callback.onSuccess) {
+            callback.onSuccess(resp)
+          }
 
-        if (callback && callback.onSuccess) {
-          callback.onSuccess(response)
+        }, onError: (error) => {
+          console.log(error)
+
+          if (callback && callback.onError) {
+            callback.onError(error)
+          }
         }
-
-      }, onError: (error) => {
-        console.log(error)
-
-        if (callback && callback.onError) {
-          callback.onError(error)
-        }
-      }
     })
   },
   /**
@@ -371,30 +383,56 @@ export default {
 
   },
   /**
+   * 停止进行中的数据请求
+   */
+  stopRuleAttentionPendingTask(){
+    let cancelPromise = new Promise((resolve, reject) => {
+      reject('取消其他全部未完成请求！');
+    })
+
+    Promise.race([...this.promisePool.ruleAttData, cancelPromise]).catch(error => {
+
+      console.info(error)
+      this.promisePool.ruleAttData.length = 0
+    })
+  },
+  /**
    * 获取规则关注
    * @param {Vue} v - vue实例
+   * @param {Object} callback
+   * @param {Object} callback.params - 请求参数
+   * @param {Function} callback.onSuccess - onSuccess (resp
+   * @param {Function} callback.onError - onError (error){}
+   * @param {Boolean} doTimer
    */
-  getRuleAttention(v) {
+  getRuleAttention(v, callback, doTimer) {
 
-    let startDate = '20180901', endDate = '20190315'
+    let startDate = (new Date()).addDate(-30).Format("yyyyMMdd"), endDate = (new Date()).Format("yyyyMMdd");
 
     let params = {
       startDate: startDate,
       endDate: endDate,
       trainSn: '',
-      rows: 5
+      rows: 4,
+      page: callback.params.page
     }
 
     this.createServerURL(v, 'monitor/monitorcheck/queryMonitorCheck').then((requestURI) => {
 
       let start = new Date();
 
-      v.$jsonp(requestURI, params).then(response => {
+      this.stopRuleAttentionPendingTask()
+
+      let taskPromise =  v.$jsonp(requestURI, params)
+
+      this.promisePool.ruleAttData.push(taskPromise)
+
+      this.promisePool.ruleAttData.reverse()[0].then(response => {
 
         console.log(`get mdp rule attention complete in ${ new Date() - start }ms`);
         console.log(response)
 
-        this.getRuleAttentionTrend(v, response)
+        this.getRuleAttentionTrend(v, response, callback)
 
       }).catch(error => {
 
@@ -410,10 +448,11 @@ export default {
    * @param {Vue} v - vue实例
    * @param {Object} ruleAttentionData - 关注数据
    * @param {Array} ruleAttentionData.rows - 参数点数据
+   * @param {Object} callback.params - 请求参数
+   * @param {Function} callback.onSuccess - onSuccess (resp
+   * @param {Function} callback.onError - onError (error){}
    */
-  getRuleAttentionTrend(v, ruleAttentionData){
-
-    let requestInterval = v.$store.state.requestInterval || 60000
+  getRuleAttentionTrend(v, ruleAttentionData, callback){
 
     if(ruleAttentionData && ruleAttentionData.rows.length > 0) {
 
@@ -442,11 +481,13 @@ export default {
             })
           }
 
+          if (callback && callback.onSuccess) {
+            callback.onSuccess(ruleAttentionData)
+          }
+
           v.$store.commit('updateRuleAttention', result)
 
-          setTimeout(() => {
-            this.getRuleAttention(v)
-          }, requestInterval)
+
 
         }).catch(error => {
 
@@ -455,11 +496,12 @@ export default {
       }, reason => {
 
         v.$store.commit('updateRuleAttention', result)
-        console.log(reason);
 
-        setTimeout(() => {
-          this.getRuleAttention(v)
-        }, requestInterval)
+        if (callback && callback.onSuccess) {
+          callback.onSuccess(ruleAttentionData)
+        }
+
+        console.error(reason);
 
       })
     }

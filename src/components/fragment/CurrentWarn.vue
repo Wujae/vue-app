@@ -4,9 +4,12 @@
       <arrow-title :title-text="'平台预警'" />
     </div>
     <div id="onlinestatus4-r1">
-      <level-dropdown   :drop-down-items="dropDownItems" v-bind:style="styleObject" @levelSelected="handleLevelChange"></level-dropdown>
+      <level-dropdown   :drop-down-items="dropDownItems" v-bind:style="styleObject" @level-clicked="handleLevelClick"></level-dropdown>
     </div>
     <wrap-table :column-setting="columnSetting" :data-items="dataItems[this.levelSelected]"></wrap-table>
+    <auto-fresh-pagination class="pagination" @autoed="getRefreshData"
+                           :dataLoading="dataLoading" :pager="pagerInfo"
+                           @to-page="handlePageChange"  @auto-fresh="handleAutoFresh"></auto-fresh-pagination>
   </tech-frame>
 </template>
 
@@ -16,14 +19,18 @@
   import { mapGetters } from 'vuex'
   import LevelDropdown from "../base/LevelDropdown"
   import ArrowTitle from '../base/ArrowTitle'
+  import AutoFreshPagination from '../base/AutoFreshPagination'
+
+  import thmInterfaceService from '../../service/ThmInterfaceService'
 
   //currentWarn
   export default {
     name: "OnlineStatus2",
+    components: {AutoFreshPagination, ArrowTitle, WrapTable, TechFrame,LevelDropdown},
     data () {
       return {
         columnSetting: {
-          needIdx: true,
+          needIdx: false,
           idxOccupancyRate: 5,
           overallStyle: null,
           rowHeight: '32px',
@@ -56,7 +63,15 @@
           width: '100px',
           height: '20px'
         },
-        levelSelected: null
+        levelSelected: 'A',
+        pagerInfo: {
+          layout: 'prev, pager, next',
+          total:0,
+          pageSize: 4,
+          currentPage: 1
+        },
+        dataLoading: true,
+        refreshFlag: false
       }
     },
     props: {
@@ -73,25 +88,40 @@
     },
     computed:{
       ...mapGetters([
-        'getCurrentWarn'
+        'getCurrentWarn','getCurrentFaultCount'
       ])
     },
     watch: {
       getCurrentWarn (newv) { //newv 就是改变后的getTrains值
 
         this.parseData(newv);
+      },
+      getCurrentFaultCount (newv){
+        this.handleLevelChange()
       }
     },
-    components: {ArrowTitle, WrapTable, TechFrame,LevelDropdown},
-    mounted () {
-
+    mounted() {
+      this.enabledTimerQuery();
     },
     methods : {
+      getData (doEnableTimer){
+
+        this.dataLoading = true;
+
+        thmInterfaceService.fetchWarnData(this,
+          {
+            onSuccess:(response) => {
+
+              this.dataLoading = false;
+            },
+            onError:() => {
+              this.dataLoading = false;
+            }
+          }, doEnableTimer);
+
+      },
       parseData (rawdata) {
-        let contA=0
-        let contB=0
-        let contC=0
-        let contD=0
+        let cont = { A:0, B:0, C:0, D:0 };
 
         this.dataItems.A.length = 0;
         this.dataItems.B.length = 0;
@@ -101,99 +131,114 @@
         //rawdata.forEach  data. warnLevel
         rawdata.forEach((data,index) => {
 
-          switch (data.warnLevel) {
-            case 'A':
-              contA++;
-              if(this.dataItems.A.length <= 5) this.dataItems.A.push(data)
-              break;
-            case 'B':
-              contB++;
-              if(this.dataItems.B.length <= 5) this.dataItems.B.push(data)
-              break;
-            case 'C':
-              contC++;
-              if(this.dataItems.C.length <= 5) this.dataItems.C.push(data)
-              break;
-            case 'D':
-              contD++;
-              if(this.dataItems.D.length <= 5) this.dataItems.D.push(data)
-              break;
-          }
+
+            switch (data.warnLevel) {
+              case 'A':
+                cont.A++;
+                if(this.dataItems.A.length < this.pagerInfo.pageSize && (index >= (this.pagerInfo.currentPage-1) * this.pagerInfo.pageSize))
+                  this.dataItems.A.push(data)
+                break;
+              case 'B':
+                cont.B++;
+                if(this.dataItems.B.length < this.pagerInfo.pageSize && (index >= (this.pagerInfo.currentPage-1) * this.pagerInfo.pageSize))
+                  this.dataItems.B.push(data)
+                break;
+              case 'C':
+                cont.C++;
+                if(this.dataItems.C.length < this.pagerInfo.pageSize && (index >= (this.pagerInfo.currentPage-1) * this.pagerInfo.pageSize))
+                  this.dataItems.C.push(data)
+                break;
+              case 'D':
+                cont.D++;
+                if(this.dataItems.D.length < this.pagerInfo.pageSize && (index >= (this.pagerInfo.currentPage-1) * this.pagerInfo.pageSize))
+                  this.dataItems.D.push(data)
+                break;
+            }
+
         })
+
+        this.pagerInfo.total = cont[this.levelSelected]
 
           let result = [{
             key: 'A',
             selected: this.levelSelected === 'A',
-            name: `A 级 ${contA}`,
+            name: `A 级 ${cont.A}`,
             style: {'background-color': '#bf3131', color: '#fff'}
           },
           {
             key: 'B',
             selected: this.levelSelected === 'B',
-            name: `B 级 ${contB}`,
+            name: `B 级 ${cont.B}`,
             style: {'background-color': '#c08528', color: '#fff'}
           },
           {
             key: 'C',
             selected: this.levelSelected === 'C',
-            name: `C 级 ${contC}`,
+            name: `C 级 ${cont.C}`,
             style: {'background-color': '#ac990a', color: '#fff'}
           },
           {
             key: 'D',
             selected: this.levelSelected === 'D',
-            name: `D 级 ${contD}`,
+            name: `D 级 ${cont.D}`,
             style: {'background-color': '#25ac48', color: '#fff'}
           }]
 
          this.dropDownItems = result
 
       },
-      handleLevelChange(event) {
+      getRefreshData(flag) {
+        this.refreshFlag = flag
+      },
+      handleAutoFresh(flag) {
+        //切换自动刷新将跳转第一页
+        //console.log(`刷新状态: ${flag}`);
+        if(flag){
+          this.pagerInfo.currentPage = 1
+        }else{
+          //阻止数据请求
+          thmInterfaceService.stopFaultDataSimplePendingTask()
+        }
+      },
+      handleLevelClick(event) {
+        console.log('handleLevelClick');
 
-        // console.log(event)
         this.levelSelected = event.key
+        this.disabledTimerQuery()
+      },
+      handleLevelChange() {
 
-        this.$store.commit('updateWarnLevel', event.key)
-      }
+        if(this.refreshFlag){
+          this.enabledTimerQuery()
+        }
+      },
+      handlePageChange(page) {
+        //console.log(`当前页: ${page}`)
+        //切换页面将停止自动刷新逻辑
+        this.pagerInfo.currentPage = page
+
+        //console.log('paging');
+        this.disabledTimerQuery()
+
+      },
+      enabledTimerQuery(){
+        this.getData(true)
+      },
+      disabledTimerQuery(){
+        this.getData(false)
+      },
     }
   }
 </script>
 
 <style scoped>
-  .level-band-container-div{
-    position: relative;
-    width: 100%;
-    padding: 10px;
+
+  .pagination{
+    position: absolute;
+    bottom: 0;
+    right: 20px;
   }
 
-  .level-band-holder {
-    width: 20%;
-    height: 30px;
-    display: inline-block;
-  }
-
-  .level-band {
-    width: 100%;
-    height: 15px;
-  }
-
-  .level-a {
-    background-color: #c43838;
-  }
-
-  .level-b {
-    background-color: #cf8c2d;
-
-  }
-
-  .level-c {
-    background-color: #cdcd40;
-  }
-
-  .level-normal {
-    background-color: #5ab943;
-  }
   #onlinestatus4-l1 {
     display: inline-block;
     color: #09f2e1;
@@ -204,13 +249,6 @@
   #onlinestatus4-r1 {
     position: relative;
 
-  }
-  .selectCW {
-    position: absolute;
-    top: -20px;
-    right: 30px;
-    width: 100px;
-    height: 20px;
   }
 
 </style>

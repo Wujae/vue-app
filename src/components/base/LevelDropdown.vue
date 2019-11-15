@@ -86,6 +86,11 @@
         if(idx > -1){
 
           this.selectedItem = this.dropDownItems[idx]
+
+          setTimeout( () =>{
+            this.$emit('level-clicked', this.selectedItem)
+          }, 10)
+
         }
 
       }
