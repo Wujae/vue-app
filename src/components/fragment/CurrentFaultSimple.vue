@@ -162,12 +162,14 @@
       },
       handleLevelClick(event) {
         //console.log('handleLevelClick');
+        this.levelSelected = event.key
+        this.pagerInfo.currentPage = 1
+
         this.disabledTimerQuery()
       },
       handleLevelChange(event) {
 
         //console.log('handleLevelChange');
-        this.levelSelected = event.key
         if(this.refreshFlag){
           this.enabledTimerQuery()
         }

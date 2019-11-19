@@ -160,7 +160,7 @@
         this.updateLine(nodeSelected.pos, idx, "node")
       },
       getNodeSelectedInfo(nodeSelected){
-        console.log("node selected on ", nodeSelected)
+        //console.log("node selected on ", nodeSelected)
 
         this.showInfo = false;
 

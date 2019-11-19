@@ -201,9 +201,11 @@
         }
       },
       handleLevelClick(event) {
-        console.log('handleLevelClick');
+        //console.log('handleLevelClick');
 
         this.levelSelected = event.key
+        this.pagerInfo.currentPage = 1
+
         this.disabledTimerQuery()
       },
       handleLevelChange() {
