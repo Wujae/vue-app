@@ -105,18 +105,18 @@
             style: {'background-color': '#bf3131', color: '#fff'}
           },
           {
-            key: 'MO',
-            selected: this.levelSelected === 'MO',
-            //name: `电机  ${newv[1].amount}`,
-            name: `电机`,
-            style: {'background-color': '#c08528', color: '#fff'}
-          },
-          {
             key: 'AX',
             selected: this.levelSelected === 'AX',
             //name: `轴温  ${newv[2].amount}`,
             name: `轴温`,
             style: {'background-color': '#ac990a', color: '#fff'}
+          },
+          {
+            key: 'MO',
+            selected: this.levelSelected === 'MO',
+            //name: `电机  ${newv[1].amount}`,
+            name: `电机`,
+            style: {'background-color': '#c08528', color: '#fff'}
           },
           {
             key: 'GE',
