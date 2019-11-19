@@ -34,7 +34,7 @@
           {"x":0, "y":0, "w":40, "h":36, "i":"0", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa0", "componentPath": "fragment/CurrentFault" },
           {"x":40, "y":0, "w":20, "h":9, "i":"1", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa1", "componentPath": "fragment/CurrentFaultSimple"  },
           {"x":40, "y":9, "w":20, "h":9, "i":"2", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa2", "componentPath": "fragment/CurrentWarn"  },
-          {"x":40, "y":18, "w":20, "h":9, "i":"3", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa3", "componentPath": "fragment/AirConditioner"  },
+          {"x":40, "y":18, "w":20, "h":9, "i":"3", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa3", "componentPath": "fragment/AIWarnFault"  },
           {"x":40, "y":27, "w":20, "h":9, "i":"4", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa4", "componentPath": "fragment/RuleAttention"  },
           {"x":0, "y":36, "w":60, "h":9, "i":"5", isDraggable: false, isResizable: false, "innerComponent":"async-echarts-compa5", "componentPath": "fragment/CurrentFaultCards"  }
 

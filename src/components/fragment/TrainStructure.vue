@@ -171,7 +171,7 @@
             if(result.status === 'success'){
 
               this.showInfo = true;
-              this.bomInfo = result.data;
+              this.bomInfo = result.data.bom;
             }
           }
         })

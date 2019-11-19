@@ -242,7 +242,7 @@
           if(idx++ < this.shows.length){
             this.$set(this.shows, idx, true)
           }
-          console.log("show", idx)
+          //console.log("show", idx)
 
         }, 10)
       }

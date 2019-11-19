@@ -30,8 +30,8 @@ export default new Vuex.Store({
     currentWarnCount: null,
     currentWarn: null,
     currentFaultCard: null,
-    airConditionerCount: null,
-    airConditioner: null,
+    aiWarnFaultCount: null,
+    aiWarnFault: null,
     ruleAttentionCount: null,
     ruleAttention: null,
     trainParamsEntity:null,
@@ -101,11 +101,11 @@ export default new Vuex.Store({
      * @param state
      * @return {null|*}
      */
-    getAirConditionerCount : state => {
-      return state.airConditionerCount;
+    getAIWarnFaultCount : state => {
+      return state.aiWarnFaultCount;
     },
-    getAirConditioner : state => {
-      return state.airConditioner;
+    getAIWarnFault : state => {
+      return state.aiWarnFault;
     },
     /**
      * 规则关注数量
@@ -179,11 +179,11 @@ export default new Vuex.Store({
     updateCurrentFaultCard (state, data) {
       state.currentFaultCard = data
     },
-    updateAirConditionerCount (state, data){
-      state.airConditionerCount = data
+    updateAIWarnFaultCount (state, data){
+      state.aiWarnFaultCount = data
     },
-    updateAirConditioner (state, data){
-      state.airConditioner = data
+    updateAIWarnFault (state, data){
+      state.aiWarnFault = data
     },
     updateRuleAttentionCount (state, data){
       console.log('updateRuleAttentionCount', data)

@@ -1,7 +1,7 @@
 <template>
   <tech-frame v-bind="frameInitOptions" :content-style="{overflow: 'hidden'}">
     <div id="onlinestatus5-l1">
-      <arrow-title :title-text="'空调健康评估'" />
+      <arrow-title :title-text="'模型预警'" />
     </div>
     <div id="onlinestatus5-r1">
       <level-dropdown v-bind:style="styleObject3" :drop-down-items="dropDownItems"  @level-clicked="handleLevelClick" @levelSelected="handleLevelChange"></level-dropdown>
@@ -23,7 +23,7 @@
 
   import mdpInterfaceService from '../../service/MdpInterfaceService'
 
-  //airConditioner
+  //aiWarnFault
   export default {
     name: "OnlineStatus2",
     components: {AutoFreshPagination, ArrowTitle, WrapTable, TechFrame,LevelDropdown},
@@ -39,14 +39,15 @@
           oddRowStyle: null,
           evenRowStyle: null,
           columns: [
-            {title: '配属局', key: 'ALLOCATE_BUREAU', style: {width: '18%', 'font-size': '14px'}},
             {title: '服务站', key: 'SERVICE_STATION', style: {width: '20%', 'font-size': '14px'}},
             {title: '车型', key: 'TRAIN_MODEL', style: {width: '15%', 'font-size': '14px'}},
             {title: '车组号', key: 'TRAIN_NO', style: {width: '15%', 'font-size': '14px'}},
             {title: '车辆号', key: 'COACH', style: {width: '10%', 'font-size': '14px'}},
-            {title: '空调序号', key: 'AC_NUM', style: {width: '13%', 'font-size': '14px'}},
-            {title: '健康状况', key: 'HEALTH_STATUS', style: {width: '13%', 'font-size': '14px'}},
-            {title: '评估日期', key: 'EVALUATE_DATE', style: {width: '20%', 'font-size': '14px'}}
+            {title: '部位', key: 'AC_NUM',  style: {width: '20%', 'font-size': '12px'},
+              titleStyle: {width: '20%', 'font-size': '14px', 'justify-content': 'center'}},
+            {title: '健康状况', key: 'FAULT_MESSAGE', style: {width: '13%', 'font-size': '12px'},
+              titleStyle: {width: '20%', 'font-size': '14px'}},
+            {title: '预警时间', key: 'RS_DATE', style: {width: '20%', 'font-size': '14px'}}
 
           ]
         },
@@ -85,53 +86,51 @@
     },
     computed:{
       ...mapGetters([
-        'getAirConditioner','getAirConditionerCount'
+        'getAIWarnFault','getAIWarnFaultCount'
       ])
     },
     watch: {
-      getAirConditioner (newv) { //newv 就是改变后的getTrains值
-        console.log(newv)
+      getAIWarnFault (newv) { //newv 就是改变后的getTrains值
+        //console.log(newv)
         this.dataItems = newv.rows
       },
-      getAirConditionerCount (newv) { //newv 就是改变后的getTrains值
+      getAIWarnFaultCount (newv) { //newv 就是改变后的getTrains值
 
         this.dropDownItems = [
           {
-            key: '疾病',
-            selected: this.levelSelected === '疾病',
-            name: `A 疾病  ${newv[0].amount}`,
+            key: 'AC',
+            selected: this.levelSelected === 'AC',
+            //name: `空调  ${newv[0].amount}`,
+            name: `空调`,
             style: {'background-color': '#bf3131', color: '#fff'}
           },
           {
-            key: '恶化',
-            selected: this.levelSelected === '恶化',
-            name: `B 恶化  ${newv[1].amount}`,
+            key: 'MO',
+            selected: this.levelSelected === 'MO',
+            //name: `电机  ${newv[1].amount}`,
+            name: `电机`,
             style: {'background-color': '#c08528', color: '#fff'}
           },
           {
-            key: '注意',
-            selected: this.levelSelected === '注意',
-            name: `C 注意  ${newv[2].amount}`,
+            key: 'AX',
+            selected: this.levelSelected === 'AX',
+            //name: `轴温  ${newv[2].amount}`,
+            name: `轴温`,
             style: {'background-color': '#ac990a', color: '#fff'}
           },
           {
-            key: '良好',
-            selected: this.levelSelected === '良好',
-            name: `D 良好  ${newv[3].amount}`,
+            key: 'GE',
+            selected: this.levelSelected === 'GE',
+            //name: `齿轮箱  ${newv[3].amount}`,
+            name: `齿轮箱`,
             style: {'background-color': '#88ac33', color: '#fff'}
-          },
-          {
-            key: '健康',
-            selected: this.levelSelected === '健康',
-            name: `E 健康  ${newv[4].amount}`,
-            style: {'background-color': '#11ac68', color: '#fff'}
           }
         ]
 
       }
     },
     mounted () {
-      mdpInterfaceService.getAirConditionerCount(this);
+      mdpInterfaceService.getAIWarnFaultCount(this);
 
     },
     methods : {
@@ -139,7 +138,7 @@
 
         this.dataLoading = true;
 
-        mdpInterfaceService.fetchAirConditioner(this,
+        mdpInterfaceService.fetchAIWarnFault(this,
           {
             params: {
               page: this.pagerInfo.currentPage,
@@ -155,30 +154,6 @@
             }
           });
 
-      },
-      parseFaultCountData (rawdata) {
-
-        let list = [
-          {
-            key: 'A',
-            selected: this.levelSelected === 'A',
-            name: `A 级  ${rawdata[0].count}`,
-            style: {'background-color': '#bf3131', color: '#fff'}
-          },
-          {
-            key: 'B',
-            selected: this.levelSelected === 'B',
-            name: `B 级  ${rawdata[1].count}`,
-            style: {'background-color': '#c08528', color: '#fff'}
-          },
-          {
-            key: 'C',
-            selected: this.levelSelected === 'C',
-            name: `C 级  ${rawdata[2].count}`,
-            style: {'background-color': '#ac990a', color: '#fff'}
-          }
-        ]
-        this.dropDownItems = list
       },
       handlePageChange(page) {
         //console.log(`当前页: ${page}`)

@@ -257,17 +257,17 @@ export default {
 
 
   },
-  getAirConditionerCount(v){
+  getAIWarnFaultCount(v){
     let requestInterval = v.$store.state.requestInterval
 
-    this.getAirConditionerCountTimer(v, requestInterval)
+    this.getAIWarnFaultCountTimer(v, requestInterval)
 
   },
   /**
    * 获取空调健康评估分级数量
    * @param {Vue} v - vue实例
    */
-  getAirConditionerCountTimer(v, interval) {
+  getAIWarnFaultCountTimer(v, interval) {
 
     //30天内
     let startDate = (new Date()).addDate(-30).Format("yyyyMMdd"),
@@ -284,14 +284,14 @@ export default {
 
       v.$jsonp(requestURI, params).then(response => {
 
-        console.log(`get mdp air-conditioner base summary complete in ${ new Date() - start }ms`);
+        console.log(`get mdp AI-MODEL base summary complete in ${ new Date() - start }ms`);
         console.log(response)
 
-        v.$store.commit('updateAirConditionerCount', response)
+        v.$store.commit('updateAIWarnFaultCount', response)
 
         setTimeout(() => {
 
-          this.getAirConditionerCountTimer(v, interval)
+          this.getAIWarnFaultCountTimer(v, interval)
         }, interval)
 
       }).catch(error => {
@@ -311,19 +311,19 @@ export default {
    * @param {Function} callback.onSuccess - onSuccess (resp
    * @param {Function} callback.onError - onError (error){}
    */
-  fetchAirConditioner(v, callback) {
+  fetchAIWarnFault(v, callback) {
 
     //30天内
     let startDate = (new Date()).addDate(-30).Format("yyyy-MM-dd"),
       endDate = (new Date()).Format("yyyy-MM-dd")
 
-    let querySql = `EVALUATE_DATE >= '${startDate}'`
+    let querySql = `RS_DATE >= '${startDate}'`
 
     if(callback && callback.params){
-      querySql += ` AND HEALTH_STATUS = '${callback.params.level}' `
+      querySql += ` AND TYPE = '${callback.params.level}' `
     }
 
-    this.queryBy(v, "T_MA_AC_HEALTH",
+    this.queryBy(v, "V_AI_MODEL_WARN",
       {
         params: {
           rows: 4,
@@ -333,7 +333,7 @@ export default {
         onSuccess: (resp) => {
 
           //console.log(resp)
-          v.$store.commit('updateAirConditioner', resp)
+          v.$store.commit('updateAIWarnFault', resp)
 
           if (callback && callback.onSuccess) {
             callback.onSuccess(resp)

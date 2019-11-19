@@ -18,7 +18,7 @@
     },
     "remotePhmDataMdpServerProperties": {
       "useRelativeUrl": true,
-      "serverIp": "phm.tangche.com",
+      "serverIp": "phm.true.com",
       "serverPort": "",
       "ctx": "PHM-DATA-MDP"
     }
@@ -45,13 +45,13 @@
     {"NAME":"五级修","ID":"000005","IS_ADVANCE":"1"}
   ],
   "queryFunctions": {
-    "T_MA_AC_HEALTH":{
+    "V_AI_MODEL_WARN":{
       "menuId": "ma_ac_health",
-      "codeName": "T_MA_AC_HEALTH",
-      "viewCode": "T_MA_AC_HEALTH_1",
-      "rows": 5,
+      "codeName": "V_AI_MODEL_WARN",
+      "viewCode": "V_AI_MODEL_WARN_1",
+      "rows": 4,
       "page": 1,
-      "queryResultFilterSql": "EVALUATE_DATE BETWEEN '${startDate}' AND '${endDate}'"
+      "queryResultFilterSql": "RS_DATE BETWEEN '${startDate}' AND '${endDate}'"
     },
     "V_KXQK":{
       "menuId": "V_KXQK_1_GRID",
