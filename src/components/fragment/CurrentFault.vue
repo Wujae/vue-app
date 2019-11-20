@@ -86,7 +86,7 @@
         pagerInfo: {
           layout: 'prev, pager, next',
           total:0,
-          pageSize: 20,
+          pageSize: 21,
           currentPage: 1
         },
         dataLoading: true,
@@ -227,7 +227,7 @@
     color: #09f2e1;
     font-weight: bolder;
     font-size: 18px;
-    margin-top: 30px;
+    margin-top: 10px;
   }
   #onlinestatus2-r1 {
     position: relative;

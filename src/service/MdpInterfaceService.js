@@ -326,7 +326,7 @@ export default {
     this.queryBy(v, "V_AI_MODEL_WARN",
       {
         params: {
-          rows: 4,
+          rows: 5,
           page: callback.params.page,
           queryResultFilterSql: querySql
         },
@@ -413,7 +413,7 @@ export default {
       startDate: startDate,
       endDate: endDate,
       trainSn: '',
-      rows: 4,
+      rows: 5,
       page: callback.params.page
     }
 
